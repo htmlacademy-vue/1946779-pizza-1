@@ -35,7 +35,7 @@
   &--light {
     b {
       &::before {
-        background-image: url("~@/assets/img/dough-light.svg");
+        background-color: #ffffff;
       }
     }
   }
@@ -43,7 +43,7 @@
   &--large {
     b {
       &::before {
-        background-image: url("~@/assets/img/dough-large.svg");
+        background-color: #ffffff;
       }
     }
   }

@@ -11,7 +11,7 @@
       "id": 2,
       "name": "Толстое",
       "image": "/public/img/dough-large.svg",
-      "description": "Из твердых сортов пшеницы",
+      "description": "Из мягких сортов пшеницы",
       "price": 300
     }
   ],
@@ -41,7 +41,7 @@
     {
       "id": 2,
       "name": "Сливочный",
-      "price": 50
+      "price": 60
     }
   ],
   "sizes": [
