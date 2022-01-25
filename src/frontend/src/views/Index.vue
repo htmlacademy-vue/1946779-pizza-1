@@ -77,8 +77,8 @@
 
             <BuilderPriceCounter
               :resultPrice="resultPrice"
-              :originalNameOfPizza="originalNameOfPizza"
               @movePriceToCart="movePriceToCart"
+              :nameOfPizza="nameOfPizza"
             />
 
           </div>
@@ -126,7 +126,7 @@ export default {
       sizeMultiplier: 1,
       ingredientMovedArray: [],
       ingredientDroped: [],
-      originalNameOfPizza: '',
+      nameOfPizza: '',
       priceToCart: 0,
     };
   },
@@ -178,7 +178,7 @@ export default {
       }
     },
     inputNameOfPizza(inputValue) {
-      this.originalNameOfPizza = inputValue;
+      this.nameOfPizza = inputValue;
     },
     movePriceToCart() {
       this.priceToCart = this.resultPrice;

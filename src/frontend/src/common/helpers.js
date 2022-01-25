@@ -5,6 +5,7 @@ export const normalizeDough = dough => {
   return {
     ...dough,
     type: dough_types.find(({ label }) => dough.name === label)?.value,
+    checked: dough_types.find(({ label }) => dough.name === label)?.checked,
   };
 };
 
@@ -13,6 +14,7 @@ export const normalizeSize = sizes => {
   return {
     ...sizes,
     type: pizza_sizes.find(({ label }) => sizes.multiplier === label)?.value,
+    checked: pizza_sizes.find(({ label }) => sizes.multiplier === label)?.checked,
   };
 }
 
@@ -21,6 +23,7 @@ export const normalizeSauce = sauces => {
   return {
     ...sauces,
     type: pizza_sauces.find(({ label }) => sauces.name === label)?.value,
+    checked: pizza_sauces.find(({ label }) => sauces.name === label)?.checked,
   };
 }
 

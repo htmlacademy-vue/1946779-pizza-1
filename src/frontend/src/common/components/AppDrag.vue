@@ -1,5 +1,6 @@
 <template>
   <div
+    :draggable="ingredient.counter <= 2"
     @dragstart.self="onDrag"
     @dragover.prevent
     @dragenter.prevent
@@ -15,6 +16,10 @@ export default {
   name: 'AppDrag',
   props: {
     transferData: {
+      type: Object,
+      required: true
+    },
+    ingredient: {
       type: Object,
       required: true
     }

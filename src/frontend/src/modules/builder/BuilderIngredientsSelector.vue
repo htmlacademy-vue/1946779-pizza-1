@@ -30,7 +30,7 @@
 
           <AppDrag
             :transfer-data="ingredient"
-            :draggable="ingredient.counter <= 2"
+            :ingredient="ingredient"
           >
             <span
               class="filling"

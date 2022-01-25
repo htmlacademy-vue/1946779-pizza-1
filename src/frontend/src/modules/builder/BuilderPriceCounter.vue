@@ -7,7 +7,7 @@
     <button
       type="button"
       class="button"
-      :disabled="resultPrice == 0 || originalNameOfPizza === ''"
+      :disabled="resultPrice == 0 || nameOfPizza === ''"
       @click="$emit('movePriceToCart')"
     >
       Готовьте!
@@ -23,7 +23,7 @@ export default {
       type: Number,
       default: 0
     },
-    originalNameOfPizza: {
+    nameOfPizza: {
       type: String,
       default: ''
     }

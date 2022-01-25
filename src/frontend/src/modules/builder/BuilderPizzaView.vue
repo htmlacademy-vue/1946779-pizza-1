@@ -11,7 +11,6 @@
         name="pizza_name"
         placeholder="Введите название пиццы"
         v-model="originalNameOfPizza"
-        @input="inputNameOfPizza"
         required
       >
 
@@ -25,7 +24,7 @@
         <div class="pizza__wrapper">
           <div
             v-for="(ingredientType, index) in dropIngredientParsed"
-            :key="index"
+            :key="ingredientType.index"
             :data-id="index"
             class="pizza__filling"
             :class="[`pizza__filling--${ingredientType.info.type}`,
@@ -65,11 +64,6 @@ export default {
       originalNameOfPizza: ''
     }
   },
-  methods: {
-    inputNameOfPizza(event) {
-      this.$emit("inputNameOfPizza", event.target.value);
-    }
-  },
   watch: {
     ingredientDroped: function (newVal, oldVal) {
       this.dropIngredientParsed = [];
@@ -81,6 +75,9 @@ export default {
           this.dropIngredientParsed.push(cloneElement);
         }
       });
+    },
+    originalNameOfPizza: function(newVal) {
+      this.$emit("inputNameOfPizza", newVal);
     }
   }
 }

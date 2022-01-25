@@ -6,7 +6,7 @@
       @input="sendSauceData"
       type="radio"
       name="sauce"
-      :checked="sauce['id'] === 1"
+      :checked="sauce.checked"
     >
     <span>{{ sauce.name }}</span>
   </div>
@@ -21,16 +21,9 @@ export default {
       default: null
     }
   },
-  data() {
-    return {
-      sauceTypeandPrice: {},
-    }
-  },
   methods: {
     sendSauceData(event) {;
-      this.sauceTypeandPrice["type"] = event.target.value;
-      this.sauceTypeandPrice["price"] = event.target.getAttribute('data-price');
-      this.$emit("sendSauceData", this.sauceTypeandPrice);
+      this.$emit("sendSauceData", { type: event.target.value, price: event.target.getAttribute('data-price')});
     }
   }
 }

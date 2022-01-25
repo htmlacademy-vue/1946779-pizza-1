@@ -1,37 +1,44 @@
 export const dough_types = [
   {
     label: 'Тонкое',
-    value: 'small'
+    value: 'small',
+    checked: true,
   },
   {
     label: 'Толстое',
-    value: 'large'
+    value: 'large',
+    checked: false,
   }
 ];
 
 export const pizza_sizes = [
   {
     label: 1,
-    value: 'small'
+    value: 'small',
+    checked: true,
   },
   {
     label: 2,
-    value: 'normal'
+    value: 'normal',
+    checked: false,
   },
   {
     label: 3,
-    value: 'big'
+    value: 'big',
+    checked: false,
   }
 ];
 
 export const pizza_sauces = [
   {
     label: "Томатный",
-    value: 'tomato'
+    value: 'tomato',
+    checked: true,
   },
   {
     label: "Сливочный",
-    value: 'creamy'
+    value: 'creamy',
+    checked: false,
   }
 ];
 

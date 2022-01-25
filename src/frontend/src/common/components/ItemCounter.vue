@@ -4,19 +4,16 @@
       @click="clickCounterHandler('-')"
       type="button"
       class="counter__button counter__button--minus"
-      :disabled="this.ingredient.counter < 1"
+      :disabled="ingredient.counter < 1"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
 
     <input
-      :data-price="ingredient.price"
       type="text"
       name="counter"
       class="counter__input"
-      value="0"
-      v-model="this.ingredient.counter"
-      ref="inputPrice"
+      :value="ingredient.counter"
       disabled
       >
 
@@ -24,7 +21,7 @@
       @click="clickCounterHandler('+')"
       type="button"
       class="counter__button counter__button--plus"
-      :disabled="this.ingredient.counter >= 3"
+      :disabled="ingredient.counter >= 3"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -40,28 +37,14 @@ export default {
       default: null
     }
   },
-  data() {
-    return {
-      price: 0,
-      ingredientInfoObject: {},
-    }
-  },
-
   methods: {
     clickCounterHandler(symbol) {
       if ( symbol === '+' ) {
         this.ingredient.counter += 1;
-
-        this.ingredientInfoObject["id"] = this.ingredient["id"];
-        this.ingredientInfoObject["info"] = this.ingredient;
-
-        this.$emit('moveIngredient', this.ingredientInfoObject);
+        this.$emit('moveIngredient', {id: this.ingredient["id"], info: this.ingredient});
       } else if ( symbol === '-' ) {
         this.ingredient.counter -= 1;
-
-        this.ingredientInfoObject["id"] = this.ingredient["id"];
-        this.ingredientInfoObject["info"] = this.ingredient;
-        this.$emit('moveIngredient', this.ingredientInfoObject);
+        this.$emit('moveIngredient', {id: this.ingredient["id"], info: this.ingredient});
       }
     },
   },

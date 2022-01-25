@@ -9,9 +9,9 @@
       type="radio"
       class="visually-hidden"
       :value="dough.type"
-      :data-price="dough.price"
       @input="sendDoughData"
-      :checked="dough['id'] === 1"
+      :data-price="dough.price"
+      :checked="dough.checked"
     >
     <b>{{dough.name}}</b>
     <span>{{dough.description}}</span>
@@ -28,16 +28,9 @@ export default {
       required: true,
     }
   },
-  data() {
-    return {
-      doughTypeandPrice: {},
-    }
-  },
   methods: {
     sendDoughData(event) {
-      this.doughTypeandPrice["type"] = event.target.value;
-      this.doughTypeandPrice["price"] = event.target.getAttribute('data-price');
-      this.$emit("sendDoughData", this.doughTypeandPrice);
+      this.$emit("sendDoughData", { type: event.target.value, price: event.target.getAttribute('data-price')});
     }
   }
 }

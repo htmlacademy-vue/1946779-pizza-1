@@ -6,11 +6,10 @@
   >
     <input
       :value="size.name.split(' ', )[0]"
-      :data-multiplier="size.multiplier"
       type="radio"
       name="diameter"
       class="visually-hidden"
-      :checked="size['id'] == 1"
+      :checked="size.checked"
       @input="sendSize"
     >
     <span>{{size.name}}</span>
@@ -27,15 +26,9 @@ export default {
       default: null
     }
   },
-  data() {
-    return {
-      sizeMultiplier: '',
-    }
-  },
   methods: {
     sendSize(event) {
-      this.sizeMultiplier = event.target.getAttribute('data-multiplier');
-      this.$emit("sendSize", this.sizeMultiplier);
+      this.$emit("sendSize", this.size.multiplier);
     }
   }
 }
