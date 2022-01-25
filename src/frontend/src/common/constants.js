@@ -1,7 +1,7 @@
 export const dough_types = [
   {
     label: 'Тонкое',
-    value: 'light'
+    value: 'small'
   },
   {
     label: 'Толстое',
@@ -97,3 +97,6 @@ export const pizza_ingredients = [
     value: 'blue_cheese'
   }
 ]
+
+export const MOVE = 'move';
+export const DATA_TRANSFER_PAYLOAD = 'payload';
