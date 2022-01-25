@@ -1,9 +1,9 @@
 <template>
   <div
-    :draggable="ingredient.counter <= 2"
     @dragstart.self="onDrag"
     @dragover.prevent
     @dragenter.prevent
+    :draggable="isDraggable"
   >
     <slot />
   </div>
@@ -19,9 +19,9 @@ export default {
       type: Object,
       required: true
     },
-    ingredient: {
-      type: Object,
-      required: true
+    isDraggable: {
+      type: Boolean,
+      default: true,
     }
   },
   methods: {

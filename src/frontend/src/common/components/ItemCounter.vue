@@ -40,13 +40,23 @@ export default {
   methods: {
     clickCounterHandler(symbol) {
       if ( symbol === '+' ) {
-        this.ingredient.counter += 1;
-        this.$emit('moveIngredient', {id: this.ingredient["id"], info: this.ingredient});
+        let newObjIngredient = {};
+        newObjIngredient.id = this.ingredient.id;
+        newObjIngredient.info = this.ingredient;
+        newObjIngredient.info.counter = this.ingredient.counter + 1;
+
+        this.$emit('moveIngredient', newObjIngredient);
+
       } else if ( symbol === '-' ) {
-        this.ingredient.counter -= 1;
-        this.$emit('moveIngredient', {id: this.ingredient["id"], info: this.ingredient});
+        let newObjIngredient = {};
+        newObjIngredient.id = this.ingredient.id;
+        newObjIngredient.info = this.ingredient;
+        newObjIngredient.info.counter = this.ingredient.counter - 1;
+
+        this.$emit('moveIngredient', newObjIngredient);
       }
     },
   },
+
 }
 </script>

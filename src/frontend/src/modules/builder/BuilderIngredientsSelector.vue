@@ -25,18 +25,17 @@
           v-for="ingredient in ingredients"
           :key="ingredient.id"
           class="ingredients__item"
-          :data-id="ingredient.counter"
         >
 
           <AppDrag
             :transfer-data="ingredient"
-            :ingredient="ingredient"
+            :isDraggable="isDraggable(ingredient)"
           >
+
             <span
               class="filling"
               :class="`filling--${ingredient.type}`"
               :style="{'--varIngBcg': `url(${ingredient.image})`}"
-
             >
               {{ ingredient.name }}
             </span>
@@ -45,6 +44,7 @@
               :ingredient="ingredient"
               @moveIngredient="moveIngredient"
             />
+
           </AppDrag>
         </li>
       </ul>
@@ -55,7 +55,7 @@
 <script>
 import AppDrag from '@/common/components/AppDrag';
 import ItemCounter from '@/common/components/ItemCounter';
-import BuilderSauceSelector from '@/modules/builder/BuilderSauceSelector'
+import BuilderSauceSelector from '@/modules/builder/BuilderSauceSelector';
 
 export default {
   name: "BuilderIngredientsSelector",
@@ -75,12 +75,10 @@ export default {
     ItemCounter,
     BuilderSauceSelector,
     AppDrag,
-
   },
   data() {
     return {
-      saucePrice: '',
-      ingredientInfoObject: {}
+      ingredientInfoObject: {},
     }
   },
   methods: {
@@ -90,7 +88,9 @@ export default {
     moveIngredient(ingredientInfoObject) {
       this.$emit('moveIngredient', ingredientInfoObject);
     },
-
+    isDraggable(ingredient) {
+      return (ingredient.counter <= 2);
+    }
   },
 
 }

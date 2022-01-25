@@ -56,9 +56,9 @@
                 <BuilderIngredientsSelector
                   :sauces="sauces"
                   :ingredients="ingredients"
+                  :ingredientDroped="ingredientDroped"
                   @sendSauceData="sendSauceData"
                   @moveIngredient="moveIngredient"
-                  :ingredientDroped="ingredientDroped"
                 />
 
               </div>
@@ -77,8 +77,8 @@
 
             <BuilderPriceCounter
               :resultPrice="resultPrice"
-              @movePriceToCart="movePriceToCart"
               :nameOfPizza="nameOfPizza"
+              @movePriceToCart="movePriceToCart"
             />
 
           </div>

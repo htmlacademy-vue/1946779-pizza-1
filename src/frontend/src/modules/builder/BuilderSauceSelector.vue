@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     sendSauceData(event) {;
-      this.$emit("sendSauceData", { type: event.target.value, price: event.target.getAttribute('data-price')});
+      this.$emit("sendSauceData", { type: this.sauce.type, price: this.sauce.price });
     }
   }
 }

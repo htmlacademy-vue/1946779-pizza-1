@@ -10,7 +10,6 @@
       class="visually-hidden"
       :value="dough.type"
       @input="sendDoughData"
-      :data-price="dough.price"
       :checked="dough.checked"
     >
     <b>{{dough.name}}</b>
@@ -30,7 +29,7 @@ export default {
   },
   methods: {
     sendDoughData(event) {
-      this.$emit("sendDoughData", { type: event.target.value, price: event.target.getAttribute('data-price')});
+      this.$emit("sendDoughData", { type: this.dough.type, price: this.dough.price });
     }
   }
 }

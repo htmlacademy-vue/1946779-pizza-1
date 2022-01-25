@@ -60,24 +60,25 @@ export default {
   },
   data() {
     return {
-      dropIngredientParsed: [],
       originalNameOfPizza: ''
     }
   },
   watch: {
-    ingredientDroped: function (newVal, oldVal) {
-      this.dropIngredientParsed = [];
-
-      newVal.forEach( element => {
+    originalNameOfPizza: function(newVal) {
+      this.$emit("inputNameOfPizza", newVal);
+    },
+  },
+  computed: {
+    dropIngredientParsed: function() {
+      let newArrIngredients = [];
+      this.ingredientDroped.forEach( element => {
         for (let index = 1; index <= parseInt(element.info.counter); index++) {
           const cloneElement = Object.assign({}, element);
           cloneElement.number = index;
-          this.dropIngredientParsed.push(cloneElement);
+          newArrIngredients.push(cloneElement);
         }
       });
-    },
-    originalNameOfPizza: function(newVal) {
-      this.$emit("inputNameOfPizza", newVal);
+      return newArrIngredients;
     }
   }
 }
