@@ -1,16 +1,46 @@
 <template>
   <div id="app">
-    <IndexHome />
+    <AppLayout
+      :price="price"
+      :isLogin="isLogin"
+      :user="user"
+    >
+      <router-view
+        :pizzasInfoArray="routeProps.pizzasInfoArray"
+        :user="routeProps.user"
+        @sendInfo="catchInfo"
+      />
+    </AppLayout>
   </div>
 </template>
 
 <script>
-import IndexHome from '@/views/Index';
+import user from '@/static/user';
 
 export default {
   name: "App",
-  components: {
-    IndexHome
+  data() {
+    return {
+      user: user,
+      pizzasInfoArray: [],
+      price: 0,
+      isLogin: true,
+    }
+  },
+  methods: {
+    catchInfo(info) {
+      this.pizzasInfoArray.push(info);
+      this.$router.push({ name: 'Cart' });
+    },
+  },
+  computed: {
+     routeProps() {
+      const routes = {
+        Cart: { pizzasInfoArray: this.pizzasInfoArray },
+        Profile: { user: this.user}
+      };
+      return routes[this.$route.name] || {};
+    },
   }
 };
 </script>

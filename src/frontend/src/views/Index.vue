@@ -1,10 +1,5 @@
 <template>
-  <div class="">
-
-    <AppLayoutHeader
-      :priceToCart="priceToCart"
-    />
-
+  <div>
     <main class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
@@ -87,11 +82,10 @@
 
       </form>
     </main>
-
   </div>
 </template>
 <script>
-import AppLayoutHeader from '@/layouts/AppLayoutHeader';
+
 import BuilderDoughSelector from '@/modules/builder/BuilderDoughSelector';
 import BuilderSizeSelector from '@/modules/builder/BuilderSizeSelector';
 import BuilderIngredientsSelector from '@/modules/builder/BuilderIngredientsSelector';
@@ -106,7 +100,6 @@ import { normalizeDough, normalizeSize, normalizeSauce, normalizeIngredients } f
 export default {
   name: "IndexHome",
   components: {
-    AppLayoutHeader,
     BuilderDoughSelector,
     BuilderSizeSelector,
     BuilderIngredientsSelector,
@@ -149,11 +142,13 @@ export default {
       if (!this.ingredientMovedArray.find(el => el["id"] === ingredientInfoObject["id"])) {
         this.ingredientMovedArray.push(ingredientInfoObject);
         this.ingredientDroped = this.ingredientMovedArray;
+
       } else if (this.ingredientMovedArray.find(el => el["id"] === ingredientInfoObject["id"])) {
         const findedElement = this.ingredientMovedArray.find(el => el["id"] === ingredientInfoObject["id"]);
         this.ingredientMovedArray.splice(this.ingredientMovedArray.indexOf(findedElement), 1);
         this.ingredientMovedArray.push(ingredientInfoObject);
         this.ingredientDroped = this.ingredientMovedArray;
+
       }
     },
     dropIngr(ingredient) {
@@ -164,6 +159,7 @@ export default {
           info: this.ingredients.find(( ing => ing.id === ingredient.id))
         })
         this.ingredientDroped = this.ingredientMovedArray;
+
       } else if (this.ingredientMovedArray.includes(this.ingredientMovedArray.find( ing => ing.id === ingredient.id))) {
         let indexOfingr = this.ingredientMovedArray.indexOf(this.ingredientMovedArray.find( ing => ing.id === ingredient.id));
         if (indexOfingr !== -1) {
@@ -174,6 +170,7 @@ export default {
             info: this.ingredients.find(( ing => ing.id === ingredient.id))
           });
           this.ingredientDroped = this.ingredientMovedArray;
+
         }
       }
     },
@@ -182,6 +179,17 @@ export default {
     },
     movePriceToCart() {
       this.priceToCart = this.resultPrice;
+
+      let infoAboutPizza = {};
+
+      infoAboutPizza.id_pizza = Date.now();
+      infoAboutPizza.pizza_name = this.nameOfPizza;
+      infoAboutPizza.pizza_sauce = this.sauceType;
+      infoAboutPizza.pizza_dough = this.doughType;
+      infoAboutPizza.pizza_size = this.sizeMultiplier;
+      infoAboutPizza.pizza_price = this.priceToCart;
+      infoAboutPizza.pizza_ingredients = this.ingredientDroped;
+      this.$emit('sendInfo', infoAboutPizza);
     }
   },
   computed: {
@@ -204,6 +212,7 @@ export default {
 
       return finalSum;
     }
-  }
+  },
+
 }
 </script>
