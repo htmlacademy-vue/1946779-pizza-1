@@ -16,14 +16,14 @@
 
       <router-link
         class="layout__link layout__link--active"
-          to="/orders"
+        to="/orders"
       >
         История заказов
       </router-link>
 
       <router-link
         class="layout__link"
-          to="/profile"
+        to="/profile"
       >
         Мои данные
       </router-link>
@@ -118,9 +118,5 @@
 
 export default {
   name: "Orders",
-  components: {
-
-  },
-
 }
 </script>

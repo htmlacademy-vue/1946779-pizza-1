@@ -3,8 +3,8 @@
     <button
       type="button"
       class="counter__button counter__button--minus"
-      @click="clickCounter('-')"
-      :disabled="counterInside < 1"
+      @click="$emit('sendCount', counter - 1)"
+      :disabled="counter < 1"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
@@ -13,15 +13,15 @@
       type="text"
       name="counter"
       class="counter__input"
-      v-model="counterInside"
+      v-model="counter"
       disabled
     >
 
     <button
       type="button"
       class="counter__button counter__button--plus counter__button--orange"
-      @click="clickCounter('+')"
-      :disabled="counterInside >= 3"
+      @click="$emit('sendCount', counter + 1)"
+      :disabled="counter >= 3"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -35,24 +35,8 @@ export default {
   props: {
     counter: {
       type: Number,
+      required: true,
     }
   },
-  data() {
-    return {
-      counterInside: this.counter,
-    }
-  },
-  methods: {
-     clickCounter(symbol) {
-      if ( symbol === '+' ) {
-        this.counterInside += 1;
-        this.$emit("sendCount", this.counterInside)
-      } else if ( symbol === '-' ) {
-        this.counterInside -= 1;
-        this.$emit("sendCount", this.counterInside)
-      }
-    },
-  },
-
 }
 </script>

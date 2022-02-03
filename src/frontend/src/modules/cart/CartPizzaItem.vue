@@ -57,10 +57,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    pizzaPrice: {
-      type: Number,
-      default: 0
-    },
   },
   data() {
     return {
@@ -78,7 +74,7 @@ export default {
   },
   computed: {
     allPizzasCost: function() {
-      return (this.counter * this.pizzaPrice);
+      return (this.counter * this.pizza.pizza_price);
     }
   },
   watch: {

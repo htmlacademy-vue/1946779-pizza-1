@@ -23,27 +23,25 @@
 
       </div>
       <div class="header__user">
-        <a
+        <router-link
           v-if="isLogin"
-          href="#"
           class="header__logout"
-           @click.prevent="goToAuth"
+          to="/profile"
         >
           <picture>
             <source type="image/webp" srcset="@/assets/img/users/user5.webp 1x, @/assets/img/users/user5@2x.webp 2x">
             <img src="@/assets/img/users/user5.jpg" srcset="@/assets/img/users/user5@2x.jpg" alt="Василий Ложкин" width="32" height="32">
           </picture>
           <span>{{ user.name }}</span>
-        </a>
+        </router-link>
 
-        <a
+        <router-link
           v-else-if="!isLogin"
-          href="#"
           class="header__login"
-          @click.prevent="goToAuth"
+          to="/login"
         >
           <span>Войти</span>
-        </a>
+        </router-link>
       </div>
 
     </header>
@@ -65,14 +63,5 @@ export default {
       default: () => {}
     }
   },
-  methods: {
-    goToAuth() {
-      if(this.isLogin) {
-        this.$router.push({ name: 'Profile' });
-      } else if (!this.isLogin) {
-        this.$router.push({ name: 'Login' });
-      }
-    },
-  }
 }
 </script>

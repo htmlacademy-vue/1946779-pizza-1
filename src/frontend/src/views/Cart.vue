@@ -8,7 +8,7 @@
 
         <div
           class="sheet cart__empty"
-          v-if="pizzasInfoArray && (pizzasInfoArray.length < 1)"
+          v-if="pizzasInfoArray.length < 1"
         >
           <p>В корзине нет ни одного товара</p>
         </div>
@@ -22,7 +22,6 @@
             v-for="pizza in pizzasInfoArray"
             :key="pizza.id"
             :pizza="pizza"
-            :pizzaPrice="pizza.pizza_price"
             @sendPizzaCost="catchPizzaCost"
           />
 
@@ -35,7 +34,7 @@
               v-for="misc in miscs"
               :key="misc.id"
               :misc="misc"
-              @sendAllAdditionalCost="catchAllAdditionalCost"
+              @sendAdditionalSum="catchAdditionalSum"
             />
 
           </ul>
@@ -139,6 +138,7 @@ export default {
   props: {
     pizzasInfoArray: {
       type: Array,
+      required: true,
     }
   },
   data() {
@@ -159,15 +159,6 @@ export default {
     closePopup() {
       this.showPopup = !this.showPopup;
     },
-    catchAllAdditionalCost(additionalCost) {
-      if (this.additionalsList.find( elem => additionalCost.id === elem.id )) {
-        let findSomeElem = this.additionalsList.find( elem => additionalCost.id === elem.id );
-        this.additionalsList.splice(this.additionalsList.indexOf(findSomeElem), 1);
-        this.additionalsList.push(additionalCost);
-      } else {
-        this.additionalsList.push(additionalCost);
-      }
-    },
     catchPizzaCost(pizzaCost) {
       if (this.pizzaList.find( elem => pizzaCost.id === elem.id )) {
         let findSomeElem = this.pizzaList.find( elem => pizzaCost.id === elem.id );
@@ -176,20 +167,37 @@ export default {
       } else {
         this.pizzaList.push(pizzaCost);
       }
-    }
+    },
+    catchAdditionalSum(additionalSum) {
+
+      if(!this.additionalsList.includes(this.additionalsList.find(el => additionalSum.id === el.id))) {
+        this.additionalsList.push({
+          id: additionalSum.id,
+          price: (this.miscs.find(element => element.id === additionalSum.id).price * additionalSum.additional_sum),
+        });
+      } else {
+        let findSomeEl = this.additionalsList.find(element => element.id === additionalSum.id);
+        this.additionalsList.splice(this.additionalsList.indexOf(findSomeEl), 1);
+
+        this.additionalsList.push({
+          id: additionalSum.id,
+          price: (this.miscs.find(element => element.id === additionalSum.id).price * additionalSum.additional_sum),
+        });
+      }
+    },
   },
   watch: {
-    additionalsList: function(newVal) {
-      this.allAdditionalCost = 0;
-      newVal.forEach(element => {
-        this.allAdditionalCost += element.cost;
-      });
-    },
     pizzaList: function(newVal) {
       this.allPizzasCost = 0;
       newVal.forEach(element => {
         this.allPizzasCost += element.cost;
       });
+    },
+    additionalsList: function(newVal) {
+      this.allAdditionalCost = 0,
+      newVal.forEach(element => {
+        this.allAdditionalCost += element.price;
+      })
     }
   },
   computed: {

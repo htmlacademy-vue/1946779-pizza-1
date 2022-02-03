@@ -7,9 +7,11 @@
         :alt="misc.name"
       >
       <span>{{misc.name}}</span>
+
     </p>
 
     <div class="additional-list__wrapper">
+
       <CartItemCounter
         @sendCount="sendCount"
         :counter="counter"
@@ -18,6 +20,7 @@
       <div class="additional-list__price">
         <b>× {{misc.price}} ₽</b>
       </div>
+
     </div>
   </div>
 </template>
@@ -36,22 +39,19 @@ export default {
   },
   data() {
     return {
-      counter: 0
+      counter: 0,
+      additionalSum: 0
     }
   },
   methods: {
     sendCount(counter) {
       this.counter = counter;
-    }
-  },
-  computed: {
-    additionalCost: function() {
-      return (this.counter * this.misc.price);
+      this.additionalSum = counter;
     }
   },
   watch: {
-    additionalCost: function(newVal) {
-      this.$emit("sendAllAdditionalCost", {id: this.misc.id, cost: newVal});
+    additionalSum: function(newVal) {
+      this.$emit("sendAdditionalSum", { id: this.misc.id, additional_sum: newVal })
     }
   }
 }
