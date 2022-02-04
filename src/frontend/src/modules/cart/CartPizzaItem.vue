@@ -70,16 +70,12 @@ export default {
   methods: {
     catchCounter(counter) {
       this.counter = counter;
+      this.$emit("sendPizzaCost", {id: this.pizza.id_pizza, pizza_sum: counter, price: this.pizza.pizza_price})
     }
   },
   computed: {
     allPizzasCost: function() {
       return (this.counter * this.pizza.pizza_price);
-    }
-  },
-  watch: {
-    allPizzasCost: function(newVal) {
-      this.$emit("sendPizzaCost", {id: this.pizza.id_pizza, cost: newVal})
     }
   }
  }

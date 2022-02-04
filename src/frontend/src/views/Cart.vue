@@ -159,17 +159,7 @@ export default {
     closePopup() {
       this.showPopup = !this.showPopup;
     },
-    catchPizzaCost(pizzaCost) {
-      if (this.pizzaList.find( elem => pizzaCost.id === elem.id )) {
-        let findSomeElem = this.pizzaList.find( elem => pizzaCost.id === elem.id );
-        this.pizzaList.splice(this.pizzaList.indexOf(findSomeElem), 1);
-        this.pizzaList.push(pizzaCost);
-      } else {
-        this.pizzaList.push(pizzaCost);
-      }
-    },
     catchAdditionalSum(additionalSum) {
-
       if(!this.additionalsList.includes(this.additionalsList.find(el => additionalSum.id === el.id))) {
         this.additionalsList.push({
           id: additionalSum.id,
@@ -185,12 +175,28 @@ export default {
         });
       }
     },
+    catchPizzaCost(pizzaInfo) {
+      if(!this.pizzaList.includes(this.pizzaList.find(el => pizzaInfo.id === el.id))) {
+        this.pizzaList.push({
+          id: pizzaInfo.id,
+          price: (pizzaInfo.price * pizzaInfo.pizza_sum),
+        });
+      } else {
+        let findSomeEl = this.pizzaList.find(element => element.id === pizzaInfo.id);
+        this.pizzaList.splice(this.pizzaList.indexOf(findSomeEl), 1);
+
+        this.pizzaList.push({
+          id: pizzaInfo.id,
+          price: (pizzaInfo.price * pizzaInfo.pizza_sum),
+        });
+      }
+    },
   },
   watch: {
     pizzaList: function(newVal) {
       this.allPizzasCost = 0;
       newVal.forEach(element => {
-        this.allPizzasCost += element.cost;
+        this.allPizzasCost += element.price;
       });
     },
     additionalsList: function(newVal) {

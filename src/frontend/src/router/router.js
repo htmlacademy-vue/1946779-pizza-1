@@ -27,19 +27,13 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: () => import('@/views/Profile.vue'),
-    meta: {
-      layout: 'AppLayoutMain',
-      isActive: true
-    }
+    meta: { layout: 'AppLayoutProfile' }
   },
   {
     path: '/orders',
     name: 'Orders',
     component: () => import('@/views/Orders.vue'),
-    meta: {
-      layout: 'AppLayoutMain',
-      isActive: true
-    }
+    meta: { layout: 'AppLayoutProfile' }
   },
 ]
 

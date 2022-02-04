@@ -40,18 +40,12 @@ export default {
   data() {
     return {
       counter: 0,
-      additionalSum: 0
     }
   },
   methods: {
     sendCount(counter) {
       this.counter = counter;
-      this.additionalSum = counter;
-    }
-  },
-  watch: {
-    additionalSum: function(newVal) {
-      this.$emit("sendAdditionalSum", { id: this.misc.id, additional_sum: newVal })
+      this.$emit("sendAdditionalSum", { id: this.misc.id, additional_sum: counter })
     }
   }
 }

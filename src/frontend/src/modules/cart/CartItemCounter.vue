@@ -13,7 +13,7 @@
       type="text"
       name="counter"
       class="counter__input"
-      v-model="counter"
+      :value="counter"
       disabled
     >
 
