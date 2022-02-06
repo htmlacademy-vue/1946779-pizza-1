@@ -165,6 +165,8 @@ export default {
           id: additionalSum.id,
           price: (this.miscs.find(element => element.id === additionalSum.id).price * additionalSum.additional_sum),
         });
+
+        this.miscs.find(el => el.id === additionalSum.id).initialCounter = additionalSum.additional_sum;
       } else {
         let findSomeEl = this.additionalsList.find(element => element.id === additionalSum.id);
         this.additionalsList.splice(this.additionalsList.indexOf(findSomeEl), 1);
@@ -173,6 +175,8 @@ export default {
           id: additionalSum.id,
           price: (this.miscs.find(element => element.id === additionalSum.id).price * additionalSum.additional_sum),
         });
+
+        this.miscs.find(el => el.id === additionalSum.id).initialCounter = additionalSum.additional_sum;
       }
     },
     catchPizzaCost(pizzaInfo) {
@@ -181,6 +185,8 @@ export default {
           id: pizzaInfo.id,
           price: (pizzaInfo.price * pizzaInfo.pizza_sum),
         });
+
+        this.$emit("changeInitialCounter", {id: pizzaInfo.id, counter:  pizzaInfo.pizza_sum})
       } else {
         let findSomeEl = this.pizzaList.find(element => element.id === pizzaInfo.id);
         this.pizzaList.splice(this.pizzaList.indexOf(findSomeEl), 1);
@@ -189,6 +195,8 @@ export default {
           id: pizzaInfo.id,
           price: (pizzaInfo.price * pizzaInfo.pizza_sum),
         });
+
+        this.$emit("changeInitialCounter", {id: pizzaInfo.id, counter:  pizzaInfo.pizza_sum})
       }
     },
   },

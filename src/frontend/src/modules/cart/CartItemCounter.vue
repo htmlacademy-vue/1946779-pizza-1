@@ -28,8 +28,6 @@
   </div>
 </template>
 <script>
-
-
 export default {
   name: "CartItemCounter",
   props: {

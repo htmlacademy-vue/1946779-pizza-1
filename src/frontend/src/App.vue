@@ -9,6 +9,7 @@
         :pizzasInfoArray="routeProps.pizzasInfoArray"
         :user="routeProps.user"
         @sendInfo="catchInfo"
+        @changeInitialCounter="changeInitialCounter"
       />
     </AppLayout>
   </div>
@@ -32,6 +33,12 @@ export default {
       this.pizzasInfoArray.push(info);
       this.$router.push({ name: 'Cart' });
     },
+    changeInitialCounter(counterAndPizzaId) {
+      if (this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id )) {
+        let findedPizza = this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id);
+        findedPizza.initialCounter = counterAndPizzaId.counter;
+      }
+    }
   },
   computed: {
      routeProps() {

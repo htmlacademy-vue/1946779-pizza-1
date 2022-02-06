@@ -29,7 +29,7 @@
 
         <CartItemCounter
           @sendCount="catchCounter"
-          :counter="counter"
+          :counter="this.pizza.initialCounter"
         />
       </div>
 
@@ -58,24 +58,26 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {
-      sizeOfPizza: pizza_sizes.find(({ label }) => this.pizza.pizza_size === label)?.size,
-      typeOfDough: dough_types.find(({ value }) => this.pizza.pizza_dough === value)?.label,
-      typeOfSauce: pizza_sauces.find(({ value }) => this.pizza.pizza_sauce === value)?.rus_label,
-      ingredients: parsePizzaInfo(this.pizza.pizza_ingredients),
-      counter: 1,
-    }
-  },
   methods: {
     catchCounter(counter) {
-      this.counter = counter;
       this.$emit("sendPizzaCost", {id: this.pizza.id_pizza, pizza_sum: counter, price: this.pizza.pizza_price})
     }
   },
   computed: {
     allPizzasCost: function() {
-      return (this.counter * this.pizza.pizza_price);
+      return (this.pizza.initialCounter * this.pizza.pizza_price);
+    },
+    sizeOfPizza: function() {
+      return pizza_sizes.find(({ label }) => this.pizza.pizza_size === label)?.size;
+    },
+    typeOfDough: function() {
+      return  dough_types.find(({ value }) => this.pizza.pizza_dough === value)?.label;
+    },
+    typeOfSauce: function() {
+      return pizza_sauces.find(({ value }) => this.pizza.pizza_sauce === value)?.rus_label;
+    },
+    ingredients: function() {
+      return parsePizzaInfo(this.pizza.pizza_ingredients);
     }
   }
  }

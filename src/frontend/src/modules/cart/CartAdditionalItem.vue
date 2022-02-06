@@ -14,7 +14,7 @@
 
       <CartItemCounter
         @sendCount="sendCount"
-        :counter="counter"
+        :counter="misc.initialCounter"
       />
 
       <div class="additional-list__price">
@@ -35,16 +35,11 @@ export default {
   props: {
     misc: {
       type: Object,
-    }
-  },
-  data() {
-    return {
-      counter: 0,
-    }
+      required: true
+    },
   },
   methods: {
     sendCount(counter) {
-      this.counter = counter;
       this.$emit("sendAdditionalSum", { id: this.misc.id, additional_sum: counter })
     }
   }

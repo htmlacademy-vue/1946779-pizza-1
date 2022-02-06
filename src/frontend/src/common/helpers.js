@@ -40,6 +40,7 @@ export const normalizeIngredients = ings => {
 export const normalizeMisc = misc => {
   return {
     ...misc,
+    initialCounter: misc_types.find(({ name }) => misc.name === name)?.initialCounter,
     svgName: misc_types.find(({ name }) => misc.name === name)?.svg,
   };
 };

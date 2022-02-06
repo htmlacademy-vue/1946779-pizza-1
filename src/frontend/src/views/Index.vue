@@ -183,6 +183,7 @@ export default {
       let infoAboutPizza = {};
 
       infoAboutPizza.id_pizza = Date.now();
+      infoAboutPizza.initialCounter  = 1;
       infoAboutPizza.pizza_name = this.nameOfPizza;
       infoAboutPizza.pizza_sauce = this.sauceType;
       infoAboutPizza.pizza_dough = this.doughType;

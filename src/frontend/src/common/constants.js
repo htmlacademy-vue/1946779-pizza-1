@@ -116,14 +116,17 @@ export const misc_types = [
   {
     name: "Cola-Cola 0,5 литра",
     svg: "cola",
+    initialCounter: 0
   },
   {
     name: "Острый соус",
     svg: "sauce",
+    initialCounter: 0
   },
   {
     name: "Картошка из печи",
     svg: "potato",
+    initialCounter: 0
   }
 ];
 
