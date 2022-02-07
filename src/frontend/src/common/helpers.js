@@ -1,4 +1,4 @@
-import { dough_types, pizza_sizes, pizza_sauces, pizza_ingredients } from "@/common/constants";
+import { dough_types, pizza_sizes, pizza_sauces, pizza_ingredients, misc_types } from "@/common/constants";
 
 // Нормализация массыва с видом теста.
 export const normalizeDough = dough => {
@@ -34,4 +34,36 @@ export const normalizeIngredients = ings => {
     type: pizza_ingredients.find(({ name }) => ings.name === name)?.value,
     counter: 0,
   }
+}
+
+// Нормализация массыва с допами.
+export const normalizeMisc = misc => {
+  return {
+    ...misc,
+    initialCounter: misc_types.find(({ name }) => misc.name === name)?.initialCounter,
+    svgName: misc_types.find(({ name }) => misc.name === name)?.svg,
+  };
+};
+
+// парсинг ингередиентов для корзины:
+export const parsePizzaInfo = ingredientInfo => {
+  let ingredientList = [];
+  ingredientInfo.forEach( ingredients => {
+    let igredient = ingredients.info.name;
+    ingredientList.push(igredient);
+  });
+  return ingredientList;
+}
+
+// парсинг цены ингредиентов:
+export const parsePizzaCost = pizzasInfoArray => {
+  let costsList = [];
+  var initialValue = 0;
+  pizzasInfoArray.forEach( pizzaInfo => {
+    let price = pizzaInfo.pizza_price;
+    costsList.push(price);
+  });
+  return costsList.reduce(function(a, b) {
+    return a + b;
+  }, initialValue);
 }

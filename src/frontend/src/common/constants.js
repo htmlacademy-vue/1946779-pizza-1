@@ -1,11 +1,13 @@
 export const dough_types = [
   {
     label: 'Тонкое',
+    rus_label: "тонкое",
     value: 'small',
     checked: true,
   },
   {
     label: 'Толстое',
+    rus_label: "толстое",
     value: 'large',
     checked: false,
   }
@@ -15,16 +17,19 @@ export const pizza_sizes = [
   {
     label: 1,
     value: 'small',
+    size: '23см',
     checked: true,
   },
   {
     label: 2,
     value: 'normal',
+    size: '32см',
     checked: false,
   },
   {
     label: 3,
     value: 'big',
+    size: '45см',
     checked: false,
   }
 ];
@@ -32,11 +37,13 @@ export const pizza_sizes = [
 export const pizza_sauces = [
   {
     label: "Томатный",
+    rus_label: "томатный",
     value: 'tomato',
     checked: true,
   },
   {
     label: "Сливочный",
+    rus_label: "сливочный",
     value: 'creamy',
     checked: false,
   }
@@ -104,6 +111,24 @@ export const pizza_ingredients = [
     value: 'blue_cheese'
   }
 ]
+
+export const misc_types = [
+  {
+    name: "Cola-Cola 0,5 литра",
+    svg: "cola",
+    initialCounter: 0
+  },
+  {
+    name: "Острый соус",
+    svg: "sauce",
+    initialCounter: 0
+  },
+  {
+    name: "Картошка из печи",
+    svg: "potato",
+    initialCounter: 0
+  }
+];
 
 export const MOVE = 'move';
 export const DATA_TRANSFER_PAYLOAD = 'payload';
