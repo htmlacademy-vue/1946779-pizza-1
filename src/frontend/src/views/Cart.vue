@@ -8,7 +8,7 @@
 
         <div
           class="sheet cart__empty"
-          v-if="pizzasInfoArray.length < 1"
+          v-if="pizzas.length < 1"
         >
           <p>В корзине нет ни одного товара</p>
         </div>
@@ -19,10 +19,9 @@
         >
 
           <CartPizzaItem
-            v-for="pizza in pizzasInfoArray"
+            v-for="pizza in pizzas"
             :key="pizza.id"
             :pizza="pizza"
-            @sendPizzaCost="catchPizzaCost"
           />
 
         </ul>
@@ -34,19 +33,24 @@
               v-for="misc in miscs"
               :key="misc.id"
               :misc="misc"
-              @sendAdditionalSum="catchAdditionalSum"
             />
 
           </ul>
         </div>
 
         <div class="cart__form">
-          <div class="cart-form">
+
+           <div class="cart-form">
 
             <label class="cart-form__select">
               <span class="cart-form__label">Получение заказа:</span>
 
-              <select name="test" class="select">
+              <select
+                name="test"
+                class="select"
+                v-model="orderWay"
+                required
+              >
                 <option value="1">Заберу сам</option>
                 <option value="2">Новый адрес</option>
                 <option value="3">Дом</option>
@@ -55,34 +59,66 @@
 
             <label class="input input--big-label">
               <span>Контактный телефон:</span>
-              <input type="text" name="tel" placeholder="+7 999-999-99-99">
+
+              <input
+                type="text"
+                name="tel"
+                placeholder="+7 999-999-99-99"
+                v-model="phoneNumber"
+                required
+              >
+
             </label>
 
             <div class="cart-form__address">
               <span class="cart-form__label">Новый адрес:</span>
 
               <div class="cart-form__input">
+
                 <label class="input">
                   <span>Улица*</span>
-                  <input type="text" name="street">
+
+                  <input
+                    type="text"
+                    name="street"
+                    v-model="street"
+                    required
+                  >
+
                 </label>
               </div>
 
               <div class="cart-form__input cart-form__input--small">
+
                 <label class="input">
                   <span>Дом*</span>
-                  <input type="text" name="house">
+
+                  <input
+                    type="number"
+                    name="house"
+                    v-model="house"
+                    required
+                  >
+
                 </label>
               </div>
 
               <div class="cart-form__input cart-form__input--small">
+
                 <label class="input">
                   <span>Квартира</span>
-                  <input type="text" name="apartment">
+
+                  <input
+                    type="number"
+                    name="apartment"
+                    v-model="apartment"
+                    required
+                  >
                 </label>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </main>
@@ -99,14 +135,15 @@
       </div>
       <p class="footer__text">Перейти к конструктору<br>чтоб собрать ещё одну пиццу</p>
       <div class="footer__price">
-        <b>Итого: {{ finalCostOfProducts }} ₽</b>
+        <b>Итого: {{ finalPrice }} ₽</b>
       </div>
 
       <div class="footer__submit">
         <button
           type="submit"
           class="button"
-          @click.prevent="checkout"
+          @click.prevent="addOrder"
+          :disabled="finalPrice === 0"
         >
         Оформить заказ
         </button>
@@ -125,8 +162,8 @@ import CartAdditionalItem from '@/modules/cart/CartAdditionalItem';
 
 import Popup from '@/views/Popup';
 
-import misc from '@/static/misc';
-import { normalizeMisc, parsePizzaCost } from '@/common/helpers';
+import { parsePizzaCost } from '@/common/helpers';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
 export default {
   name: "Cart",
@@ -135,97 +172,67 @@ export default {
     CartPizzaItem,
     Popup
   },
-  props: {
-    pizzasInfoArray: {
-      type: Array,
-      required: true,
-    }
-  },
   data() {
     return {
       showPopup: false,
-      miscs: misc.map(item => normalizeMisc(item)),
-      pizzasPriceFromArray: 0,
-      additionalsList: [],
-      allAdditionalCost: 0,
-      pizzaList: [],
-      allPizzasCost: 0,
+      orderWay: 1,
+      phoneNumber: '',
+      street: '',
+      house: '',
+      apartment: ''
     }
   },
+  computed: {
+    ...mapState('Cart', ['miscs', 'pizzas', 'orderInfo']),
+    ...mapGetters('Cart', ['finalPrice']),
+  },
+  mounted() {
+    if(this.pizzas) {
+      this.pizzasPriceFromArray = parsePizzaCost(this.pizzas);
+    } else {
+      this.pizzasPriceFromArray = 0;
+    }
+    this.allPizzasCost = parseInt(this.pizzasPriceFromArray);
+  },
   methods: {
-    checkout() {
+    ...mapActions('Orders', ['addOrderToState']),
+    ...mapMutations('Cart', {
+      addOrderInfo: 'ADD_ORDERINFO'
+    }),
+
+    addOrder() {
+      if (!this.phoneNumber || !this.street || !this.house || !this.apartment) {
+        return;
+      }
+
+      let orderInfo = {
+        orderWay: this.orderWay,
+        phone: this.phoneNumber,
+        adress: {
+          street: this.street,
+          house: this.house,
+          apartment: this.apartment
+        }
+      };
+
+      this.addOrderInfo(orderInfo);
+
+      let orderObj = {
+        pizzas: this.pizzas,
+        miscs: this.miscs,
+        orderInfo: this.orderInfo,
+      }
+
+      this.addOrderToState(orderObj);
+
       this.showPopup = !this.showPopup;
     },
     closePopup() {
       this.showPopup = !this.showPopup;
     },
-    catchAdditionalSum(additionalSum) {
-      if(!this.additionalsList.includes(this.additionalsList.find(el => additionalSum.id === el.id))) {
-        this.additionalsList.push({
-          id: additionalSum.id,
-          price: (this.miscs.find(element => element.id === additionalSum.id).price * additionalSum.additional_sum),
-        });
-
-        this.miscs.find(el => el.id === additionalSum.id).initialCounter = additionalSum.additional_sum;
-      } else {
-        let findSomeEl = this.additionalsList.find(element => element.id === additionalSum.id);
-        this.additionalsList.splice(this.additionalsList.indexOf(findSomeEl), 1);
-
-        this.additionalsList.push({
-          id: additionalSum.id,
-          price: (this.miscs.find(element => element.id === additionalSum.id).price * additionalSum.additional_sum),
-        });
-
-        this.miscs.find(el => el.id === additionalSum.id).initialCounter = additionalSum.additional_sum;
-      }
-    },
-    catchPizzaCost(pizzaInfo) {
-      if(!this.pizzaList.includes(this.pizzaList.find(el => pizzaInfo.id === el.id))) {
-        this.pizzaList.push({
-          id: pizzaInfo.id,
-          price: (pizzaInfo.price * pizzaInfo.pizza_sum),
-        });
-
-        this.$emit("changeInitialCounter", {id: pizzaInfo.id, counter:  pizzaInfo.pizza_sum})
-      } else {
-        let findSomeEl = this.pizzaList.find(element => element.id === pizzaInfo.id);
-        this.pizzaList.splice(this.pizzaList.indexOf(findSomeEl), 1);
-
-        this.pizzaList.push({
-          id: pizzaInfo.id,
-          price: (pizzaInfo.price * pizzaInfo.pizza_sum),
-        });
-
-        this.$emit("changeInitialCounter", {id: pizzaInfo.id, counter:  pizzaInfo.pizza_sum})
-      }
-    },
   },
-  watch: {
-    pizzaList: function(newVal) {
-      this.allPizzasCost = 0;
-      newVal.forEach(element => {
-        this.allPizzasCost += element.price;
-      });
-    },
-    additionalsList: function(newVal) {
-      this.allAdditionalCost = 0,
-      newVal.forEach(element => {
-        this.allAdditionalCost += element.price;
-      })
-    }
-  },
-  computed: {
-    finalCostOfProducts: function() {
-      return (this.allAdditionalCost + this.allPizzasCost);
-    }
-  },
-  mounted() {
-    if(this.pizzasInfoArray) {
-      this.pizzasPriceFromArray = parsePizzaCost(this.pizzasInfoArray);
-    } else {
-      this.pizzasPriceFromArray = 0;
-    }
-    this.allPizzasCost = parseInt(this.pizzasPriceFromArray);
+  created() {
+    this.$store.dispatch("Cart/setAdditionals");
   }
 }
 </script>

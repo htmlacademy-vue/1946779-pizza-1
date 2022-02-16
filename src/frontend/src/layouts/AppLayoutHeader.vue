@@ -15,11 +15,21 @@
       </div>
       <div class="header__cart">
 
-        <router-link
-          to="/cart"
-        >
-          {{price}} ₽
-        </router-link>
+          <router-link
+            v-if="this.pizzas.length > 0"
+            to="/cart"
+          >
+            {{ this.finalPrice }} ₽
+          </router-link>
+
+          <a
+            v-else
+            href="#"
+            class="empty"
+            @click.prevent
+          >
+          </a>
+
 
       </div>
       <div class="header__user">
@@ -47,13 +57,12 @@
     </header>
 </template>
 <script>
+import { mapState, mapGetters } from 'vuex';
+
 export default {
   name: "AppLayout",
   props: {
-    price: {
-      type: Number,
-      default: 0
-    },
+
     isLogin: {
       type: Boolean,
       default: false
@@ -63,5 +72,9 @@ export default {
       default: () => {}
     }
   },
+  computed: {
+    ...mapState('Cart', ['pizzas']),
+    ...mapGetters('Cart', ['finalPrice']),
+  }
 }
 </script>

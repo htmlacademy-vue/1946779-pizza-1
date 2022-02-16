@@ -49,6 +49,9 @@
     &:focus {
       opacity: 0.5;
     }
+    &.empty {
+      padding-top: 40px;
+    }
   }
 }
 

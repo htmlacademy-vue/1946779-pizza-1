@@ -3,7 +3,7 @@
       <div class="product cart-list__product">
         <img src="@/assets/img/product.svg" class="product__img" width="56" height="56" alt="Капричоза">
         <div class="product__text">
-          <h2>{{ pizza.pizza_name }}</h2>
+          <h2>{{ pizza.pizzaName }}</h2>
           <ul>
             <li>
               {{ sizeOfPizza }}, <span class="product__ingredient-span">{{ typeOfDough }}</span> тесто.
@@ -29,12 +29,12 @@
 
         <CartItemCounter
           @sendCount="catchCounter"
-          :counter="this.pizza.initialCounter"
+          :counter="this.pizza.count"
         />
       </div>
 
       <div class="cart-list__price">
-        <b>{{ allPizzasCost }} ₽</b>
+        <b>{{ this.pizza.count * this.pizza.price }} ₽</b>
       </div>
 
       <div class="cart-list__button">
@@ -44,8 +44,9 @@
 </template>
 <script>
 import CartItemCounter from '@/modules/cart/CartItemCounter';
-import { dough_types, pizza_sizes, pizza_sauces, pizza_ingredients, misc_types } from "@/common/constants";
+import { dough_types, pizza_sizes, pizza_sauces } from "@/common/constants";
 import { parsePizzaInfo } from "@/common/helpers";
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: "CartPizzaItem",
@@ -55,31 +56,30 @@ export default {
   props: {
     pizza: {
       type: Object,
-      default: () => {},
+      required: true
     },
-  },
-  methods: {
-    catchCounter(counter) {
-      this.$emit("sendPizzaCost", {id: this.pizza.id_pizza, pizza_sum: counter, price: this.pizza.pizza_price})
-    }
   },
   computed: {
-    allPizzasCost: function() {
-      return (this.pizza.initialCounter * this.pizza.pizza_price);
-    },
     sizeOfPizza: function() {
-      return pizza_sizes.find(({ label }) => this.pizza.pizza_size === label)?.size;
+      return pizza_sizes.find(({ label }) => this.pizza.size === label)?.size;
     },
     typeOfDough: function() {
-      return  dough_types.find(({ value }) => this.pizza.pizza_dough === value)?.label;
+      return  dough_types.find(({ value }) => this.pizza.dough.type === value)?.label;
     },
     typeOfSauce: function() {
-      return pizza_sauces.find(({ value }) => this.pizza.pizza_sauce === value)?.rus_label;
+      return pizza_sauces.find(({ value }) => this.pizza.sauce.type === value)?.rus_label;
     },
     ingredients: function() {
-      return parsePizzaInfo(this.pizza.pizza_ingredients);
+      return parsePizzaInfo(this.pizza.ingredients);
     }
-  }
+  },
+  methods: {
+    ...mapActions('Cart', ['addPizzaCount']),
+
+    catchCounter(counter) {
+      this.addPizzaCount({id: this.pizza.id, count: counter, price: this.pizza.price});
+    }
+  },
  }
 </script>
 <style lang="scss" scoped>

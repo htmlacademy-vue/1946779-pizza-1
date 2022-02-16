@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <label
+    class="radio ingredients__input"
+  >
     <input
       :value="sauce.type"
       :data-price="sauce.price"
@@ -9,9 +11,11 @@
       :checked="sauce.checked"
     >
     <span>{{ sauce.name }}</span>
-  </div>
+  </label>
 </template>
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   name: "RadioButton",
   props:{
@@ -22,9 +26,15 @@ export default {
     }
   },
   methods: {
+    ...mapMutations("Builder", {
+      addSauce: "ADD_SAUCE"
+    }),
     sendSauceData(event) {;
-      this.$emit("sendSauceData", { type: this.sauce.type, price: this.sauce.price });
+      this.addSauce({ type: this.sauce.type, price: this.sauce.price });
     }
+  },
+  beforeMount() {
+    this.sendSauceData();
   }
 }
 </script>
