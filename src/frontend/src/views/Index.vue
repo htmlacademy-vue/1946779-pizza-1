@@ -92,25 +92,21 @@ export default {
 
   computed: {
     ...mapState("Builder", ['sizes', 'doughs']),
-
   },
   methods: {
-    ...mapActions("Builder", ["addIngredients"]),
+    ...mapActions("Builder", ["addIngredients", "dropIngredients"]),
 
-    async dropIngr(ingredient) {
-      ingredient.counter += 1;
-      await this.addIngredients(ingredient);
+    dropIngr(ingredient) {
+      this.dropIngredients(ingredient);
     },
 
     inputNameOfPizza(inputValue) {
       this.nameOfPizza = inputValue;
     },
+
     movePriceToCart() {
       this.$emit('sendInfo', infoAboutPizza);
     }
   },
-  created() {
-    this.$store.dispatch("Builder/setPizza")
-  }
 }
 </script>

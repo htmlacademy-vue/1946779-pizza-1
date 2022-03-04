@@ -36,8 +36,10 @@ export default {
       this.addSize(this.size.multiplier);
     }
   },
-  beforeMount() {
-    this.sendSize();
+  created() {
+    if (this.size.checked === true) {
+      this.addSize(this.size.multiplier);
+    }
   }
 }
 </script>

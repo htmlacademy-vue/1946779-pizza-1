@@ -29,12 +29,16 @@ export default {
     ...mapMutations("Builder", {
       addSauce: "ADD_SAUCE"
     }),
+
     sendSauceData(event) {;
       this.addSauce({ type: this.sauce.type, price: this.sauce.price });
+
     }
   },
-  beforeMount() {
-    this.sendSauceData();
+  created() {
+    if (this.sauce.checked === true) {
+      this.addSauce({ type: this.sauce.type, price: this.sauce.price });
+    }
   }
 }
 </script>

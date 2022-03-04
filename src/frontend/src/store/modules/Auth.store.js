@@ -3,7 +3,8 @@ import user from '@/static/user.json';
 export default {
   namespaced: true,
   state: {
-    user: user
+    user: user,
+    isLogin: false
   },
   mutations: {
     SET_USER: (state, user) => (state.user = user),

@@ -38,7 +38,12 @@
       </div>
 
       <div class="cart-list__button">
-        <button type="button" class="cart-list__edit">Изменить</button>
+        <button
+          type="button"
+          class="cart-list__edit"
+          @click="changeIngredients"
+        >
+        Изменить</button>
       </div>
     </div>
 </template>
@@ -46,7 +51,7 @@
 import CartItemCounter from '@/modules/cart/CartItemCounter';
 import { dough_types, pizza_sizes, pizza_sauces } from "@/common/constants";
 import { parsePizzaInfo } from "@/common/helpers";
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
 
 export default {
   name: "CartPizzaItem",
@@ -75,9 +80,17 @@ export default {
   },
   methods: {
     ...mapActions('Cart', ['addPizzaCount']),
+    ...mapActions('Builder', ['setChangingPizza']),
 
     catchCounter(counter) {
       this.addPizzaCount({id: this.pizza.id, count: counter, price: this.pizza.price});
+    },
+    changeIngredients() {
+      const copyPizza = Object.assign({}, this.pizza);
+      this.setChangingPizza(copyPizza);
+
+      this.$router.push({ name: 'Home' });
+
     }
   },
  }

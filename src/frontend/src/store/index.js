@@ -5,21 +5,18 @@ import modules from '@/store/modules';
 Vue.use(Vuex);
 
 const state = () => ({
-  buildedPizzas: []
+  changingPizza: {}
 });
+
+
+const mutations = {
+
+};
 
 const actions = {
   async init({ dispatch }) {
     dispatch();
   },
-  putPizzaToCart({ state, rootState, commit }) {
-    const pizza = rootState.buildedPizza;
-    commit('ADD_PIZZA', pizza);
-  },
-};
-
-const mutations = {
-  ADD_PIZZA: (state, data) => (state.buildedPizzas.push(data)),
 };
 
 export default new Vuex.Store({

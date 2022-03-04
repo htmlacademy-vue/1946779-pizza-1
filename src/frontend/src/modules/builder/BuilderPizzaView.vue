@@ -68,6 +68,7 @@ export default {
     doughType: function() {
       return this.buildedPizza.dough.type;
     },
+
     sauceType: function() {
       return this.buildedPizza.sauce.type;
     },
@@ -84,6 +85,9 @@ export default {
       return newArrIngredients;
     }
   },
+  created() {
+    this.originalNameOfPizza = this.buildedPizza.pizzaName;
+  }
 
 }
 </script>

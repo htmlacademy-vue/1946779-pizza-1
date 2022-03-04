@@ -37,8 +37,10 @@ export default {
       this.addDough({ type: this.dough.type, price: this.dough.price });
     }
   },
-  beforeMount() {
-    this.sendDoughData();
+  created() {
+    if (this.dough.checked === true) {
+      this.addDough({ type: this.dough.type, price: this.dough.price });
+    }
   }
 }
 </script>

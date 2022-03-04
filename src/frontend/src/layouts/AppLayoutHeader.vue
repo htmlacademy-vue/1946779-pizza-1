@@ -22,13 +22,14 @@
             {{ this.finalPrice }} ₽
           </router-link>
 
-          <a
+          <router-link
             v-else
             href="#"
             class="empty"
-            @click.prevent
+            to="/cart"
+
           >
-          </a>
+          </router-link>
 
 
       </div>

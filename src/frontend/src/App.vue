@@ -26,7 +26,6 @@ export default {
     }
   },
   methods: {
-
     changeInitialCounter(counterAndPizzaId) {
       if (this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id )) {
         let findedPizza = this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id);
@@ -43,6 +42,9 @@ export default {
       return routes[this.$route.name] || {};
     },
   },
+  beforeCreate() {
+    this.$store.dispatch("Builder/setPizza");
+  }
 };
 </script>
 

@@ -3,13 +3,13 @@ export const dough_types = [
     label: 'Тонкое',
     rus_label: "тонкое",
     value: 'small',
-    checked: false,
+    checked: true,
   },
   {
     label: 'Толстое',
     rus_label: "толстое",
     value: 'large',
-    checked: true,
+    checked: false,
   }
 ];
 
@@ -18,7 +18,7 @@ export const pizza_sizes = [
     label: 1,
     value: 'small',
     size: '23см',
-    checked: false,
+    checked: true,
   },
   {
     label: 2,
@@ -30,7 +30,7 @@ export const pizza_sizes = [
     label: 3,
     value: 'big',
     size: '45см',
-    checked: true,
+    checked: false,
   }
 ];
 
@@ -39,13 +39,13 @@ export const pizza_sauces = [
     label: "Томатный",
     rus_label: "томатный",
     value: 'tomato',
-    checked: false,
+    checked: true,
   },
   {
     label: "Сливочный",
     rus_label: "сливочный",
     value: 'creamy',
-    checked: true,
+    checked: false,
   }
 ];
 

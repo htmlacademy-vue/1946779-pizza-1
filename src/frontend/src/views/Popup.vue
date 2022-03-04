@@ -25,12 +25,40 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex';
+
 export default {
   name: 'Popup',
-  methods: {
-    closePopup() {
-      this.$emit("closePopup");
+  props: {
+    showPopup: {
+      type: Boolean,
+      default: false
     }
+  },
+  methods: {
+    ...mapMutations('Builder', {
+      resetBuilderState: 'RESET_STATE'
+    }),
+    ...mapMutations('Cart', {
+      resetCartState: 'RESET_STATE'
+    }),
+    ...mapActions('Builder', ['setPizza']),
+
+    closePopup() {
+      if (this.isLogin == true) {
+        this.$router.push({ name: 'Orders' });
+        this.resetBuilderState();
+        this.resetCartState();
+      } else {
+        this.$router.push({ name: 'Home' });
+        this.resetBuilderState();
+        this.resetCartState();
+        this.setPizza();
+      }
+    }
+  },
+  computed: {
+    ...mapState('Auth', ['isLogin']),
   }
 }
 </script>
