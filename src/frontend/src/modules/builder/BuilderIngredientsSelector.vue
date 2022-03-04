@@ -3,102 +3,44 @@
     <div class="ingredients__sauce">
       <p>Основной соус:</p>
 
-      <label
+      <BuilderSauceSelector
         v-for="sauce in sauces"
         :key="sauce.id"
-        class="radio ingredients__input"
-      >
+        :sauce="sauce"
+      />
 
-        <BuilderSauceSelector
-          :sauce="sauce"
-          @sendSauceData="sendSauceData"
-        />
-
-      </label>
     </div>
 
     <div class="ingredients__filling">
       <p>Начинка:</p>
 
       <ul class="ingredients__list">
-        <li
+
+        <BuilderIngredient
           v-for="ingredient in ingredients"
           :key="ingredient.id"
-          class="ingredients__item"
-        >
+          :ingredient="ingredient"
+        />
 
-          <AppDrag
-            :transfer-data="ingredient"
-            :isDraggable="isDraggable(ingredient)"
-          >
-
-            <span
-              class="filling"
-              :class="`filling--${ingredient.type}`"
-              :style="{'--varIngBcg': `url(${ingredient.image})`}"
-            >
-              {{ ingredient.name }}
-            </span>
-
-            <ItemCounter
-              :ingredient="ingredient"
-              @moveIngredient="moveIngredient"
-            />
-
-          </AppDrag>
-        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-import AppDrag from '@/common/components/AppDrag';
-import ItemCounter from '@/common/components/ItemCounter';
 import BuilderSauceSelector from '@/modules/builder/BuilderSauceSelector';
+import BuilderIngredient from '@/modules/builder/BuilderIngredient';
+
+import { mapState } from 'vuex';
 
 export default {
   name: "BuilderIngredientsSelector",
-  props: {
-    sauces: {
-      type: Array,
-      required: true,
-      default: null
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-      default: null
-    },
-  },
   components: {
-    ItemCounter,
     BuilderSauceSelector,
-    AppDrag,
+    BuilderIngredient
   },
-  data() {
-    return {
-      ingredientInfoObject: {},
-    }
+  computed: {
+    ...mapState('Builder', ['ingredients', 'sauces']),
   },
-  methods: {
-    sendSauceData(saucePrice) {
-      this.$emit("sendSauceData", saucePrice);
-    },
-    moveIngredient(ingredientInfoObject) {
-      this.$emit('moveIngredient', ingredientInfoObject);
-    },
-    isDraggable(ingredient) {
-      return (ingredient.counter <= 2);
-    }
-  },
-
 }
 </script>
-
-<style lang="scss" scoped>
-.filling::before {
-  cursor: pointer;
-  background-image: var(--varIngBcg);
-}
-</style>

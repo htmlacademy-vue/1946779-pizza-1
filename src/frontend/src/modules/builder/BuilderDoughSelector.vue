@@ -18,6 +18,7 @@
   </label>
 </template>
 <script>
+import { mapActions, mapState, mapMutations } from 'vuex';
 
 export default {
   name: "BuilderDoughSelector",
@@ -28,8 +29,17 @@ export default {
     }
   },
   methods: {
+    ...mapMutations("Builder", {
+      addDough: "ADD_DOUGH"
+    }),
+
     sendDoughData(event) {
-      this.$emit("sendDoughData", { type: this.dough.type, price: this.dough.price });
+      this.addDough({ type: this.dough.type, price: this.dough.price });
+    }
+  },
+  created() {
+    if (this.dough.checked === true) {
+      this.addDough({ type: this.dough.type, price: this.dough.price });
     }
   }
 }

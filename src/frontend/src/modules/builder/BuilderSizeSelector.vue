@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   name: "BuilderSizeSelector",
   props: {
@@ -27,8 +29,16 @@ export default {
     }
   },
   methods: {
+    ...mapMutations("Builder", {
+      addSize: 'ADD_SIZE'
+    }),
     sendSize(event) {
-      this.$emit("sendSize", this.size.multiplier);
+      this.addSize(this.size.multiplier);
+    }
+  },
+  created() {
+    if (this.size.checked === true) {
+      this.addSize(this.size.multiplier);
     }
   }
 }

@@ -26,6 +26,7 @@
 </template>
 <script>
 import CartItemCounter from '@/modules/cart/CartItemCounter';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: "CartAdditionalItem",
@@ -39,8 +40,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions('Cart', ['addAdditional']),
+
     sendCount(counter) {
-      this.$emit("sendAdditionalSum", { id: this.misc.id, additional_sum: counter })
+      this.addAdditional({ id: this.misc.id, count: counter });
     }
   }
 }

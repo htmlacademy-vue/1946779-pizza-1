@@ -49,7 +49,7 @@ export const normalizeMisc = misc => {
 export const parsePizzaInfo = ingredientInfo => {
   let ingredientList = [];
   ingredientInfo.forEach( ingredients => {
-    let igredient = ingredients.info.name;
+    let igredient = ingredients.name;
     ingredientList.push(igredient);
   });
   return ingredientList;
