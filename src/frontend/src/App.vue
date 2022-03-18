@@ -14,13 +14,16 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import user from '@/static/user';
+import { setAuth } from '@/common/helpers';
+import { logout } from '@/common/mixins';
 
 export default {
   name: "App",
+  mixins: [logout],
   data() {
     return {
-      user: user,
       pizzasInfoArray: [],
       isLogin: true,
     }
@@ -31,10 +34,25 @@ export default {
         let findedPizza = this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id);
         findedPizza.initialCounter = counterAndPizzaId.counter;
       }
+    },
+    async $logout() {
+      // Вызываем действие логаута в хранилище.
+      await this.$store.dispatch('Auth/logout');
+      // Показываем уведомление об успешном выходе.
+      this.$notifier.success('Вы успешно вышли');
+      // Переводим пользователя на страницу логина.
+      await this.$router.push('/login');
     }
   },
   computed: {
-     routeProps() {
+    ...mapState(['Auth']),
+    ...mapGetters('Auth', ['getUserAttribute']),
+
+    user() {
+      return this.Auth.user || {};
+    },
+
+    routeProps() {
       const routes = {
         Cart: { pizzasInfoArray: this.pizzasInfoArray },
         Profile: { user: this.user}
@@ -42,8 +60,16 @@ export default {
       return routes[this.$route.name] || {};
     },
   },
-  beforeCreate() {
-    this.$store.dispatch("Builder/setPizza");
+  created() {
+    window.onerror = function (msg, url, line, col, error) {
+      console.error(error);
+    };
+
+    if (this.$jwt.getToken()) {
+      setAuth(this.$store);
+    }
+
+    this.$store.dispatch('init');
   }
 };
 </script>

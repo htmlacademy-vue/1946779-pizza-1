@@ -1,6 +1,10 @@
 import Vue from 'vue';
 import VueRouter from  'vue-router';
 import Home from '@/views/Index.vue';
+import store from '@/store';
+import { middlewarePipeline } from '@/middlewares';
+
+import { auth, isAdmin, isLoggedIn } from '@/middlewares';
 
 Vue.use(VueRouter)
 
@@ -9,13 +13,18 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    meta: { layout: 'AppLayoutMain' }
+    meta: {
+      layout: 'AppLayoutMain',
+    }
   },
   {
     path: "/login",
     name: "Login",
     component: () => import('@/views/Login.vue'),
-    meta: { layout: 'AppLayoutDefault' }
+    meta: {
+      layout: 'AppLayoutDefault',
+      middlewares: [isLoggedIn]
+    }
   },
   {
     path: '/cart',
@@ -27,13 +36,19 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: () => import('@/views/Profile.vue'),
-    meta: { layout: 'AppLayoutProfile' }
+    meta: {
+      layout: 'AppLayoutProfile',
+      middlewares: [auth, isAdmin]
+    }
   },
   {
     path: '/orders',
     name: 'Orders',
     component: () => import('@/views/Orders.vue'),
-    meta: { layout: 'AppLayoutProfile' }
+    meta: {
+      layout: 'AppLayoutProfile',
+      middlewares: [auth, isAdmin]
+    }
   },
 ]
 
@@ -42,5 +57,25 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const middlewares = to.meta.middlewares;
+  if (!middlewares?.length) {
+    return next();
+  }
+
+  // Запускаем обход по цепочке проверок
+  const context = { to, from, next, store };
+  const firstMiddlewareIndex = 0;
+  const nextMiddlewareIndex = 1;
+  return middlewares[firstMiddlewareIndex]({
+    ...context,
+    nextMiddleware: middlewarePipeline(
+      context,
+      middlewares,
+      nextMiddlewareIndex
+    )
+  });
+});
 
 export default router

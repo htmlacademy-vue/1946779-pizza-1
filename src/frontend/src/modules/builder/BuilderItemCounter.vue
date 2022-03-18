@@ -15,7 +15,7 @@
       class="counter__input"
       :value="counter"
       disabled
-      >
+    >
 
     <button
       @click="$emit('countIngredient', counter + 1)"

@@ -31,13 +31,13 @@ export default {
     }),
 
     sendSauceData(event) {;
-      this.addSauce({ type: this.sauce.type, price: this.sauce.price });
+      this.addSauce({ type: this.sauce.type, price: this.sauce.price, id: this.sauce.id});
 
     }
   },
   created() {
     if (this.sauce.checked === true) {
-      this.addSauce({ type: this.sauce.type, price: this.sauce.price });
+      this.addSauce({ type: this.sauce.type, price: this.sauce.price, id: this.sauce.id });
     }
   }
 }

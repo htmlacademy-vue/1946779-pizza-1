@@ -58,7 +58,7 @@
     </header>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
 export default {
   name: "AppLayout",
@@ -68,12 +68,10 @@ export default {
       type: Boolean,
       default: false
     },
-    user: {
-      type: Object,
-      default: () => {}
-    }
+
   },
   computed: {
+    ...mapState('Auth', ['isAuthenticated', 'user', 'address']),
     ...mapState('Cart', ['pizzas']),
     ...mapGetters('Cart', ['finalPrice']),
   }

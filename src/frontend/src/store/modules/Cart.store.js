@@ -1,17 +1,9 @@
-import misc from '@/static/misc';
-import { normalizeMisc } from '@/common/helpers';
-
-
-const setupState = () => ({
-  pizzas: [],
-  miscs: [],
-  orderInfo: {},
-  changingPizza: {}
-});
-
 export default {
   namespaced: true,
-  state: setupState,
+  state: {
+    miscs: [],
+    pizzas: [],
+  },
   getters: {
     finalPrice(state) {
       let allPizzasPrice = 0;
@@ -50,12 +42,12 @@ export default {
     DELETE_PIZZA: (state, pizzaInfo) => (state.pizzas.splice((state.pizzas.indexOf(state.pizzas.find(el => el.id === pizzaInfo.id))), 1)),
 
     RESET_STATE: (state) => {
-      Object.assign(state, setupState());
+      state.pizzas = [];
     },
   },
   actions: {
-    setAdditionals({ commit }) {
-      const miscs = misc.map(item => normalizeMisc(item));
+    async queryMisc({ commit }) {
+      const miscs = await this.$api.misc.query();
       commit('SET_MISCS', miscs);
     },
 

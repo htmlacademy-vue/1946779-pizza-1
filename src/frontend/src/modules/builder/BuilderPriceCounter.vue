@@ -35,8 +35,9 @@ export default {
 
     putPizza() {
       this.addPrice(this.pricePizza);
-      this.setPizza(this.buildedPizza);
+      this.setPizza(Object.assign( {}, this.buildedPizza));
       this.resetState();
+
       this.$router.push({ name: 'Cart' });
     }
   }

@@ -48,7 +48,7 @@
 
           <div
             class="cart-form"
-            v-if="isLogin"
+            v-if="isAuthenticated"
           >
 
             <label class="cart-form__select">
@@ -60,10 +60,27 @@
                 v-model="orderWay"
                 required
               >
-                <option value="1">Заберу сам</option>
-                <option value="2">Новый адрес</option>
-                <option value="3">Существующий адрес</option>
+
+                <option
+                  value="1"
+                >
+                  Заберу сам
+                </option>
+
+                <option
+                  value="2"
+                >
+                  Новый адрес
+                </option>
+
+                <option
+                  value="3"
+                >
+                  Существующий адрес
+                </option>
+
               </select>
+
             </label>
 
             <label class="input input--big-label">
@@ -91,6 +108,7 @@
                     type="text"
                     name="street"
                     v-model="street"
+                    :disabled="(orderWay === 1)"
                     required
                   >
 
@@ -106,6 +124,7 @@
                     type="number"
                     name="house"
                     v-model="house"
+                    :disabled="(orderWay === 1)"
                     required
                   >
 
@@ -121,6 +140,7 @@
                     type="number"
                     name="apartment"
                     v-model="apartment"
+                    :disabled="(orderWay === 1)"
                     required
                   >
                 </label>
@@ -143,8 +163,18 @@
                 v-model="orderWay"
                 required
               >
-                <option value="1">Заберу сам</option>
-                <option value="2">Новый адрес</option>
+                <option
+                  value="1"
+                >
+                  Заберу сам
+                </option>
+
+                <option
+                  value="2"
+                >
+                  Новый адрес
+                </option>
+
               </select>
             </label>
 
@@ -173,7 +203,7 @@
                     type="text"
                     name="street"
                     v-model="street"
-                    required
+                    :disabled="(orderWay === 1)"
                   >
 
                 </label>
@@ -188,7 +218,7 @@
                     type="number"
                     name="house"
                     v-model="house"
-                    required
+                    :disabled="(orderWay === 1)"
                   >
 
                 </label>
@@ -203,7 +233,7 @@
                     type="number"
                     name="apartment"
                     v-model="apartment"
-                    required
+                    :disabled="(orderWay === 1)"
                   >
                 </label>
               </div>
@@ -254,7 +284,7 @@ import CartAdditionalItem from '@/modules/cart/CartAdditionalItem';
 
 import Popup from '@/views/Popup';
 
-import { parsePizzaCost } from '@/common/helpers';
+import { parsePizzaCost, createPizzasRequestObj, createMiscRequestObj } from '@/common/helpers';
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
 export default {
@@ -275,7 +305,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('Auth', ['isLogin']),
+    ...mapState('Auth', ['isAuthenticated', 'user', 'address']),
     ...mapState('Cart', ['miscs', 'pizzas', 'orderInfo']),
     ...mapGetters('Cart', ['finalPrice']),
   },
@@ -288,67 +318,85 @@ export default {
     this.allPizzasCost = parseInt(this.pizzasPriceFromArray);
   },
   methods: {
-    ...mapActions('Orders', ['addOrderToState']),
-    ...mapMutations('Cart', {
-      addOrderInfo: 'ADD_ORDERINFO'
+    ...mapActions('Orders', {
+      'addOrderToState': 'post'
     }),
 
     addOrder() {
-      if (!this.phoneNumber || !this.street || !this.house || !this.apartment) {
-        return;
-      }
+      if (this.isAuthenticated == true) {
 
-      if (this.isLogin == true) {
-        let orderInfo = {
-          orderWay: this.orderWay,
-          phone: this.phoneNumber,
-          adress: {
+        if( this.orderWay === 1 ) {
+          // самовывоз
+          const addressForm = {
+            street: '',
+            building: '',
+            flat: '',
+            comment: 'pickup'
+          };
+
+        } else if ( this.orderWay === 2 ) {
+          // новый адрес
+          const addressForm = {
             street: this.street,
-            house: this.house,
-            apartment: this.apartment
-          }
-        };
-
-        this.addOrderInfo(orderInfo);
-
-        let orderObj = {
-          userId: 1,
-          pizzas: this.pizzas,
-          miscs: this.miscs,
-          orderInfo: this.orderInfo,
+            building: this.house,
+            flat: this.apartment,
+            comment: ''
+          };
+        } else if ( this.orderWay === 3 ) {
+          // существующий адрес
+          const addressForm = {
+            street: this.address.street,
+            building: this.address.building,
+            flat: this.address.flat,
+            comment: ''
+          };
         }
 
-        this.addOrderToState(orderObj);
+        let order = {
+          "userId": this.user.id,
+          "phone": this.phoneNumber,
+          "address": this.addressForm,
+          "pizzas": createPizzasRequestObj(this.pizzas),
+          "misc": createMiscRequestObj(this.miscs),
+        };
+
+        this.addOrderToState(order);
 
         this.showPopup = !this.showPopup;
-        this.$router.push({ name: 'Orders' });
-
       } else {
-        let orderInfo = {
-          orderWay: this.orderWay,
-          phone: this.phoneNumber,
-          adress: {
-            street: this.street,
-            house: this.house,
-            apartment: this.apartment
-          }
-        };
-        this.addOrderInfo(orderInfo);
 
-        let orderObj = {
-          userId: null,
-          pizzas: this.pizzas,
-          miscs: this.miscs,
-          orderInfo: this.orderInfo,
+        if( this.orderWay === 1 ) {
+          // самовывоз
+          const addressForm = {
+            street: 'pickup',
+            building: 'pickup',
+            flat: 'pickup',
+            comment: 'pickup'
+          };
+
+        } else if ( this.orderWay === 2 ) {
+          // новый адрес
+          const addressForm = {
+            street: this.street,
+            building: this.house,
+            flat: this.apartment,
+            comment: ''
+          };
         }
+
+        let order = {
+          "userId": this.user.id,
+          "phone": this.phoneNumber,
+          "address": this.addressForm,
+          "pizzas": createPizzasRequestObj(this.pizzas),
+          "misc": createMiscRequestObj(this.miscs),
+        };
+
         this.addOrderToState(orderObj);
 
         this.showPopup = !this.showPopup;
       }
     },
   },
-  created() {
-    this.$store.dispatch("Cart/setAdditionals");
-  }
 }
 </script>

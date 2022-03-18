@@ -34,12 +34,12 @@ export default {
     }),
 
     sendDoughData(event) {
-      this.addDough({ type: this.dough.type, price: this.dough.price });
+      this.addDough({ type: this.dough.type, price: this.dough.price, id: this.dough.id });
     }
   },
   created() {
     if (this.dough.checked === true) {
-      this.addDough({ type: this.dough.type, price: this.dough.price });
+      this.addDough({ type: this.dough.type, price: this.dough.price, id: this.dough.id });
     }
   }
 }

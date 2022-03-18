@@ -3,7 +3,6 @@
     <AppLayoutHeader
       :price="price"
       :isLogin="isLogin"
-      :user="user"
     />
 
     <main class="layout">
@@ -35,10 +34,6 @@ export default {
       type: Boolean,
       default: false
     },
-    user: {
-      type: Object,
-      default: () => {}
-    }
   },
   data() {
     return {

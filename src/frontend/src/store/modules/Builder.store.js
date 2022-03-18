@@ -1,29 +1,26 @@
-import pizzaObj from '@/static/pizza.json';
 import { uniqueId } from 'lodash';
 
-import { normalizeDough, normalizeSize, normalizeSauce, normalizeIngredients } from '@/common/helpers';
-
 const setupState = () => ({
+  id: uniqueId(),
+  count: 1,
+  dough: {},
   ingredients: [],
-  sauces: [],
-  sizes: [],
-  doughs: [],
-  buildedPizza: {
-    id: uniqueId(),
-    count: 1,
-    dough: {},
-    ingredients: [],
-    pizzaName: '',
-    price: 0,
-    sauce: {},
-    size: {}
-  },
+  pizzaName: '',
+  price: 0,
+  sauce: {},
+  size: {}
 });
 
 export default {
   namespaced: true,
 
-  state: setupState,
+  state: {
+    ingredients: [],
+    sauces: [],
+    sizes: [],
+    doughs: [],
+    buildedPizza: setupState(),
+  },
 
   mutations: {
     SET_INGREDIENTS: (state, data) => (state.ingredients = data),
@@ -67,7 +64,7 @@ export default {
       (state.ingredients.find(el => el.id === ingredient.id).counter = ingredient.counter),
 
     RESET_STATE: (state) => {
-      Object.assign(state, setupState());
+      Object.assign(state.buildedPizza, setupState());
     },
 
     SET_PIZZA_TO_CHANGE: (state, pizza) => (state.buildedPizza = pizza),
@@ -80,23 +77,21 @@ export default {
         ingredientsPriceSum += parseInt(ingredient.counter * ingredient.price);
       });
 
-      return ((state.buildedPizza.sauce.price + state.buildedPizza.dough.price + ingredientsPriceSum) * state.buildedPizza.size);
+      return ((state.buildedPizza.sauce.price + state.buildedPizza.dough.price + ingredientsPriceSum) * state.buildedPizza.size.multiplier);
     }
    },
   actions: {
-    setPizza({ commit }) {
-      const pizza  = Object.assign({}, pizzaObj);
-
-      const ingredients = pizza.ingredients.map( (item) => normalizeIngredients(item));
+    async query({ commit }, config) {
+      const ingredients = await this.$api.ingredients.query(config);
       commit('SET_INGREDIENTS', ingredients);
 
-      const doughs = pizza.dough.map( (item) => normalizeDough(item));
+      const doughs = await this.$api.dough.query(config);
       commit('SET_DOUGHS', doughs);
 
-      const sizes = pizza.sizes.map( (item) => normalizeSize(item));
+      const sizes = await this.$api.sizes.query(config);
       commit('SET_SIZES', sizes);
 
-      const sauces = pizza.sauces.map( (item) => normalizeSauce(item));
+      const sauces = await this.$api.sauces.query(config);
       commit('SET_SAUCES', sauces);
     },
 
@@ -144,8 +139,8 @@ export default {
         commit('CHANGE_INGREDIENTS', ingredientMovedArray);
       }
     },
-    setChangingPizza({ state, commit, dispatch}, copyPizza) {
-      dispatch('setPizza');
+    async setChangingPizza({ state, commit, dispatch}, copyPizza) {
+      // await dispatch('query');
 
       commit('SET_PIZZA_TO_CHANGE', copyPizza);
       commit('SET_SAUCE', copyPizza.sauce.type);
