@@ -29,3 +29,13 @@ export const ORDER_CONFIG = {
     }
   ]
 };
+
+export const ADDRESS_CONFIG = {
+  "id": 0,
+  "name": "string",
+  "userId": "string",
+  "street": "string",
+  "building": "string",
+  "flat": "string",
+  "comment": "string"
+}

@@ -26,7 +26,7 @@
     <div class="layout__address">
 
       <ProfileFormAddress
-
+        :user="user"
       />
 
     </div>

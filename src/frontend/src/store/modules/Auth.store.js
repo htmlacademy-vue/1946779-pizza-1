@@ -55,6 +55,10 @@ export default {
     async getAddress({ commit }) {
       const data = await this.$api.address.query();
       commit('GET_ADDRESS', data)
-    }
+    },
+    async postAddress({ commit }, address) {
+      const data = await this.$api.address.post(address);
+      commit('GET_ADDRESS', data)
+    },
   }
 };

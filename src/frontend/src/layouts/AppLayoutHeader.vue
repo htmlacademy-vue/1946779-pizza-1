@@ -63,15 +63,16 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 export default {
   name: "AppLayout",
   props: {
-
     isLogin: {
       type: Boolean,
       default: false
     },
-
+    user: {
+      type: Object,
+      default: () => {}
+    }
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated', 'user', 'address']),
     ...mapState('Cart', ['pizzas']),
     ...mapGetters('Cart', ['finalPrice']),
   }

@@ -246,12 +246,6 @@ export class AddressApiService extends CrudApiService {
     return orders;
   }
 
-  // Создание нового адреса
-  async post(address) {
-    const { data: newAddress } =
-      await axios.post('addresses', address);
-  }
-
   // Редактирование адреса
   async put(address) {
     const { data } = await axios.put(
