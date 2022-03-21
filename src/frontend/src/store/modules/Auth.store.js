@@ -1,9 +1,11 @@
+import { cloneDeep } from 'lodash';
+
 export default {
   namespaced: true,
   state: {
     isAuthenticated: false, // для проверки, авторизован пользователь или нет
     user: null, // здесь мы будем хранить авторизованного пользователя
-    address: [],
+    addresses: [],
   },
 
   getters: {
@@ -14,7 +16,10 @@ export default {
   mutations: {
     SET_AUTH: (state, value) => (state.isAuthenticated = value),
     SET_USER: (state, data) => (state.user = data),
-    GET_ADDRESS: (state, address) => (state.address = address)
+    GET_ADDRESS: (state, addresses) => (state.addresses = addresses),
+    DELETE_ADDRESS: (state, addressId) => {
+      state.addresses.splice(state.addresses.indexOf(state.addresses.find(el => el.id === addressId)), 1);
+    }
   },
 
   actions: {
@@ -27,7 +32,7 @@ export default {
       this.$api.auth.setAuthHeader();
       // 3. Отправляем запрос на получение профиля пользователя
       dispatch('getMe');
-      dispatch('getAddress');
+      dispatch('getAddresses');
      },
 
     async logout({ commit }, sendRequest = true) {
@@ -52,13 +57,25 @@ export default {
         dispatch('logout', false);
       }
     },
-    async getAddress({ commit }) {
+
+    async getAddresses({ commit }) {
       const data = await this.$api.address.query();
       commit('GET_ADDRESS', data)
     },
+
     async postAddress({ commit }, address) {
-      const data = await this.$api.address.post(address);
-      commit('GET_ADDRESS', data)
+      const addressCopy = cloneDeep(address);
+      const data = await this.$api.address.post(addressCopy);
+      return data;
     },
+
+    async putAddress({ commit }, address) {
+      const data = await this.$api.address.put(address);
+    },
+
+    async deleteAddress({ commit }, addressId) {
+      const data = await this.$api.address.delete(addressId);
+      commit('DELETE_ADDRESS', addressId);
+    }
   }
 };

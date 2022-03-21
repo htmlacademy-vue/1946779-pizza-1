@@ -242,17 +242,26 @@ export class AddressApiService extends CrudApiService {
 
   // Получение списка адресов
   async query(config = {}) {
-    const orders = await super.query(config);
-    return orders;
+    const addresses = await super.query(config);
+    return addresses;
   }
 
   // Редактирование адреса
   async put(address) {
-    const { data } = await axios.put(
-      `$addresses/${address.id}`,
-      address
-    );
-    return data;
+    await axios.put(`addresses/${address.id}`, address);
+    return address;
   }
 
+  // Создание нового адреса
+  async post(address) {
+    const {data: newAddress} =
+      await axios.post('addresses', address);
+    return newAddress;
+  }
+
+  // запрос на удаление адреса
+  async delete(id) {
+    const { data } = await axios.delete(`addresses/${id}`);
+    return data;
+  }
 }

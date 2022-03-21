@@ -31,21 +31,21 @@ export default {
     ADD_PIZZA_NAME: (state, name) => (state.buildedPizza.pizzaName = name),
 
     ADD_SAUCE: (state, sauce) => (state.buildedPizza.sauce = sauce),
-    SET_SAUCE: (state, sauceType) => {
-      state.sauces.find( el => el.type === sauceType).checked = true;
-      state.sauces.find( el => el.type !== sauceType).checked = false;
+    SET_SAUCE: (state, sauceId) => {
+      state.sauces.find( el => el.id === sauceId).checked = true;
+      state.sauces.find( el => el.type !== sauceId).checked = false;
     },
 
     ADD_SIZE: (state, size) => (state.buildedPizza.size = size),
-    SET_SIZE: (state, size) => {
-      state.sizes.find( el => el.multiplier === size).checked = true;
-      state.sizes.find( el => el.multiplier !== size).checked = false;
+    SET_SIZE: (state, sizeId) => {
+      state.sizes.find( el => el.id === sizeId).checked = true;
+      state.sizes.find( el => el.id !== sizeId).checked = false;
     },
 
     ADD_DOUGH: (state, dough) => (state.buildedPizza.dough = dough),
-    SET_DOUGH: (state, doughType) => {
-      state.doughs.find( el => el.type === doughType).checked = true;
-      state.doughs.find( el => el.type !== doughType).checked = false;
+    SET_DOUGH: (state, doughId) => {
+      state.doughs.find( el => el.id === doughId).checked = true;
+      state.doughs.find( el => el.id !== doughId).checked = false;
     },
 
     SET_ID: (state, pizzaId) => (state.buildedPizza.id = pizzaId),
@@ -140,14 +140,12 @@ export default {
       }
     },
     async setChangingPizza({ state, commit, dispatch}, copyPizza) {
-      // await dispatch('query');
-
-      commit('SET_PIZZA_TO_CHANGE', copyPizza);
-      commit('SET_SAUCE', copyPizza.sauce.type);
-      commit('SET_DOUGH', copyPizza.dough.type);
-      commit('SET_SIZE', copyPizza.size);
-      commit('SET_INGREDIENT_COUNT', copyPizza.ingredients),
-      commit('SET_ID', copyPizza.id);
+      await commit('SET_PIZZA_TO_CHANGE', copyPizza),
+            commit('SET_SAUCE', copyPizza.sauce.id),
+            commit('SET_DOUGH', copyPizza.dough.id),
+            commit('SET_SIZE', copyPizza.size.id),
+            commit('SET_INGREDIENT_COUNT', copyPizza.ingredients),
+            commit('SET_ID', copyPizza.id);
     }
   },
 };

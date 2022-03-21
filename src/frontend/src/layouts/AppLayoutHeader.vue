@@ -35,19 +35,26 @@
       </div>
       <div class="header__user">
         <router-link
-          v-if="isLogin"
+          v-if="isAuthenticated"
           class="header__logout"
           to="/profile"
         >
           <picture>
-            <source type="image/webp" srcset="@/assets/img/users/user5.webp 1x, @/assets/img/users/user5@2x.webp 2x">
-            <img src="@/assets/img/users/user5.jpg" srcset="@/assets/img/users/user5@2x.jpg" alt="Василий Ложкин" width="32" height="32">
+            <source type="image/webp"
+            :srcset="user.avatar"
+            >
+
+            <img
+            :src="user.avatar"
+
+            alt="Василий Ложкин" width="32" height="32"
+            >
           </picture>
           <span>{{ user.name }}</span>
         </router-link>
 
         <router-link
-          v-else-if="!isLogin"
+          v-else
           class="header__login"
           to="/login"
         >
@@ -63,16 +70,13 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 export default {
   name: "AppLayout",
   props: {
-    isLogin: {
-      type: Boolean,
-      default: false
-    },
     user: {
       type: Object,
       default: () => {}
     }
   },
   computed: {
+    ...mapState('Auth', ['isAuthenticated']),
     ...mapState('Cart', ['pizzas']),
     ...mapGetters('Cart', ['finalPrice']),
   }

@@ -15,7 +15,6 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
-import user from '@/static/user';
 import { setAuth } from '@/common/helpers';
 import { logout } from '@/common/mixins';
 

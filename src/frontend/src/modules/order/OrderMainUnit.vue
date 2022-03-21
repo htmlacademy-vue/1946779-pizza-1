@@ -3,7 +3,7 @@
 
     <div class="order__wrapper">
       <div class="order__number">
-        <b>Заказ #11199929</b>
+        <b>Заказ #{{ order.id }}</b>
       </div>
 
       <div class="order__sum">
@@ -22,7 +22,15 @@
 
       </div>
       <div class="order__button">
-        <button type="button" class="button">Повторить</button>
+
+        <button
+          type="button"
+          class="button"
+          @click="repeat"
+        >
+          Повторить
+        </button>
+
       </div>
     </div>
 
@@ -47,7 +55,28 @@
 
     </ul>
 
-    <p class="order__address">Адрес доставки: Тест (или если адрес новый - писать целиком)</p>
+    <p
+      class="order__address"
+      v-if="addresses.find(el => el.id == order.addressId)"
+    >
+      Адрес доставки: {{ order.orderAddress.name }}
+    </p>
+
+    <p
+      class="order__address"
+      v-else-if="order.addressId === null"
+    >
+      Адрес доставки: самовывоз.
+    </p>
+
+    <p
+      class="order__address"
+      v-else-if="!addresses.find(el => el.id == order.addressId)"
+    >
+      Адрес доставки: улица {{  order.orderAddress.street }},
+      дом {{  order.orderAddress.building }}, квартира {{  order.orderAddress.flat }}
+    </p>
+
   </section>
 </template>
 <script>
@@ -68,13 +97,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Orders', ['deleteOrder']),
+    ...mapActions('Orders', ['deleteOrder', 'repeatOrder']),
 
     removeOrder() {
       this.deleteOrder(this.order.id);
     },
+
+    repeat() {
+      this.repeatOrder(this.order);
+      this.$router.push({ name: 'Cart' });
+    }
   },
   computed: {
+    ...mapState('Auth', ['isAuthenticated', 'user', 'addresses']),
     ...mapState("Builder", ['sizes', 'doughs', 'sauces', 'ingredients']),
     ...mapState("Cart", ['miscs']),
 

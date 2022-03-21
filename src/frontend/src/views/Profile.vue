@@ -15,25 +15,56 @@
       <p class="user__phone">Контактный телефон: <span>{{ user.phone }}</span></p>
     </div>
 
-    <div class="layout__address">
+    <div
+      class="layout__address"
+      v-if="addresses && ( addresses.length > 0 )"
+    >
 
       <ProfileAddressView
+        @editAddress="editAddress"
+        v-for="address in this.addresses"
+        :key="address.id"
+        :address="address"
+      />
 
+      <ProfileFormAddress
+        v-show="showEditForm"
+        :user="user"
+        :address='editedAddress'
+        :mode='"edit"'
+        @removeAddress="removeAddress"
+        @closeForm="closeForm"
       />
 
     </div>
 
-    <div class="layout__address">
+    <div
+      class="layout__address"
+      v-else
+    >
 
-      <ProfileFormAddress
-        :user="user"
-      />
+      <h2>Нет сохраненных aдресов</h2>
 
     </div>
 
     <div class="layout__button">
-      <button type="button" class="button button--border">Добавить новый адрес</button>
+      <button
+        type="button"
+        class="button button--border"
+        @click="showForm"
+        :disabled="showNewForm"
+      >
+        Добавить новый адрес
+      </button>
     </div>
+
+      <ProfileFormAddress
+        buttonText="Отменить"
+        v-show="showNewForm"
+        :user="user"
+        @removeAddress="removeAddress"
+        @closeForm="closeForm"
+      />
   </div>
 
 </template>
@@ -42,15 +73,57 @@ import ProfileAddressView from '@/modules/profile/ProfileAddressView';
 import ProfileFormAddress from '@/modules/profile/ProfileFormAddress';
 
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { cloneDeep } from 'lodash';
 
 export default {
   name: "Profile",
+  data: () => ({
+    showEditForm: false,
+    showNewForm: false,
+    editedAddress: {},
+  }),
   components: {
     ProfileAddressView,
     ProfileFormAddress
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated', 'user', 'address']),
+    ...mapState('Auth', ['isAuthenticated', 'user', 'addresses']),
+  },
+  methods: {
+    ...mapActions('Auth', ['deleteAddress']),
+    ...mapMutations('Auth', {
+      getAddresses: 'GET_ADDRESS'
+    }),
+
+    showForm() {
+      this.showNewForm = true;
+    },
+
+    editAddress(address) {
+      this.showEditForm = true;
+      this.editedAddress = cloneDeep(address);
+    },
+
+    removeAddress(address) {
+      if( !address.id ) {
+        this.showNewForm = false;
+      } else if ( address.id ) {
+        this.deleteAddress(address.id);
+        this.showEditForm = false;
+      }
+    },
+
+    closeForm(mode) {
+      if (mode === 'edit') {
+        this.showEditForm = false;
+      } else if( mode === 'new' ) {
+        this.showNewForm = false;
+      }
+    }
+  },
+
+  created() {
+    this.$store.dispatch('Auth/getAddresses');
   }
 }
 </script>

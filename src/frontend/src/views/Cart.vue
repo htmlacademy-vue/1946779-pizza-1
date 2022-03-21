@@ -1,5 +1,5 @@
 <template>
-  <form action="" class="layout-form">
+  <form @submit.prevent="addOrder" class="layout-form">
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
@@ -59,24 +59,27 @@
                 class="select"
                 v-model="orderWay"
                 required
+                @change="selectOrderMethod($event.target.value)"
               >
 
                 <option
-                  value="1"
+                  value="myself"
                 >
                   Заберу сам
                 </option>
 
                 <option
-                  value="2"
+                  value="new"
                 >
                   Новый адрес
                 </option>
 
                 <option
-                  value="3"
+                  :value="address.id"
+                  v-for="address in addresses"
+                  :key="address.id"
                 >
-                  Существующий адрес
+                  {{ address.name }}
                 </option>
 
               </select>
@@ -108,7 +111,7 @@
                     type="text"
                     name="street"
                     v-model="street"
-                    :disabled="(orderWay === 1)"
+                    :disabled="(orderWay === 'myself')"
                     required
                   >
 
@@ -124,7 +127,7 @@
                     type="number"
                     name="house"
                     v-model="house"
-                    :disabled="(orderWay === 1)"
+                    :disabled="(orderWay === 'myself')"
                     required
                   >
 
@@ -140,7 +143,7 @@
                     type="number"
                     name="apartment"
                     v-model="apartment"
-                    :disabled="(orderWay === 1)"
+                    :disabled="(orderWay === 'myself')"
                     required
                   >
                 </label>
@@ -164,13 +167,13 @@
                 required
               >
                 <option
-                  value="1"
+                  value="myself"
                 >
                   Заберу сам
                 </option>
 
                 <option
-                  value="2"
+                  value="new"
                 >
                   Новый адрес
                 </option>
@@ -264,7 +267,7 @@
         <button
           type="submit"
           class="button"
-          @click.prevent="addOrder"
+
           :disabled="finalPrice === 0"
         >
         Оформить заказ
@@ -296,16 +299,18 @@ export default {
   },
   data() {
     return {
+      addressForm: {},
       showPopup: false,
-      orderWay: 1,
+      orderWay: 'myself',
       phoneNumber: '',
       street: '',
       house: '',
-      apartment: ''
+      apartment: '',
+      addressId: ''
     }
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated', 'user', 'address']),
+    ...mapState('Auth', ['isAuthenticated', 'user', 'addresses']),
     ...mapState('Cart', ['miscs', 'pizzas', 'orderInfo']),
     ...mapGetters('Cart', ['finalPrice']),
   },
@@ -315,6 +320,7 @@ export default {
     } else {
       this.pizzasPriceFromArray = 0;
     }
+
     this.allPizzasCost = parseInt(this.pizzasPriceFromArray);
   },
   methods: {
@@ -322,81 +328,121 @@ export default {
       'addOrderToState': 'post'
     }),
 
-    addOrder() {
-      if (this.isAuthenticated == true) {
+    selectOrderMethod(value) {
+      if( value === 'myself' ) {
+        return;
+      }
 
-        if( this.orderWay === 1 ) {
+      if( value === 'new' ) {
+        return;
+      }
+
+      const findedAddress = this.addresses.find(el => el.id == value );
+
+      this.street = findedAddress.street;
+      this.house = findedAddress.building;
+      this.apartment = findedAddress.flat;
+      this.addressId = findedAddress.id;
+    },
+
+    addOrder() {
+      let order;
+      if ( this.isAuthenticated === true ) {
+
+        if( this.orderWay === 'myself' ) {
           // самовывоз
-          const addressForm = {
-            street: '',
-            building: '',
-            flat: '',
-            comment: 'pickup'
+
+          let order = {
+            "userId": this.user.id,
+            "phone": this.phoneNumber,
+            "address": null,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
           };
 
-        } else if ( this.orderWay === 2 ) {
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
+        } else if ( this.orderWay === 'new' ) {
           // новый адрес
-          const addressForm = {
+          this.addressForm = {
+            name: 'unknown',
             street: this.street,
             building: this.house,
             flat: this.apartment,
             comment: ''
           };
-        } else if ( this.orderWay === 3 ) {
-          // существующий адрес
-          const addressForm = {
-            street: this.address.street,
-            building: this.address.building,
-            flat: this.address.flat,
-            comment: ''
+
+          order = {
+            "userId": this.user.id,
+            "phone": this.phoneNumber,
+            "address": this.addressForm,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
           };
+
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
+        } else {
+          // существующий адрес
+          const findedAddress = this.addresses.find(el => el.id == value );
+          const addressId = { id: this.addressId }
+
+          order = {
+            "userId": this.user.id,
+            "phone": this.phoneNumber,
+            "address": addressId,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
+          };
+
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
         }
-
-        let order = {
-          "userId": this.user.id,
-          "phone": this.phoneNumber,
-          "address": this.addressForm,
-          "pizzas": createPizzasRequestObj(this.pizzas),
-          "misc": createMiscRequestObj(this.miscs),
-        };
-
-        this.addOrderToState(order);
-
-        this.showPopup = !this.showPopup;
       } else {
 
-        if( this.orderWay === 1 ) {
+        if( this.orderWay === 'myself' ) {
           // самовывоз
-          const addressForm = {
-            street: 'pickup',
-            building: 'pickup',
-            flat: 'pickup',
-            comment: 'pickup'
+          order = {
+            "userId": null,
+            "phone": this.phoneNumber,
+            "address": null,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
           };
 
-        } else if ( this.orderWay === 2 ) {
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
+
+        } else if ( this.orderWay === 'new' ) {
           // новый адрес
-          const addressForm = {
+          this.addressForm = {
             street: this.street,
             building: this.house,
             flat: this.apartment,
             comment: ''
           };
+
+          order = {
+            "userId": null,
+            "phone": this.phoneNumber,
+            "address": this.addressForm,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
+          };
+
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
         }
 
-        let order = {
-          "userId": this.user.id,
-          "phone": this.phoneNumber,
-          "address": this.addressForm,
-          "pizzas": createPizzasRequestObj(this.pizzas),
-          "misc": createMiscRequestObj(this.miscs),
-        };
-
-        this.addOrderToState(orderObj);
-
-        this.showPopup = !this.showPopup;
       }
     },
   },
+  created() {
+    this.$store.dispatch('Auth/getAddresses');
+
+    if ( this.isAuthenticated === true ) {
+      this.phoneNumber = this.user.phone;
+    }
+  }
 }
 </script>

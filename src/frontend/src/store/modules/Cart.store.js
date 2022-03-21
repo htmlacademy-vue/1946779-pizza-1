@@ -65,6 +65,5 @@ export default {
     addAdditional({ commit }, additionalInfo) {
       commit('ADD_ADDITIONALS', additionalInfo)
     },
-
   },
 }

@@ -87,8 +87,7 @@ export default {
     },
     async changeIngredients() {
       const copyPizza = Object.assign({}, this.pizza);
-      await this.setChangingPizza(copyPizza);
-
+      this.setChangingPizza(copyPizza);
       this.$router.push({ name: 'Home' });
     }
   },

@@ -14,7 +14,7 @@
           <span>Название адреса*</span>
 
           <input
-            v-model="name"
+            v-model="address.name"
             type="text"
             placeholder="Введите название адреса"
             required
@@ -27,7 +27,7 @@
           <span>Улица*</span>
 
           <input
-            v-model="street"
+            v-model="address.street"
             type="text"
             placeholder="Введите название улицы"
             required
@@ -40,7 +40,7 @@
           <span>Дом*</span>
 
           <input
-            v-model="building"
+            v-model="address.building"
             type="text"
             placeholder="Введите номер дома"
             required
@@ -53,7 +53,7 @@
           <span>Квартира</span>
 
           <input
-            v-model="flat"
+            v-model="address.flat"
             type="text"
             placeholder="Введите № квартиры"
             required
@@ -66,7 +66,7 @@
           <span>Комментарий</span>
 
           <input
-            v-model="comment"
+            v-model="address.comment"
             type="text"
             placeholder="Введите комментарий"
           >
@@ -79,9 +79,9 @@
       <button
         type="button"
         class="button button--transparent"
-        @click="removeAddress"
+        @click="$emit('removeAddress', address)"
       >
-        Удалить
+        {{ buttonText }}
       </button>
 
       <button
@@ -103,34 +103,54 @@ export default {
     user: {
       type: Object,
       default: null
+    },
+    buttonText: {
+      type: String,
+      default: 'Удалить'
+    },
+    address: {
+      type: Object,
+      default: () => ({
+        name: '',
+        street: '',
+        building: '',
+        flat: '',
+        comment: ''
+      })
+    },
+    mode: {
+      type: String,
+      default: 'new'
     }
   },
-
-  data: () => ({
-    name: '',
-    street: '',
-    building: '',
-    flat: '',
-    comment: ''
-  }),
   methods: {
-    ...mapActions('Auth', ['postAddress']),
+    ...mapActions('Auth', ['postAddress', 'putAddress']),
 
-    removeAddress() {
-
-    },
     saveAddress() {
+      if ( this.mode === 'new' ) {
+        let newAddress = {
+          userId: this.user.id,
+          name: this.address.name,
+          street: this.address.street,
+          building: this.address.building,
+          flat: this.address.flat,
+          comment: this.address.comment
+        };
 
-      let address = {
-        userId: this.user.id,
-        name: this.name,
-        street: this.street,
-        building: this.building,
-        flat: this.flat,
-        comment: this.comment
-      };
+        this.postAddress(newAddress);
+      } else if ( this.mode === 'edit' ) {
+        this.putAddress(this.address);
+      }
 
-      this.postAddress(address);
+      this.$store.dispatch('Auth/getAddresses');
+
+      this.address.name = '';
+      this.address.street = '';
+      this.address.building = '';
+      this.address.flat = '';
+      this.address.comment = '';
+
+      this.$emit('closeForm', this.mode);
     }
   }
 }
