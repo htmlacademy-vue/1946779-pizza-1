@@ -99,7 +99,10 @@
 
             </label>
 
-            <div class="cart-form__address">
+            <div
+              class="cart-form__address"
+              v-show="showAddressForm"
+            >
               <span class="cart-form__label">Новый адрес:</span>
 
               <div class="cart-form__input">
@@ -111,7 +114,7 @@
                     type="text"
                     name="street"
                     v-model="street"
-                    :disabled="(orderWay === 'myself')"
+                    :disabled="(orderWay !== 'new')"
                     required
                   >
 
@@ -127,7 +130,7 @@
                     type="number"
                     name="house"
                     v-model="house"
-                    :disabled="(orderWay === 'myself')"
+                    :disabled="(orderWay !== 'new')"
                     required
                   >
 
@@ -143,7 +146,7 @@
                     type="number"
                     name="apartment"
                     v-model="apartment"
-                    :disabled="(orderWay === 'myself')"
+                    :disabled="(orderWay !== 'new')"
                     required
                   >
                 </label>
@@ -194,7 +197,10 @@
 
             </label>
 
-            <div class="cart-form__address">
+            <div
+              class="cart-form__address"
+              v-show="showAddressForm"
+            >
               <span class="cart-form__label">Новый адрес:</span>
 
               <div class="cart-form__input">
@@ -206,7 +212,7 @@
                     type="text"
                     name="street"
                     v-model="street"
-                    :disabled="(orderWay === 1)"
+                    :disabled="(orderWay !== 'new')"
                   >
 
                 </label>
@@ -221,7 +227,7 @@
                     type="number"
                     name="house"
                     v-model="house"
-                    :disabled="(orderWay === 1)"
+                    :disabled="(orderWay !== 'new')"
                   >
 
                 </label>
@@ -236,7 +242,7 @@
                     type="number"
                     name="apartment"
                     v-model="apartment"
-                    :disabled="(orderWay === 1)"
+                    :disabled="(orderWay !== 'new')"
                   >
                 </label>
               </div>
@@ -310,9 +316,18 @@ export default {
     }
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated', 'user', 'addresses']),
+    ...mapState('Auth', ['user', 'addresses']),
     ...mapState('Cart', ['miscs', 'pizzas', 'orderInfo']),
     ...mapGetters('Cart', ['finalPrice']),
+    ...mapGetters('Auth', ['isAuthenticated']),
+
+    showAddressForm: function() {
+      if (this.orderWay === 'myself') {
+        return false;
+      } else {
+        return true;
+      }
+    }
   },
   mounted() {
     if(this.pizzas) {
@@ -334,6 +349,10 @@ export default {
       }
 
       if( value === 'new' ) {
+        this.street = '';
+        this.house = '';
+        this.apartment = '';
+
         return;
       }
 
@@ -384,7 +403,6 @@ export default {
           this.showPopup = !this.showPopup;
         } else {
           // существующий адрес
-          const findedAddress = this.addresses.find(el => el.id == value );
           const addressId = { id: this.addressId }
 
           order = {
@@ -438,9 +456,8 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('Auth/getAddresses');
-
     if ( this.isAuthenticated === true ) {
+      this.$store.dispatch('Auth/getAddresses');
       this.phoneNumber = this.user.phone;
     }
   }

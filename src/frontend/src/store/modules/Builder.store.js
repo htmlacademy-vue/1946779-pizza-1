@@ -81,18 +81,27 @@ export default {
     }
    },
   actions: {
-    async query({ commit }, config) {
-      const ingredients = await this.$api.ingredients.query(config);
-      commit('SET_INGREDIENTS', ingredients);
+    async query({ commit } ) {
+      let items = [
+        async () => {
+          const ingredients = await this.$api.ingredients.query();
+          commit('SET_INGREDIENTS', ingredients);
+        },
+        async () => {
+          const doughs = await this.$api.dough.query();
+          commit('SET_DOUGHS', doughs);
+        },
+        async () => {
+          const sizes = await this.$api.sizes.query();
+          commit('SET_SIZES', sizes);
+        },
+        async () => {
+          const sauces = await this.$api.sauces.query();
+          commit('SET_SAUCES', sauces);
+        },
+      ]
 
-      const doughs = await this.$api.dough.query(config);
-      commit('SET_DOUGHS', doughs);
-
-      const sizes = await this.$api.sizes.query(config);
-      commit('SET_SIZES', sizes);
-
-      const sauces = await this.$api.sauces.query(config);
-      commit('SET_SAUCES', sauces);
+      return Promise.all(items.map(p => p()));
     },
 
     addIngredients({ state, commit }, ingredient) {
@@ -139,13 +148,13 @@ export default {
         commit('CHANGE_INGREDIENTS', ingredientMovedArray);
       }
     },
-    async setChangingPizza({ state, commit, dispatch}, copyPizza) {
-      await commit('SET_PIZZA_TO_CHANGE', copyPizza),
-            commit('SET_SAUCE', copyPizza.sauce.id),
-            commit('SET_DOUGH', copyPizza.dough.id),
-            commit('SET_SIZE', copyPizza.size.id),
-            commit('SET_INGREDIENT_COUNT', copyPizza.ingredients),
-            commit('SET_ID', copyPizza.id);
+    async setChangingPizza({ commit }, copyPizza) {
+        commit('SET_PIZZA_TO_CHANGE', copyPizza),
+        commit('SET_SAUCE', copyPizza.sauce.id),
+        commit('SET_DOUGH', copyPizza.dough.id),
+        commit('SET_SIZE', copyPizza.size.id),
+        commit('SET_INGREDIENT_COUNT', copyPizza.ingredients),
+        commit('SET_ID', copyPizza.id);
     }
   },
 };

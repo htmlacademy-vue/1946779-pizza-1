@@ -60,9 +60,20 @@
               @drop="dropIngr($event)"
             />
 
-            <BuilderPriceCounter
-            />
+            <div
+              class="content__result"
+            >
+              <p>Итого: {{ pricePizza }} ₽</p>
 
+              <button
+                type="button"
+                class="button"
+                :disabled=" (buildedPizza.ingredients.length < 1) || (buildedPizza.pizzaName === '') "
+                @click="putPizza"
+              >
+                Готовьте!
+              </button>
+            </div>
           </div>
 
         </div>
@@ -76,9 +87,8 @@ import BuilderDoughSelector from '@/modules/builder/BuilderDoughSelector';
 import BuilderSizeSelector from '@/modules/builder/BuilderSizeSelector';
 import BuilderIngredientsSelector from '@/modules/builder/BuilderIngredientsSelector';
 import BuilderPizzaView from '@/modules/builder/BuilderPizzaView';
-import BuilderPriceCounter from '@/modules/builder/BuilderPriceCounter';
 
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 
 export default {
   name: "IndexHome",
@@ -87,14 +97,23 @@ export default {
     BuilderSizeSelector,
     BuilderIngredientsSelector,
     BuilderPizzaView,
-    BuilderPriceCounter
   },
 
   computed: {
-    ...mapState("Builder", ['sizes', 'doughs']),
+    ...mapGetters("Builder", ["pricePizza"]),
+    ...mapState("Builder", ['buildedPizza', 'sizes', 'doughs']),
   },
   methods: {
-    ...mapActions("Builder", ["addIngredients", "dropIngredients"]),
+    ...mapActions("Builder", ["addIngredients", 'query', "dropIngredients"]),
+
+    ...mapMutations("Cart", {
+      setPizza: 'SET_PIZZA'
+    }),
+
+    ...mapMutations("Builder", {
+      addPrice: 'ADD_PRICE',
+      resetState: 'RESET_STATE'
+    }),
 
     dropIngr(ingredient) {
       this.dropIngredients(ingredient);
@@ -106,6 +125,14 @@ export default {
 
     movePriceToCart() {
       this.$emit('sendInfo', infoAboutPizza);
+    },
+
+    putPizza() {
+      this.addPrice(this.pricePizza);
+      this.setPizza(Object.assign( {}, this.buildedPizza));
+      this.resetState();
+      this.query();
+      this.$router.push({ name: 'Cart' });
     }
   },
 }

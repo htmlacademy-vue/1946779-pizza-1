@@ -109,9 +109,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated', 'user', 'addresses']),
+    ...mapState('Auth', ['user', 'addresses']),
     ...mapState("Builder", ['sizes', 'doughs', 'sauces', 'ingredients']),
     ...mapState("Cart", ['miscs']),
+    ...mapGetters('Auth', ['isAuthenticated']),
 
     price: function() {
       let pizzasPrice = 0;
@@ -122,7 +123,7 @@ export default {
         pizza.ingredients.forEach( ingredient => {
           let price = this.ingredients.find( ing => ing.id === ingredient.ingredientId)?.price;
           let count = ingredient.quantity;
-          ingredientsPriceSum += parseInt(price * count);
+          ingredientsPriceSum += (price * count);
         });
 
         let pizzaPrice = ((this.sauces.find(({ id }) => pizza.sauceId === id)?.price

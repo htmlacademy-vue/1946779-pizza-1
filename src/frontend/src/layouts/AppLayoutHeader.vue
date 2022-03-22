@@ -33,10 +33,11 @@
 
 
       </div>
-      <div class="header__user">
+      <div
+        class="header__user"
+        v-if="isAuthenticated"
+      >
         <router-link
-          v-if="isAuthenticated"
-          class="header__logout"
           to="/profile"
         >
           <picture>
@@ -51,10 +52,24 @@
             >
           </picture>
           <span>{{ user.name }}</span>
+
         </router-link>
 
+        <a
+          href="#"
+          class="header__logout"
+          @click.prevent='$logout'
+        >
+          <span>Выйти</span>
+        </a>
+      </div>
+
+      <div
+        class="header__user"
+        v-else
+      >
         <router-link
-          v-else
+
           class="header__login"
           to="/login"
         >
@@ -66,9 +81,11 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { logout } from '@/common/mixins';
 
 export default {
   name: "AppLayout",
+  mixins: [logout],
   props: {
     user: {
       type: Object,
@@ -76,8 +93,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated']),
     ...mapState('Cart', ['pizzas']),
+    ...mapGetters('Auth', ['isAuthenticated']),
     ...mapGetters('Cart', ['finalPrice']),
   }
 }

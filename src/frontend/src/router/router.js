@@ -38,7 +38,7 @@ const routes = [
     component: () => import('@/views/Profile.vue'),
     meta: {
       layout: 'AppLayoutProfile',
-      middlewares: [auth, isAdmin]
+      middlewares: [auth]
     }
   },
   {
@@ -47,7 +47,7 @@ const routes = [
     component: () => import('@/views/Orders.vue'),
     meta: {
       layout: 'AppLayoutProfile',
-      middlewares: [auth, isAdmin]
+      middlewares: [auth]
     }
   },
 ]

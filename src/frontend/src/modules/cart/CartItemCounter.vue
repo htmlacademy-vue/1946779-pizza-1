@@ -21,7 +21,6 @@
       type="button"
       class="counter__button counter__button--plus counter__button--orange"
       @click="$emit('sendCount', counter + 1)"
-      :disabled="counter >= 3"
     >
       <span class="visually-hidden">Больше</span>
     </button>

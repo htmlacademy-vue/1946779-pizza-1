@@ -16,11 +16,9 @@
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import { setAuth } from '@/common/helpers';
-import { logout } from '@/common/mixins';
 
 export default {
   name: "App",
-  mixins: [logout],
   data() {
     return {
       pizzasInfoArray: [],
@@ -34,14 +32,6 @@ export default {
         findedPizza.initialCounter = counterAndPizzaId.counter;
       }
     },
-    async $logout() {
-      // Вызываем действие логаута в хранилище.
-      await this.$store.dispatch('Auth/logout');
-      // Показываем уведомление об успешном выходе.
-      this.$notifier.success('Вы успешно вышли');
-      // Переводим пользователя на страницу логина.
-      await this.$router.push('/login');
-    }
   },
   computed: {
     ...mapState(['Auth']),

@@ -9,6 +9,7 @@
           <li>{{ sizeOfPizza }}, <span class="product__ingredient-span">{{ typeOfDough }}</span> тесто.</li>
           <li>Соус: <span class="product__ingredient-span">{{ typeOfSauce }}.</span></li>
           <li>
+            Начинка:
             <span
               class="product__ingredient-span product__ingredient-span_pseudo"
               v-for="ing in ings"
@@ -24,8 +25,6 @@
   </li>
 </template>
 <script>
-
-import { parsePizzaInfo } from "@/common/helpers";
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
 
 export default {
@@ -52,10 +51,8 @@ export default {
     },
 
     ings: function() {
-      const ings = [];
-      this.pizza.ingredients.forEach(element => {
-        ings.push(this.ingredients.find( ingredient => ingredient.id === element.ingredientId)?.name);
-      });
+      const ings =  this.pizza.ingredients.map( element =>
+        this.ingredients.find( ingredient => ingredient.id === element.ingredientId)?.name);
       return ings;
     },
 

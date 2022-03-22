@@ -3,14 +3,15 @@ import { cloneDeep } from 'lodash';
 export default {
   namespaced: true,
   state: {
-    isAuthenticated: false, // для проверки, авторизован пользователь или нет
     user: null, // здесь мы будем хранить авторизованного пользователя
     addresses: [],
   },
 
   getters: {
     // геттер-функция для получения параметра по его названию из объекта user
-    getUserAttribute: state => attr => state.user ? state.user[attr] : ''
+    getUserAttribute: state => attr => state.user ? state.user[attr] : '',
+
+    isAuthenticated: state => state.user ? true : false
   },
 
   mutations: {

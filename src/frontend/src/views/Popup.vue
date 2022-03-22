@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Popup',
@@ -38,7 +38,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated', 'user']),
+    ...mapGetters('Auth', ['isAuthenticated']),
+    ...mapState('Auth', ['user']),
   },
   methods: {
     ...mapMutations('Builder', {

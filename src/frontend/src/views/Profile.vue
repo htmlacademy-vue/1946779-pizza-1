@@ -87,7 +87,8 @@ export default {
     ProfileFormAddress
   },
   computed: {
-    ...mapState('Auth', ['isAuthenticated', 'user', 'addresses']),
+    ...mapGetters('Auth', ['isAuthenticated']),
+    ...mapState('Auth', ['user', 'addresses']),
   },
   methods: {
     ...mapActions('Auth', ['deleteAddress']),
