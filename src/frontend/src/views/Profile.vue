@@ -15,80 +15,116 @@
       <p class="user__phone">Контактный телефон: <span>{{ user.phone }}</span></p>
     </div>
 
-    <div class="layout__address">
-      <div class="sheet address-form">
-        <div class="address-form__header">
-          <b>Адрес №1. Тест</b>
-          <div class="address-form__edit">
-            <button type="button" class="icon"><span class="visually-hidden">Изменить адрес</span></button>
-          </div>
-        </div>
-        <p>Невский пр., д. 22, кв. 46</p>
-        <small>Позвоните, пожалуйста, от проходной</small>
-      </div>
+    <div
+      class="layout__address"
+      v-if="addresses && ( addresses.length > 0 )"
+    >
+
+      <ProfileAddressView
+        @editAddress="editAddress"
+        v-for="address in this.addresses"
+        :key="address.id"
+        :address="address"
+      />
+
+      <ProfileFormAddress
+        v-show="showEditForm"
+        :user="user"
+        :address='editedAddress'
+        :mode='"edit"'
+        @removeAddress="removeAddress"
+        @closeForm="closeForm"
+      />
+
     </div>
 
-    <div class="layout__address">
-      <form action="test.html" method="post" class="address-form address-form--opened sheet">
-        <div class="address-form__header">
-          <b>Адрес №1</b>
-        </div>
+    <div
+      class="layout__address"
+      v-else
+    >
 
-        <div class="address-form__wrapper">
-          <div class="address-form__input">
-            <label class="input">
-              <span>Название адреса*</span>
-              <input type="text" name="addr-name" placeholder="Введите название адреса" required>
-            </label>
-          </div>
-          <div class="address-form__input address-form__input--size--normal">
-            <label class="input">
-              <span>Улица*</span>
-              <input type="text" name="addr-street" placeholder="Введите название улицы" required>
-            </label>
-          </div>
-          <div class="address-form__input address-form__input--size--small">
-            <label class="input">
-              <span>Дом*</span>
-              <input type="text" name="addr-house" placeholder="Введите номер дома" required>
-            </label>
-          </div>
-          <div class="address-form__input address-form__input--size--small">
-            <label class="input">
-              <span>Квартира</span>
-              <input type="text" name="addr-apartment" placeholder="Введите № квартиры">
-            </label>
-          </div>
-          <div class="address-form__input">
-            <label class="input">
-              <span>Комментарий</span>
-              <input type="text" name="addr-comment" placeholder="Введите комментарий">
-            </label>
-          </div>
-        </div>
+      <h2>Нет сохраненных aдресов</h2>
 
-        <div class="address-form__buttons">
-          <button type="button" class="button button--transparent">Удалить</button>
-          <button type="submit" class="button">Сохранить</button>
-        </div>
-      </form>
     </div>
 
     <div class="layout__button">
-      <button type="button" class="button button--border">Добавить новый адрес</button>
+      <button
+        type="button"
+        class="button button--border"
+        @click="showForm"
+        :disabled="showNewForm"
+      >
+        Добавить новый адрес
+      </button>
     </div>
+
+      <ProfileFormAddress
+        buttonText="Отменить"
+        v-show="showNewForm"
+        :user="user"
+        @removeAddress="removeAddress"
+        @closeForm="closeForm"
+      />
   </div>
 
 </template>
 <script>
+import ProfileAddressView from '@/modules/profile/ProfileAddressView';
+import ProfileFormAddress from '@/modules/profile/ProfileFormAddress';
+
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { cloneDeep } from 'lodash';
 
 export default {
   name: "Profile",
-  props: {
-    user: {
-      type: Object,
-      default: () => {}
+  data: () => ({
+    showEditForm: false,
+    showNewForm: false,
+    editedAddress: {},
+  }),
+  components: {
+    ProfileAddressView,
+    ProfileFormAddress
+  },
+  computed: {
+    ...mapGetters('Auth', ['isAuthenticated']),
+    ...mapState('Auth', ['user', 'addresses']),
+  },
+  methods: {
+    ...mapActions('Auth', ['deleteAddress']),
+    ...mapMutations('Auth', {
+      getAddresses: 'GET_ADDRESS'
+    }),
+
+    showForm() {
+      this.showNewForm = true;
+    },
+
+    editAddress(address) {
+      this.showEditForm = true;
+      this.editedAddress = cloneDeep(address);
+    },
+
+    removeAddress(address) {
+      if( !address.id ) {
+        this.showNewForm = false;
+      } else if ( address.id ) {
+        this.deleteAddress(address.id);
+        this.showEditForm = false;
+      }
+    },
+
+    closeForm(mode) {
+      if (mode === 'edit') {
+        this.showEditForm = false;
+      } else if( mode === 'new' ) {
+        this.showNewForm = false;
+      }
     }
   },
+
+  created() {
+    this.$store.dispatch('Auth/getAddresses');
+  }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <form action="" class="layout-form">
+  <form @submit.prevent="addOrder" class="layout-form">
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
@@ -48,7 +48,7 @@
 
           <div
             class="cart-form"
-            v-if="isLogin"
+            v-if="isAuthenticated"
           >
 
             <label class="cart-form__select">
@@ -59,11 +59,31 @@
                 class="select"
                 v-model="orderWay"
                 required
+                @change="selectOrderMethod($event.target.value)"
               >
-                <option value="1">Заберу сам</option>
-                <option value="2">Новый адрес</option>
-                <option value="3">Существующий адрес</option>
+
+                <option
+                  value="myself"
+                >
+                  Заберу сам
+                </option>
+
+                <option
+                  value="new"
+                >
+                  Новый адрес
+                </option>
+
+                <option
+                  :value="address.id"
+                  v-for="address in addresses"
+                  :key="address.id"
+                >
+                  {{ address.name }}
+                </option>
+
               </select>
+
             </label>
 
             <label class="input input--big-label">
@@ -79,7 +99,10 @@
 
             </label>
 
-            <div class="cart-form__address">
+            <div
+              class="cart-form__address"
+              v-show="showAddressForm"
+            >
               <span class="cart-form__label">Новый адрес:</span>
 
               <div class="cart-form__input">
@@ -91,6 +114,7 @@
                     type="text"
                     name="street"
                     v-model="street"
+                    :disabled="(orderWay !== 'new')"
                     required
                   >
 
@@ -106,6 +130,7 @@
                     type="number"
                     name="house"
                     v-model="house"
+                    :disabled="(orderWay !== 'new')"
                     required
                   >
 
@@ -121,6 +146,7 @@
                     type="number"
                     name="apartment"
                     v-model="apartment"
+                    :disabled="(orderWay !== 'new')"
                     required
                   >
                 </label>
@@ -143,8 +169,18 @@
                 v-model="orderWay"
                 required
               >
-                <option value="1">Заберу сам</option>
-                <option value="2">Новый адрес</option>
+                <option
+                  value="myself"
+                >
+                  Заберу сам
+                </option>
+
+                <option
+                  value="new"
+                >
+                  Новый адрес
+                </option>
+
               </select>
             </label>
 
@@ -161,7 +197,10 @@
 
             </label>
 
-            <div class="cart-form__address">
+            <div
+              class="cart-form__address"
+              v-show="showAddressForm"
+            >
               <span class="cart-form__label">Новый адрес:</span>
 
               <div class="cart-form__input">
@@ -173,7 +212,7 @@
                     type="text"
                     name="street"
                     v-model="street"
-                    required
+                    :disabled="(orderWay !== 'new')"
                   >
 
                 </label>
@@ -188,7 +227,7 @@
                     type="number"
                     name="house"
                     v-model="house"
-                    required
+                    :disabled="(orderWay !== 'new')"
                   >
 
                 </label>
@@ -203,7 +242,7 @@
                     type="number"
                     name="apartment"
                     v-model="apartment"
-                    required
+                    :disabled="(orderWay !== 'new')"
                   >
                 </label>
               </div>
@@ -234,7 +273,7 @@
         <button
           type="submit"
           class="button"
-          @click.prevent="addOrder"
+
           :disabled="finalPrice === 0"
         >
         Оформить заказ
@@ -254,7 +293,7 @@ import CartAdditionalItem from '@/modules/cart/CartAdditionalItem';
 
 import Popup from '@/views/Popup';
 
-import { parsePizzaCost } from '@/common/helpers';
+import { parsePizzaCost, createPizzasRequestObj, createMiscRequestObj } from '@/common/helpers';
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
 export default {
@@ -266,18 +305,29 @@ export default {
   },
   data() {
     return {
+      addressForm: {},
       showPopup: false,
-      orderWay: 1,
+      orderWay: 'myself',
       phoneNumber: '',
       street: '',
       house: '',
-      apartment: ''
+      apartment: '',
+      addressId: ''
     }
   },
   computed: {
-    ...mapState('Auth', ['isLogin']),
+    ...mapState('Auth', ['user', 'addresses']),
     ...mapState('Cart', ['miscs', 'pizzas', 'orderInfo']),
     ...mapGetters('Cart', ['finalPrice']),
+    ...mapGetters('Auth', ['isAuthenticated']),
+
+    showAddressForm: function() {
+      if (this.orderWay === 'myself') {
+        return false;
+      } else {
+        return true;
+      }
+    }
   },
   mounted() {
     if(this.pizzas) {
@@ -285,70 +335,131 @@ export default {
     } else {
       this.pizzasPriceFromArray = 0;
     }
+
     this.allPizzasCost = parseInt(this.pizzasPriceFromArray);
   },
   methods: {
-    ...mapActions('Orders', ['addOrderToState']),
-    ...mapMutations('Cart', {
-      addOrderInfo: 'ADD_ORDERINFO'
+    ...mapActions('Orders', {
+      'addOrderToState': 'post'
     }),
 
-    addOrder() {
-      if (!this.phoneNumber || !this.street || !this.house || !this.apartment) {
+    selectOrderMethod(value) {
+      if( value === 'myself' ) {
         return;
       }
 
-      if (this.isLogin == true) {
-        let orderInfo = {
-          orderWay: this.orderWay,
-          phone: this.phoneNumber,
-          adress: {
+      if( value === 'new' ) {
+        this.street = '';
+        this.house = '';
+        this.apartment = '';
+
+        return;
+      }
+
+      const findedAddress = this.addresses.find(el => el.id == value );
+
+      this.street = findedAddress.street;
+      this.house = findedAddress.building;
+      this.apartment = findedAddress.flat;
+      this.addressId = findedAddress.id;
+    },
+
+    addOrder() {
+      let order;
+      if ( this.isAuthenticated === true ) {
+
+        if( this.orderWay === 'myself' ) {
+          // самовывоз
+
+          let order = {
+            "userId": this.user.id,
+            "phone": this.phoneNumber,
+            "address": null,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
+          };
+
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
+        } else if ( this.orderWay === 'new' ) {
+          // новый адрес
+          this.addressForm = {
+            name: 'unknown',
             street: this.street,
-            house: this.house,
-            apartment: this.apartment
-          }
-        };
+            building: this.house,
+            flat: this.apartment,
+            comment: ''
+          };
 
-        this.addOrderInfo(orderInfo);
+          order = {
+            "userId": this.user.id,
+            "phone": this.phoneNumber,
+            "address": this.addressForm,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
+          };
 
-        let orderObj = {
-          userId: 1,
-          pizzas: this.pizzas,
-          miscs: this.miscs,
-          orderInfo: this.orderInfo,
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
+        } else {
+          // существующий адрес
+          const addressId = { id: this.addressId }
+
+          order = {
+            "userId": this.user.id,
+            "phone": this.phoneNumber,
+            "address": addressId,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
+          };
+
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
         }
-
-        this.addOrderToState(orderObj);
-
-        this.showPopup = !this.showPopup;
-        this.$router.push({ name: 'Orders' });
-
       } else {
-        let orderInfo = {
-          orderWay: this.orderWay,
-          phone: this.phoneNumber,
-          adress: {
+
+        if( this.orderWay === 'myself' ) {
+          // самовывоз
+          order = {
+            "userId": null,
+            "phone": this.phoneNumber,
+            "address": null,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
+          };
+
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
+
+        } else if ( this.orderWay === 'new' ) {
+          // новый адрес
+          this.addressForm = {
             street: this.street,
-            house: this.house,
-            apartment: this.apartment
-          }
-        };
-        this.addOrderInfo(orderInfo);
+            building: this.house,
+            flat: this.apartment,
+            comment: ''
+          };
 
-        let orderObj = {
-          userId: null,
-          pizzas: this.pizzas,
-          miscs: this.miscs,
-          orderInfo: this.orderInfo,
+          order = {
+            "userId": null,
+            "phone": this.phoneNumber,
+            "address": this.addressForm,
+            "pizzas": createPizzasRequestObj(this.pizzas),
+            "misc": createMiscRequestObj(this.miscs),
+          };
+
+          this.addOrderToState(order);
+          this.showPopup = !this.showPopup;
         }
-        this.addOrderToState(orderObj);
 
-        this.showPopup = !this.showPopup;
       }
     },
   },
   created() {
-    this.$store.dispatch("Cart/setAdditionals");
+    if ( this.isAuthenticated === true ) {
+      this.$store.dispatch('Auth/getAddresses');
+      this.phoneNumber = this.user.phone;
+    }
   }
 }
 </script>

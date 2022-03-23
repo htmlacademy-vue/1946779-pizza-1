@@ -13,19 +13,21 @@
       </div>
       <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
       <div class="popup__button">
-        <a
-          href="#"
+
+        <AppButton
           class="button"
+          type="button"
           @click.prevent="closePopup"
         >
           Отлично, я жду!
-        </a>
+        </AppButton>
+
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Popup',
@@ -35,6 +37,10 @@ export default {
       default: false
     }
   },
+  computed: {
+    ...mapGetters('Auth', ['isAuthenticated']),
+    ...mapState('Auth', ['user']),
+  },
   methods: {
     ...mapMutations('Builder', {
       resetBuilderState: 'RESET_STATE'
@@ -42,23 +48,20 @@ export default {
     ...mapMutations('Cart', {
       resetCartState: 'RESET_STATE'
     }),
-    ...mapActions('Builder', ['setPizza']),
 
-    closePopup() {
-      if (this.isLogin == true) {
+    async closePopup() {
+      if (this.isAuthenticated == true) {
+        this.resetCartState();
+        this.resetBuilderState();
+        await this.$store.dispatch("Builder/query");
         this.$router.push({ name: 'Orders' });
-        this.resetBuilderState();
-        this.resetCartState();
       } else {
-        this.$router.push({ name: 'Home' });
-        this.resetBuilderState();
         this.resetCartState();
-        this.setPizza();
+        this.resetBuilderState();
+        await this.$store.dispatch("Builder/query");
+        this.$router.push({ name: 'Home' });
       }
     }
   },
-  computed: {
-    ...mapState('Auth', ['isLogin']),
-  }
 }
 </script>

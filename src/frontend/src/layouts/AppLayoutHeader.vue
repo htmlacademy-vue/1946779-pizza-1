@@ -33,21 +33,43 @@
 
 
       </div>
-      <div class="header__user">
+      <div
+        class="header__user"
+        v-if="isAuthenticated"
+      >
         <router-link
-          v-if="isLogin"
-          class="header__logout"
           to="/profile"
         >
           <picture>
-            <source type="image/webp" srcset="@/assets/img/users/user5.webp 1x, @/assets/img/users/user5@2x.webp 2x">
-            <img src="@/assets/img/users/user5.jpg" srcset="@/assets/img/users/user5@2x.jpg" alt="Василий Ложкин" width="32" height="32">
+            <source type="image/webp"
+            :srcset="user.avatar"
+            >
+
+            <img
+            :src="user.avatar"
+
+            alt="Василий Ложкин" width="32" height="32"
+            >
           </picture>
           <span>{{ user.name }}</span>
+
         </router-link>
 
+        <a
+          href="#"
+          class="header__logout"
+          @click.prevent='$logout'
+        >
+          <span>Выйти</span>
+        </a>
+      </div>
+
+      <div
+        class="header__user"
+        v-else
+      >
         <router-link
-          v-else-if="!isLogin"
+
           class="header__login"
           to="/login"
         >
@@ -58,16 +80,13 @@
     </header>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { logout } from '@/common/mixins';
 
 export default {
   name: "AppLayout",
+  mixins: [logout],
   props: {
-
-    isLogin: {
-      type: Boolean,
-      default: false
-    },
     user: {
       type: Object,
       default: () => {}
@@ -75,6 +94,7 @@ export default {
   },
   computed: {
     ...mapState('Cart', ['pizzas']),
+    ...mapGetters('Auth', ['isAuthenticated']),
     ...mapGetters('Cart', ['finalPrice']),
   }
 }

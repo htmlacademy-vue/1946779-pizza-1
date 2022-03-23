@@ -1,29 +1,26 @@
-import pizzaObj from '@/static/pizza.json';
 import { uniqueId } from 'lodash';
 
-import { normalizeDough, normalizeSize, normalizeSauce, normalizeIngredients } from '@/common/helpers';
-
 const setupState = () => ({
+  id: uniqueId(),
+  count: 1,
+  dough: {},
   ingredients: [],
-  sauces: [],
-  sizes: [],
-  doughs: [],
-  buildedPizza: {
-    id: uniqueId(),
-    count: 1,
-    dough: {},
-    ingredients: [],
-    pizzaName: '',
-    price: 0,
-    sauce: {},
-    size: {}
-  },
+  pizzaName: '',
+  price: 0,
+  sauce: {},
+  size: {}
 });
 
 export default {
   namespaced: true,
 
-  state: setupState,
+  state: {
+    ingredients: [],
+    sauces: [],
+    sizes: [],
+    doughs: [],
+    buildedPizza: setupState(),
+  },
 
   mutations: {
     SET_INGREDIENTS: (state, data) => (state.ingredients = data),
@@ -34,21 +31,21 @@ export default {
     ADD_PIZZA_NAME: (state, name) => (state.buildedPizza.pizzaName = name),
 
     ADD_SAUCE: (state, sauce) => (state.buildedPizza.sauce = sauce),
-    SET_SAUCE: (state, sauceType) => {
-      state.sauces.find( el => el.type === sauceType).checked = true;
-      state.sauces.find( el => el.type !== sauceType).checked = false;
+    SET_SAUCE: (state, sauceId) => {
+      state.sauces.find( el => el.id === sauceId).checked = true;
+      state.sauces.find( el => el.type !== sauceId).checked = false;
     },
 
     ADD_SIZE: (state, size) => (state.buildedPizza.size = size),
-    SET_SIZE: (state, size) => {
-      state.sizes.find( el => el.multiplier === size).checked = true;
-      state.sizes.find( el => el.multiplier !== size).checked = false;
+    SET_SIZE: (state, sizeId) => {
+      state.sizes.find( el => el.id === sizeId).checked = true;
+      state.sizes.find( el => el.id !== sizeId).checked = false;
     },
 
     ADD_DOUGH: (state, dough) => (state.buildedPizza.dough = dough),
-    SET_DOUGH: (state, doughType) => {
-      state.doughs.find( el => el.type === doughType).checked = true;
-      state.doughs.find( el => el.type !== doughType).checked = false;
+    SET_DOUGH: (state, doughId) => {
+      state.doughs.find( el => el.id === doughId).checked = true;
+      state.doughs.find( el => el.id !== doughId).checked = false;
     },
 
     SET_ID: (state, pizzaId) => (state.buildedPizza.id = pizzaId),
@@ -67,7 +64,7 @@ export default {
       (state.ingredients.find(el => el.id === ingredient.id).counter = ingredient.counter),
 
     RESET_STATE: (state) => {
-      Object.assign(state, setupState());
+      Object.assign(state.buildedPizza, setupState());
     },
 
     SET_PIZZA_TO_CHANGE: (state, pizza) => (state.buildedPizza = pizza),
@@ -80,24 +77,31 @@ export default {
         ingredientsPriceSum += parseInt(ingredient.counter * ingredient.price);
       });
 
-      return ((state.buildedPizza.sauce.price + state.buildedPizza.dough.price + ingredientsPriceSum) * state.buildedPizza.size);
+      return ((state.buildedPizza.sauce.price + state.buildedPizza.dough.price + ingredientsPriceSum) * state.buildedPizza.size.multiplier);
     }
    },
   actions: {
-    setPizza({ commit }) {
-      const pizza  = Object.assign({}, pizzaObj);
+    async query({ commit } ) {
+      let items = [
+        async () => {
+          const ingredients = await this.$api.ingredients.query();
+          commit('SET_INGREDIENTS', ingredients);
+        },
+        async () => {
+          const doughs = await this.$api.dough.query();
+          commit('SET_DOUGHS', doughs);
+        },
+        async () => {
+          const sizes = await this.$api.sizes.query();
+          commit('SET_SIZES', sizes);
+        },
+        async () => {
+          const sauces = await this.$api.sauces.query();
+          commit('SET_SAUCES', sauces);
+        },
+      ]
 
-      const ingredients = pizza.ingredients.map( (item) => normalizeIngredients(item));
-      commit('SET_INGREDIENTS', ingredients);
-
-      const doughs = pizza.dough.map( (item) => normalizeDough(item));
-      commit('SET_DOUGHS', doughs);
-
-      const sizes = pizza.sizes.map( (item) => normalizeSize(item));
-      commit('SET_SIZES', sizes);
-
-      const sauces = pizza.sauces.map( (item) => normalizeSauce(item));
-      commit('SET_SAUCES', sauces);
+      return Promise.all(items.map(p => p()));
     },
 
     addIngredients({ state, commit }, ingredient) {
@@ -144,15 +148,13 @@ export default {
         commit('CHANGE_INGREDIENTS', ingredientMovedArray);
       }
     },
-    setChangingPizza({ state, commit, dispatch}, copyPizza) {
-      dispatch('setPizza');
-
-      commit('SET_PIZZA_TO_CHANGE', copyPizza);
-      commit('SET_SAUCE', copyPizza.sauce.type);
-      commit('SET_DOUGH', copyPizza.dough.type);
-      commit('SET_SIZE', copyPizza.size);
-      commit('SET_INGREDIENT_COUNT', copyPizza.ingredients),
-      commit('SET_ID', copyPizza.id);
+    async setChangingPizza({ commit }, copyPizza) {
+        commit('SET_PIZZA_TO_CHANGE', copyPizza),
+        commit('SET_SAUCE', copyPizza.sauce.id),
+        commit('SET_DOUGH', copyPizza.dough.id),
+        commit('SET_SIZE', copyPizza.size.id),
+        commit('SET_INGREDIENT_COUNT', copyPizza.ingredients),
+        commit('SET_ID', copyPizza.id);
     }
   },
 };

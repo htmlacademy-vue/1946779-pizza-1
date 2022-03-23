@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapGetters } from 'vuex';
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 
 export default {
   name: "BuilderPriceCounter",
@@ -25,9 +25,12 @@ export default {
     ...mapState("Builder", ['buildedPizza']),
   },
   methods: {
+    ...mapActions("Builder", ['query']),
+
     ...mapMutations("Cart", {
       setPizza: 'SET_PIZZA'
     }),
+
     ...mapMutations("Builder", {
       addPrice: 'ADD_PRICE',
       resetState: 'RESET_STATE'
@@ -35,8 +38,9 @@ export default {
 
     putPizza() {
       this.addPrice(this.pricePizza);
-      this.setPizza(this.buildedPizza);
+      this.setPizza(Object.assign( {}, this.buildedPizza));
       this.resetState();
+      this.query();
       this.$router.push({ name: 'Cart' });
     }
   }

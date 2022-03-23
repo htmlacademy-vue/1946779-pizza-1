@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     sizeOfPizza: function() {
-      return pizza_sizes.find(({ label }) => this.pizza.size === label)?.size;
+      return pizza_sizes.find(({ label }) => this.pizza.size.multiplier === label)?.size;
     },
     typeOfDough: function() {
       return  dough_types.find(({ value }) => this.pizza.dough.type === value)?.label;
@@ -85,12 +85,10 @@ export default {
     catchCounter(counter) {
       this.addPizzaCount({id: this.pizza.id, count: counter, price: this.pizza.price});
     },
-    changeIngredients() {
+    async changeIngredients() {
       const copyPizza = Object.assign({}, this.pizza);
       this.setChangingPizza(copyPizza);
-
       this.$router.push({ name: 'Home' });
-
     }
   },
  }

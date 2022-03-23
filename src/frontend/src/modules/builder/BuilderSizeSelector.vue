@@ -33,12 +33,12 @@ export default {
       addSize: 'ADD_SIZE'
     }),
     sendSize(event) {
-      this.addSize(this.size.multiplier);
+      this.addSize(this.size);
     }
   },
   created() {
     if (this.size.checked === true) {
-      this.addSize(this.size.multiplier);
+      this.addSize(this.size);
     }
   }
 }
