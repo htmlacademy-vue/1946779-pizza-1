@@ -4,11 +4,13 @@
       :isLogin="isLogin"
       :user="user"
     >
+
       <router-view
         :pizzasInfoArray="routeProps.pizzasInfoArray"
         :user="routeProps.user"
         @changeInitialCounter="changeInitialCounter"
       />
+
     </AppLayout>
   </div>
 </template>

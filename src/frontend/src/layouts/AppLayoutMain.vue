@@ -35,15 +35,20 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
 .app-layout-main {
-    display: flex;
-    flex-direction: column;
-    min-width: 960px;
-    min-height: 100vh
+  display: flex;
+  flex-direction: column;
+  min-width: 960px;
+  min-height: 100vh;
+  width: 100%;
+  min-height: 100vh;
 }
+
 .slot-class {
-   display: flex;
+  display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
+
 </style>
