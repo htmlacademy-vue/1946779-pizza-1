@@ -1,5 +1,14 @@
+.sign-form-wrapper {
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .sign-form {
-  @include pf_center-all;
+  // @include pf_center-all;
 
   z-index: 10;
 

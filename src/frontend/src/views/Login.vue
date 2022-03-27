@@ -1,57 +1,59 @@
 <template>
-  <div class="sign-form">
-    <a
-      href="#"
-      class="close close--white"
-      @click.prevent="$router.push({ name: 'Home'})"
-    >
-      <span class="visually-hidden">Закрыть форму авторизации</span>
-    </a>
-    <div class="sign-form__title">
-      <h1 class="title title--small">Авторизуйтесь на сайте</h1>
-    </div>
-    <form
-      @submit.prevent="login"
-    >
-      <div class="sign-form__input">
-        <label class="input">
-          <span>E-mail</span>
-
-          <AppInput
-            ref="email"
-            v-model="email"
-            type="email"
-            name="email"
-            class="input"
-            placeholder="example@mail.ru"
-            :error-text="validations.email.error"
-          />
-        </label>
-      </div>
-
-      <div class="sign-form__input">
-        <label class="input">
-          <span>Пароль</span>
-
-          <AppInput
-          v-model="password"
-          type="password"
-          name="password"
-          class="input"
-          placeholder="***********"
-          :error-text="validations.password.error"
-        />
-        </label>
-      </div>
-
-      <AppButton
-        class="button"
-        type="submit"
+  <div class="sign-form-wrapper">
+    <div class="sign-form">
+      <a
+        href="#"
+        class="close close--white"
+        @click.prevent="$router.push({ name: 'Home'})"
       >
-        Авторизоваться
-      </AppButton>
+        <span class="visually-hidden">Закрыть форму авторизации</span>
+      </a>
+      <div class="sign-form__title">
+        <h1 class="title title--small">Авторизуйтесь на сайте</h1>
+      </div>
+      <form
+        @submit.prevent="login"
+      >
+        <div class="sign-form__input">
+          <label class="input">
+            <span>E-mail</span>
 
-    </form>
+            <AppInput
+              ref="email"
+              v-model="email"
+              type="email"
+              name="email"
+              class="input"
+              placeholder="example@mail.ru"
+              :error-text="validations.email.error"
+            />
+          </label>
+        </div>
+
+        <div class="sign-form__input">
+          <label class="input">
+            <span>Пароль</span>
+
+            <AppInput
+            v-model="password"
+            type="password"
+            name="password"
+            class="input"
+            placeholder="***********"
+            :error-text="validations.password.error"
+          />
+          </label>
+        </div>
+
+        <AppButton
+          class="button"
+          type="submit"
+        >
+          Авторизоваться
+        </AppButton>
+
+      </form>
+    </div>
   </div>
 </template>
 <script>

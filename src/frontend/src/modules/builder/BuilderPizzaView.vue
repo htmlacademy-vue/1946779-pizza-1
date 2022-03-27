@@ -24,7 +24,7 @@
         <transition-group name="ingredients" tag="ul" class="pizza__wrapper">
           <div
             v-for="(ingredientType, index) in dropIngredientParsed"
-            :key="dropIngredientParsed.indexOf(ingredientType)"
+            :key="ingredientType.keyId"
             :data-id="index"
             class="pizza__filling"
             :class="[`pizza__filling--${ingredientType.type}`,
@@ -79,9 +79,11 @@ export default {
         for (let index = 1; index <= parseInt(element.counter); index++) {
           const cloneElement = Object.assign({}, element);
           cloneElement.number = index;
-          newArrIngredients.push(cloneElement);
+          cloneElement.keyId = cloneElement.id * cloneElement.number + cloneElement.type;
+          newArrIngredients.unshift(cloneElement);
         }
       });
+
       return newArrIngredients;
     }
   },

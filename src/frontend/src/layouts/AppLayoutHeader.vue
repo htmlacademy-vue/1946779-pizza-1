@@ -25,10 +25,9 @@
           <router-link
             v-else
             href="#"
-            class="empty"
             to="/cart"
-
           >
+           0 ₽
           </router-link>
 
 

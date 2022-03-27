@@ -3,6 +3,7 @@
     <AppLayout
       :isLogin="isLogin"
       :user="user"
+      :firstLoad="firstLoad"
     >
 
       <router-view
@@ -25,6 +26,7 @@ export default {
     return {
       pizzasInfoArray: [],
       isLogin: true,
+      firstLoad: true
     }
   },
   methods: {
@@ -34,6 +36,15 @@ export default {
         findedPizza.initialCounter = counterAndPizzaId.counter;
       }
     },
+
+    // метод для сохранения информации о первом посещении страницы в LocalStorage:
+    firstLoadSaveInfo() {
+      localStorage.FIRST_LOAD = true;
+    },
+
+    deleteInfoFromLocal() {
+      localStorage.removeItem('FIRST_LOAD');
+    }
   },
   computed: {
     ...mapState(['Auth']),
@@ -51,6 +62,7 @@ export default {
       return routes[this.$route.name] || {};
     },
   },
+
   created() {
     window.onerror = function (msg, url, line, col, error) {
       console.error(error);
@@ -61,6 +73,24 @@ export default {
     }
 
     this.$store.dispatch('init');
+
+    window.addEventListener('beforeunload', this.deleteInfoFromLocal());
+
+  },
+  mounted() {
+    if (localStorage.FIRST_LOAD) {
+      this.firstLoad = false;
+    } else if (!localStorage.FIRST_LOAD) {
+      this.firstLoadSaveInfo();
+    }
+  },
+  beforeUpdate() {
+    if (localStorage.FIRST_LOAD) {
+      this.firstLoad = false;
+    }
+  },
+  unmounted() {
+    this.deleteInfoFromLocal();
   }
 };
 </script>

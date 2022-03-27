@@ -1,5 +1,5 @@
 <template>
-  <transition name="slide" mode="out-in" appear>
+  <transition :name="firstLoad === true ? '' : 'slide'" mode="out-in">
     <component
       :is="layout"
       :price="price"
@@ -29,6 +29,10 @@ export default {
     user: {
       type: Object,
       default: () => {}
+    },
+    firstLoad: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -36,32 +40,38 @@ export default {
       const layout = this.$route.meta.layout || defaultLayout;
       return () => import(`@/layouts/${layout}.vue`);
     },
-
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>
 .slide-enter-active, .slide-leave-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-enter-to{
   position: relative;
-  left: 0;
+
+  transition: all 0.4s linear;
 }
 
+// первоначальное состояние уходящего элемента:
 .slide-leave{
-  position: absolute;
+  // transform: translateX(0);
+  opacity: 1;
 }
 
-.slide-enter {
-  left: -100vw;
-  position: absolute;
-  opacity: 0.5;
-}
-
+// конечное состояние уходящего элемента:
 .slide-leave-to {
-  right: -100vw;
+  transform: translateX(-50%);
   opacity: 0;
 }
+
+// первоначальное состояние появляющегося элемента:
+.slide-enter {
+  transform: translateX(50%);
+  opacity: 0;
+}
+
+//  конечное состояние появляющегося элемента:
+.slide-enter-to{
+  transform: translateX(0);
+  opacity: 1;
+}
+
 </style>
