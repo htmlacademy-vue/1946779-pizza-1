@@ -3,12 +3,15 @@
     <AppLayout
       :isLogin="isLogin"
       :user="user"
+      :firstLoad="firstLoad"
     >
+
       <router-view
         :pizzasInfoArray="routeProps.pizzasInfoArray"
         :user="routeProps.user"
         @changeInitialCounter="changeInitialCounter"
       />
+
     </AppLayout>
   </div>
 </template>
@@ -23,6 +26,7 @@ export default {
     return {
       pizzasInfoArray: [],
       isLogin: true,
+      firstLoad: true
     }
   },
   methods: {
@@ -31,6 +35,11 @@ export default {
         let findedPizza = this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id);
         findedPizza.initialCounter = counterAndPizzaId.counter;
       }
+    }
+  },
+  watch: {
+    $route(to, from) {
+        this.firstLoad = from.name == null ? true : false
     },
   },
   computed: {

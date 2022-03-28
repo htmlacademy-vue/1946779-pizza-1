@@ -281,10 +281,13 @@
       </div>
     </section>
 
-    <Popup
-      v-show="showPopup"
-      :showPopup="showPopup"
-    />
+    <transition name="fade">
+      <Popup
+        v-show="showPopup"
+        :showPopup="showPopup"
+      />
+    </transition>
+
   </form>
 </template>
 <script>
@@ -463,3 +466,14 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .5s
+}
+.fade-enter, .fade-leave-to {
+  transform: scale(1.1);
+  opacity: 0
+}
+
+</style>

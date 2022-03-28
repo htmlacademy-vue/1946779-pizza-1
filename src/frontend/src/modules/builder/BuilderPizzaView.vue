@@ -21,10 +21,10 @@
         class="pizza"
         :class="`pizza--foundation--${doughType}-${sauceType}`"
       >
-        <div class="pizza__wrapper">
+        <transition-group name="ingredients" tag="ul" class="pizza__wrapper">
           <div
             v-for="(ingredientType, index) in dropIngredientParsed"
-            :key="ingredientType.index"
+            :key="ingredientType.keyId"
             :data-id="index"
             class="pizza__filling"
             :class="[`pizza__filling--${ingredientType.type}`,
@@ -32,7 +32,7 @@
               {'pizza__filling--third': ingredientType.number === 3} ]"
           >
           </div>
-        </div>
+        </transition-group>
       </div>
     </div>
 
@@ -79,9 +79,11 @@ export default {
         for (let index = 1; index <= parseInt(element.counter); index++) {
           const cloneElement = Object.assign({}, element);
           cloneElement.number = index;
-          newArrIngredients.push(cloneElement);
+          cloneElement.keyId = cloneElement.id * cloneElement.number + cloneElement.type;
+          newArrIngredients.unshift(cloneElement);
         }
       });
+
       return newArrIngredients;
     }
   },
@@ -91,3 +93,17 @@ export default {
 
 }
 </script>
+<style lang="scss" scoped>
+
+.ingredients-enter-active,
+.ingredients-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.ingredients-enter,
+.ingredients-leave-to {
+  width: 0;
+
+  opacity: 0;
+}
+</style>

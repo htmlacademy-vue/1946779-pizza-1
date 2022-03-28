@@ -6,14 +6,11 @@
       :user="user"
     />
 
-    <main class="layout">
+    <AppLayoutSidebar
+      :isActiveClass="isActiveClass"
+    />
 
-      <AppLayoutSidebar
-        :isActiveClass="isActiveClass"
-      />
-
-      <slot class="slot-class"/>
-    </main>
+    <slot class="slot-class"/>
   </div>
 </template>
 <script>
@@ -52,7 +49,9 @@ export default {
     display: flex;
     flex-direction: column;
     min-width: 960px;
-    min-height: 100vh
+    min-height: 100vh;
+    width: 100%;
+    min-height: 100vh;
   }
   .slot-class {
     display: flex;

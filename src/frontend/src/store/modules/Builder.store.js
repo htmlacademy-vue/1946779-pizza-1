@@ -33,7 +33,7 @@ export default {
     ADD_SAUCE: (state, sauce) => (state.buildedPizza.sauce = sauce),
     SET_SAUCE: (state, sauceId) => {
       state.sauces.find( el => el.id === sauceId).checked = true;
-      state.sauces.find( el => el.type !== sauceId).checked = false;
+      state.sauces.find( el => el.id !== sauceId).checked = false;
     },
 
     ADD_SIZE: (state, size) => (state.buildedPizza.size = size),
@@ -108,7 +108,7 @@ export default {
       const ingredientMovedArray = state.buildedPizza.ingredients;
 
       if (!ingredientMovedArray.find( el => el.id === ingredient.id )) {
-        ingredientMovedArray.push(ingredient);
+        ingredientMovedArray.unshift(ingredient);
 
         commit('CHANGE_INGREDIENTS_COUNT', ingredient);
         commit('CHANGE_INGREDIENTS', ingredientMovedArray);
@@ -116,7 +116,7 @@ export default {
       } else if (ingredientMovedArray.find( el => el.id=== ingredient.id )) {
         const findedElement = ingredientMovedArray.find(el => el.id === ingredient.id);
         ingredientMovedArray.splice(ingredientMovedArray.indexOf(findedElement), 1);
-        ingredientMovedArray.push(ingredient);
+        ingredientMovedArray.unshift(ingredient);
 
         commit('CHANGE_INGREDIENTS_COUNT', ingredient);
         commit('CHANGE_INGREDIENTS', ingredientMovedArray);
@@ -131,7 +131,7 @@ export default {
 
         let newIngredient = state.ingredients.find( el => el.id=== ingredient.id );
 
-        ingredientMovedArray.push(newIngredient);
+        ingredientMovedArray.unshift(newIngredient);
 
         commit('CHANGE_INGREDIENTS', ingredientMovedArray);
 
@@ -143,7 +143,7 @@ export default {
         let newIngredient = state.ingredients.find( el => el.id=== ingredient.id );
 
         ingredientMovedArray.splice(ingredientMovedArray.indexOf(findedElement), 1);
-        ingredientMovedArray.push(newIngredient);
+        ingredientMovedArray.unshift(newIngredient);
 
         commit('CHANGE_INGREDIENTS', ingredientMovedArray);
       }
