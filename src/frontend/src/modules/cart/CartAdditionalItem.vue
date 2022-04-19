@@ -5,6 +5,7 @@
         :src="require(`@/assets/img/${misc.svgName}.svg`)"
         width="39" height="60"
         :alt="misc.name"
+        data-test="img"
       >
       <span>{{misc.name}}</span>
 
@@ -15,6 +16,7 @@
       <CartItemCounter
         @sendCount="sendCount"
         :counter="misc.initialCounter"
+        data-test="misc-count"
       />
 
       <div class="additional-list__price">
@@ -26,7 +28,7 @@
 </template>
 <script>
 import CartItemCounter from '@/modules/cart/CartItemCounter';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: "CartAdditionalItem",

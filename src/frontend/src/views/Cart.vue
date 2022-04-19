@@ -1,5 +1,9 @@
 <template>
-  <form @submit.prevent="addOrder" class="layout-form">
+  <form
+    @submit.prevent="addOrder"
+    class="layout-form"
+    data-test="cart-submit"
+  >
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
@@ -9,6 +13,7 @@
         <div
           class="sheet cart__empty"
           v-if="pizzas.length < 1"
+
         >
           <p>В корзине нет ни одного товара</p>
         </div>
@@ -16,12 +21,14 @@
         <ul
           class="cart-list sheet"
           v-else
+          data-test="sheet"
         >
 
           <CartPizzaItem
             v-for="pizza in pizzas"
             :key="pizza.id"
             :pizza="pizza"
+            data-test="pizza"
           />
 
         </ul>
@@ -29,6 +36,7 @@
         <div
           class="cart__additional"
           v-show="this.pizzas.length > 0"
+          data-test="additionals"
         >
           <ul class="additional-list">
 
@@ -36,6 +44,7 @@
               v-for="misc in miscs"
               :key="misc.id"
               :misc="misc"
+              data-test="additional"
             />
 
           </ul>
@@ -44,11 +53,13 @@
         <div
           class="cart__form"
           v-show="this.pizzas.length > 0"
+          data-test="form"
         >
 
           <div
             class="cart-form"
             v-if="isAuthenticated"
+            data-test="auth-form"
           >
 
             <label class="cart-form__select">
@@ -60,6 +71,7 @@
                 v-model="orderWay"
                 required
                 @change="selectOrderMethod($event.target.value)"
+                data-test="auth-select"
               >
 
                 <option
@@ -70,6 +82,7 @@
 
                 <option
                   value="new"
+                  data-test="option-new"
                 >
                   Новый адрес
                 </option>
@@ -78,6 +91,7 @@
                   :value="address.id"
                   v-for="address in addresses"
                   :key="address.id"
+                  data-test="option-address"
                 >
                   {{ address.name }}
                 </option>
@@ -95,6 +109,7 @@
                 placeholder="+7 999-999-99-99"
                 v-model="phoneNumber"
                 required
+                data-test="input-tel"
               >
 
             </label>
@@ -116,6 +131,7 @@
                     v-model="street"
                     :disabled="(orderWay !== 'new')"
                     required
+                    data-test="input-street"
                   >
 
                 </label>
@@ -132,6 +148,7 @@
                     v-model="house"
                     :disabled="(orderWay !== 'new')"
                     required
+                    data-test="input-house"
                   >
 
                 </label>
@@ -148,6 +165,7 @@
                     v-model="apartment"
                     :disabled="(orderWay !== 'new')"
                     required
+                    data-test="input-apartment"
                   >
                 </label>
               </div>
@@ -158,6 +176,7 @@
           <div
             class="cart-form"
             v-else
+            data-test="notAuth-form"
           >
 
             <label class="cart-form__select">
@@ -259,21 +278,27 @@
         <router-link
           to="/"
           class="button button--border button--arrow"
+          data-test="route-link"
         >
           Хочу еще одну
         </router-link>
 
       </div>
       <p class="footer__text">Перейти к конструктору<br>чтоб собрать ещё одну пиццу</p>
-      <div class="footer__price">
+      <div
+        class="footer__price"
+        data-test="final-price"
+      >
+
         <b>Итого: {{ finalPrice }} ₽</b>
+
       </div>
 
       <div class="footer__submit">
         <button
           type="submit"
           class="button"
-
+          data-test="final-button"
           :disabled="finalPrice === 0"
         >
         Оформить заказ
@@ -285,6 +310,7 @@
       <Popup
         v-show="showPopup"
         :showPopup="showPopup"
+        data-test="popup"
       />
     </transition>
 
@@ -297,7 +323,7 @@ import CartAdditionalItem from '@/modules/cart/CartAdditionalItem';
 import Popup from '@/views/Popup';
 
 import { parsePizzaCost, createPizzasRequestObj, createMiscRequestObj } from '@/common/helpers';
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: "Cart",

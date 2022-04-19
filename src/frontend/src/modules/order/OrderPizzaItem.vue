@@ -2,7 +2,13 @@
   <li class="order__item">
 
     <div class="product">
-      <img src="@/assets/img/product.svg" class="product__img" width="56" height="56" :alt="pizza.name">
+      <img
+        src="@/assets/img/product.svg"
+        class="product__img"
+        width="56" height="56"
+        :alt="pizza.name"
+        data-test="img"
+      >
       <div class="product__text">
         <h2>{{ pizza.name }}</h2>
         <ul>
@@ -13,7 +19,8 @@
             <span
               class="product__ingredient-span product__ingredient-span_pseudo"
               v-for="ing in ings"
-              :key="ing.index"
+              :key="ings.indexOf(ing)"
+              data-test="ings"
             >
               {{ ing }}
             </span></li>
@@ -25,7 +32,7 @@
   </li>
 </template>
 <script>
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: "OrderPizzaItem",

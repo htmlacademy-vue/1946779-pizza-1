@@ -3,6 +3,7 @@
     :class="`diameter__input--${size.type}`"
     :style="{'--varSize': `url(${size.image})`}"
     class="diameter__input"
+    data-test="size__label"
   >
     <input
       :value="size.name.split(' ', )[0]"
@@ -11,6 +12,7 @@
       class="visually-hidden"
       :checked="size.checked"
       @input="sendSize"
+      data-test="size__input"
     >
     <span>{{size.name}}</span>
   </label>

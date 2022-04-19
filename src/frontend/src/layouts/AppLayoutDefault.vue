@@ -7,11 +7,5 @@
 
 export default {
   name: "AppLayoutDefault",
-  component: {
-
-  },
-  props: {
-
-  }
 }
 </script>

@@ -4,10 +4,12 @@
       :price="price"
       :isLogin="isLogin"
       :user="user"
+      data-test="header"
     />
 
     <AppLayoutSidebar
       :isActiveClass="isActiveClass"
+      data-test="sidebar"
     />
 
     <slot class="slot-class"/>

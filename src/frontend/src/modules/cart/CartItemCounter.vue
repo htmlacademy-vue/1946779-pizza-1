@@ -5,6 +5,7 @@
       class="counter__button counter__button--minus"
       @click="$emit('sendCount', counter - 1)"
       :disabled="counter < 1"
+      data-test="minus-btn"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
@@ -15,12 +16,14 @@
       class="counter__input"
       :value="counter"
       disabled
+      data-test="input"
     >
 
     <button
       type="button"
       class="counter__button counter__button--plus counter__button--orange"
       @click="$emit('sendCount', counter + 1)"
+      data-test="plus-btn"
     >
       <span class="visually-hidden">Больше</span>
     </button>
