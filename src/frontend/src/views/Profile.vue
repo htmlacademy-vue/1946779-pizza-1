@@ -112,18 +112,18 @@ export default {
     },
 
     removeAddress(address) {
-      if( !address.id ) {
-        this.showNewForm = false;
-      } else if ( address.id ) {
+      if ( address.id ) {
         this.deleteAddress(address.id);
         this.showEditForm = false;
+      } else {
+        this.showNewForm = false;
       }
     },
 
     closeForm(mode) {
       if (mode === 'edit') {
         this.showEditForm = false;
-      } else if( mode === 'new' ) {
+      } else if ( mode === 'new' ) {
         this.showNewForm = false;
       }
     }

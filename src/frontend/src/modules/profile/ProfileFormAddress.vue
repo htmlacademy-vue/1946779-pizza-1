@@ -139,7 +139,7 @@ export default {
         };
 
         this.postAddress(newAddress);
-      } else if ( this.mode === 'edit' ) {
+      } else {
         this.putAddress(this.address);
       }
 

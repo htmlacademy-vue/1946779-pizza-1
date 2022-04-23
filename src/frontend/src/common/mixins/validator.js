@@ -1,6 +1,6 @@
 import { emailRegex, urlRegex } from '@/common/constants';
 
-const rules = {
+export const rules = {
   isNotEmpty: {
     rule: value => !!value?.trim(),
     message: 'Поле не заполнено'
@@ -27,7 +27,7 @@ const rules = {
  * @returns {string}
  */
 
-const validator = (value, appliedRules) => {
+export const validator = (value, appliedRules) => {
   let error = '';
   appliedRules.forEach(appliedRule => {
     if (!rules[appliedRule]) {

@@ -4,6 +4,7 @@
     @dragover.prevent
     @dragenter.prevent
     :draggable="isDraggable"
+    data-test="drag-div"
   >
     <slot />
   </div>

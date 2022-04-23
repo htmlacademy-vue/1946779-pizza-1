@@ -1,4 +1,5 @@
 import {
+  setAuth,
   parsePizzaInfo,
   parsePizzaCost,
   createPizzasRequestObj,
@@ -7,12 +8,14 @@ import {
   normalizeSize,
   normalizeSauce,
   normalizeIngredients,
-  normalizeMisc
+  normalizeMisc,
+  parseIngredients
 } from '@/common/helpers';
+
+import store from '@/store';
 
 import pizza from '@/static/pizza';
 import misc from '@/static/misc';
-import { dough_types, pizza_sizes, pizza_sauces, pizza_ingredients, misc_types  } from '@/common/constants';
 
 describe('test helpers functions', () => {
 
@@ -277,4 +280,52 @@ describe('test helpers functions', () => {
       },
     );
   });
+
+  it('test setAuth', () => {
+    expect(setAuth(store)).toEqual();
+  });
+
+  it('test parseIngredients', () => {
+    let pizzas = [
+      {
+        count:1,
+        dough: {
+          id:1,
+          price:300,
+          type:"small",
+        },
+        id:"1",
+        ingredients: [
+          {
+            counter:2,
+            id:4,
+            image:"/public/img/filling/salmon.svg",
+            name:"Лосось",
+            price:50,
+            type:"salmon",
+          },
+        ],
+        pizzaName: "new",
+        price: 400,
+        sauce: {
+          id:2,
+          price:50,
+          type:"creamy",
+        },
+        size: {
+          checked:true,
+          id:1,
+          image:"/public/img/diameter.svg",
+          multiplier:1,
+          name:"23 см",
+          type:"small",
+        }
+      }
+    ];
+    expect(parseIngredients(pizzas[0].ingredients)).toEqual([{
+      ingredientId: 4,
+      quantity: 2
+    }]);
+  });
+
 })

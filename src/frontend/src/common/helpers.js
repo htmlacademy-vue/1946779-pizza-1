@@ -71,17 +71,6 @@ export const createPizzasRequestObj = (pizzas) => {
     })
   });
 
-  function parseIngredients(ings = []) {
-    const parsedIngs = [];
-    ings.forEach( ing => {
-      parsedIngs.push({
-        "ingredientId": ing.id,
-        "quantity": ing.counter
-      })
-    });
-    return parsedIngs;
-  }
-
   return parsePizzas;
 }
 
@@ -140,3 +129,14 @@ export const normalizeMisc = misc => {
     svgName: misc_types.find(({ name }) => misc.name === name)?.svg,
   };
 };
+
+export const parseIngredients = ings => {
+  const parsedIngs = [];
+  ings.forEach( ing => {
+    parsedIngs.push({
+      "ingredientId": ing.id,
+      "quantity": ing.counter
+    })
+  });
+  return parsedIngs;
+}

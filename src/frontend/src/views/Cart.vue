@@ -13,7 +13,7 @@
         <div
           class="sheet cart__empty"
           v-if="pizzas.length < 1"
-
+          data-test="cart-empty"
         >
           <p>В корзине нет ни одного товара</p>
         </div>
@@ -196,6 +196,7 @@
 
                 <option
                   value="new"
+                  data-test="option-new-value"
                 >
                   Новый адрес
                 </option>
@@ -212,6 +213,7 @@
                 placeholder="+7 999-999-99-99"
                 v-model="phoneNumber"
                 required
+                data-test="nonAuth-input-phone"
               >
 
             </label>
@@ -232,6 +234,7 @@
                     name="street"
                     v-model="street"
                     :disabled="(orderWay !== 'new')"
+                    data-test="nonAuth-input-street"
                   >
 
                 </label>
@@ -247,6 +250,7 @@
                     name="house"
                     v-model="house"
                     :disabled="(orderWay !== 'new')"
+                    data-test="nonAuth-input-house"
                   >
 
                 </label>
@@ -262,6 +266,7 @@
                     name="apartment"
                     v-model="apartment"
                     :disabled="(orderWay !== 'new')"
+                    data-test="nonAuth-input-apartment"
                   >
                 </label>
               </div>
@@ -322,7 +327,7 @@ import CartAdditionalItem from '@/modules/cart/CartAdditionalItem';
 
 import Popup from '@/views/Popup';
 
-import { parsePizzaCost, createPizzasRequestObj, createMiscRequestObj } from '@/common/helpers';
+import { createPizzasRequestObj, createMiscRequestObj } from '@/common/helpers';
 import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
@@ -357,15 +362,6 @@ export default {
         return true;
       }
     }
-  },
-  mounted() {
-    if(this.pizzas) {
-      this.pizzasPriceFromArray = parsePizzaCost(this.pizzas);
-    } else {
-      this.pizzasPriceFromArray = 0;
-    }
-
-    this.allPizzasCost = parseInt(this.pizzasPriceFromArray);
   },
   methods: {
     ...mapActions('Orders', {
@@ -460,7 +456,7 @@ export default {
           this.addOrderToState(order);
           this.showPopup = !this.showPopup;
 
-        } else if ( this.orderWay === 'new' ) {
+        } else {
           // новый адрес
           this.addressForm = {
             street: this.street,

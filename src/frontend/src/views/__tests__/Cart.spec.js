@@ -168,6 +168,21 @@ describe('Cart', () => {
     expect(sheet.exists()).toBeTruthy();
   });
 
+  it ('render sheet cart__empty div', () => {
+    createMiscs(store);
+    createComponent({ localVue, store, stubs });
+    const cartEmpty = wrapper.find('[ data-test="cart-empty"]');
+    expect(cartEmpty.exists()).toBeTruthy();
+  });
+
+  it ('doesn\'t render sheet cart__empty div', () => {
+    setPizza(store);
+    createMiscs(store);
+    createComponent({ localVue, store, stubs });
+    const cartEmpty = wrapper.find('[ data-test="cart-empty"]');
+    expect(cartEmpty.exists()).toBeFalsy();
+  });
+
   it ('render sheet div', () => {
     setPizza(store);
     createMiscs(store);
@@ -409,6 +424,61 @@ describe('Cart', () => {
     await wrapper.setData({ showPopup: true });
     const popup = wrapper.find('[data-test="popup"]');
     expect(popup.isVisible()).toBeTruthy();
+  });
+
+  it ('is final-button is call method addOrder with new orderWay', async () => {
+    const spyOnAddOrder = jest.spyOn(Cart.methods, 'addOrder');
+    setPizza(store);
+    createMiscs(store);
+    createComponent({ localVue, store, stubs });
+    await wrapper.setData({ orderWay: 'new' });
+    await wrapper.find('[data-test="cart-submit"]').trigger('submit');
+    expect(spyOnAddOrder).toHaveBeenCalled();
+  });
+
+  it ('is final-button is call method addOrder with new orderWay', async () => {
+    authenticateUser(store);
+    const spyOnAddOrder = jest.spyOn(Cart.methods, 'addOrder');
+    setPizza(store);
+    createMiscs(store);
+    createComponent({ localVue, store, stubs });
+    await wrapper.setData({ orderWay: 'new' });
+    await wrapper.find('[data-test="cart-submit"]').trigger('submit');
+    expect(spyOnAddOrder).toHaveBeenCalled();
+  });
+
+  it ('is final-button is call method addOrder with myself orderWay without address', async () => {
+    const spyOnAddOrder = jest.spyOn(Cart.methods, 'addOrder');
+    authenticateUser(store);
+    setPizza(store);
+    createMiscs(store);
+    // addressesSet(store);
+    createComponent({ localVue, store, stubs });
+    await wrapper.setData({ orderWay: 'myself' });
+    await wrapper.find('[data-test="cart-submit"]').trigger('submit');
+    expect(spyOnAddOrder).toHaveBeenCalled();
+  });
+
+  it ('is final-button is call method addOrder without orderWay', async () => {
+    const spyOnAddOrder = jest.spyOn(Cart.methods, 'addOrder');
+    authenticateUser(store);
+    setPizza(store);
+    createMiscs(store);
+    addressesSet(store);
+    createComponent({ localVue, store, stubs });
+    await wrapper.setData({ orderWay: '1' });
+    await wrapper.find('[data-test="cart-submit"]').trigger('submit');
+    expect(spyOnAddOrder).toHaveBeenCalled();
+  });
+
+  it ('is final-button is call method addOrder with new orderWay without user', async () => {
+    const spyOnAddOrder = jest.spyOn(Cart.methods, 'addOrder');
+    setPizza(store);
+    createMiscs(store);
+    createComponent({ localVue, store, stubs });
+    await wrapper.setData({ orderWay: 'new' });
+    await wrapper.find('[data-test="cart-submit"]').trigger('submit');
+    expect(spyOnAddOrder).toHaveBeenCalled();
   });
 })
 

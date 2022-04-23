@@ -121,14 +121,6 @@ export default {
       this.dropIngredients(ingredient);
     },
 
-    inputNameOfPizza(inputValue) {
-      this.nameOfPizza = inputValue;
-    },
-
-    movePriceToCart() {
-      this.$emit('sendInfo', infoAboutPizza);
-    },
-
     putPizza() {
       this.addPrice(this.pricePizza);
       this.setPizza(Object.assign( {}, this.buildedPizza));

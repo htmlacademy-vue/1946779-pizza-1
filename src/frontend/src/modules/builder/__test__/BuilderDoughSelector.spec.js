@@ -3,9 +3,6 @@ import { generateMockStore } from '@/store/mocks';
 import Vuex from 'vuex';
 import BuilderDoughSelector from '@/modules/builder/BuilderDoughSelector';
 
-import pizza from '@/static/pizza';
-import { normalizeSauce, normalizeIngredients } from '@/common/helpers';
-
 // Создаём локальный тестовый экземпляр Vue.
 const localVue = createLocalVue();
 
@@ -18,8 +15,6 @@ describe('BuilderDoughSelector', () => {
   let store;
   let commit;
   let dispatch;
-
-  let sendDoughData;
 
   const propsData = {
     dough: {

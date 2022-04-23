@@ -16,6 +16,7 @@
           type="button"
           class="button button--border"
           @click="removeOrder"
+          data-test="remove-btn"
         >
           Удалить
         </button>
@@ -27,6 +28,7 @@
           type="button"
           class="button"
           @click="repeat"
+          data-test="repeat-btn"
         >
           Повторить
         </button>

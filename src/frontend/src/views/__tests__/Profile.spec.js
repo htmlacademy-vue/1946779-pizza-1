@@ -19,7 +19,7 @@ const authenticateUser = store => {
 };
 
 // Создаём вспомогательный метод для добавления ADDRESSES в тест-хранилище.
-const addresses = [
+let addresses = [
   {
     building:"1",
     comment:":LKJ:LKJ:LKJ:LKJ:LKJ:LKJ:KLJ:LKJ:LKJ:LKJ",
@@ -179,6 +179,27 @@ describe('Profile', () => {
     );
   });
 
+  it ('is address form emit event removeAddress without address', async () => {
+    let addresses = [
+      {
+        building:"1",
+        comment:":LKJ:LKJ:LKJ:LKJ:LKJ:LKJ:KLJ:LKJ:LKJ:LKJ",
+        flat:"1",
+        id:null,
+        name:"newAddressStreet",
+        street:"Street",
+        userId:"8170e005-e25d-411e-9a87-d6dca201f9ab",
+      }
+    ];
+    const spyOnRemoveAddress = jest.spyOn(Profile.methods, 'removeAddress');
+    addressesSet(store);
+    authenticateUser(store);
+    createComponent({ localVue, store, mocks });
+    const addressForm = wrapper.find('[data-test="addressNew-form"]');
+    await addressForm.vm.$emit('removeAddress', addresses[0]);
+    expect(spyOnRemoveAddress).toHaveBeenCalled();
+  });
+
   it ('is address form emit event closeForm', async () => {
     const spyOnCloseAddress = jest.spyOn(Profile.methods, 'closeForm');
     authenticateUser(store);
@@ -186,6 +207,37 @@ describe('Profile', () => {
     createComponent({ localVue, store, mocks });
     const addressForm = wrapper.find('[data-test="addressEdit-form"]');
     await addressForm.vm.$emit('closeForm', "edit");
+    expect(spyOnCloseAddress).toHaveBeenCalled();
+  });
+
+  it ('is address edit form emit event closeForm with mode NEW', async () => {
+    const spyOnCloseAddress = jest.spyOn(Profile.methods, 'closeForm');
+    authenticateUser(store);
+    addressesSet(store);
+    createComponent({ localVue, store, mocks });
+    const addressForm = wrapper.find('[data-test="addressEdit-form"]');
+    await addressForm.vm.$emit('closeForm', "new");
+    expect(spyOnCloseAddress).toHaveBeenCalled();
+  });
+
+  it ('is address new form emit event closeForm with mode NEW', async () => {
+    let addresses = [
+      {
+        building:"1",
+        comment:":LKJ:LKJ:LKJ:LKJ:LKJ:LKJ:KLJ:LKJ:LKJ:LKJ",
+        flat:"1",
+        id:null,
+        name:"newAddressStreet",
+        street:"Street",
+        userId:"8170e005-e25d-411e-9a87-d6dca201f9ab",
+      }
+    ];
+    const spyOnCloseAddress = jest.spyOn(Profile.methods, 'closeForm');
+    authenticateUser(store);
+    addressesSet(store);
+    createComponent({ localVue, store, mocks });
+    const addressForm = wrapper.find('[data-test="addressNew-form"]');
+    await addressForm.vm.$emit('closeForm');
     expect(spyOnCloseAddress).toHaveBeenCalled();
   });
 
@@ -226,6 +278,8 @@ describe('Profile', () => {
     const addressForm = wrapper.find('[data-test="addressNew-form"]');
     expect(addressForm.isVisible()).toBeTruthy();
   });
+
+
 })
 
 // Список элементов для тестирования

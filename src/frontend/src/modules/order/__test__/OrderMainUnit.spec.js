@@ -130,6 +130,7 @@ describe('OrderMainUnit', () => {
   let store;
   let commit;
   let wrapper;
+  let routerPush
 
   let propsData = {
     order: orders[0]
@@ -142,18 +143,25 @@ describe('OrderMainUnit', () => {
   const mocks = {
     $store: {
       commit
+    },
+    $router: {
+      push: routerPush
     }
   };
 
   beforeEach(() => {
+    routerPush = jest.fn();
     actions = {
       Orders: {
         post: jest.fn(),
         query: jest.fn(),
+        deleteOrder: jest.fn(),
+        repeatOrder: jest.fn(),
       }
     };
     store = generateMockStore(actions);
     mocks.$store.commit = commit;
+    mocks.$router.push = routerPush;
   });
 
   afterEach(() => {
@@ -381,6 +389,43 @@ describe('OrderMainUnit', () => {
     expect(oldAddressHTML.exists()).toBeFalsy();
     expect(emptyAddressHTML.exists()).toBeFalsy();
     expect(newAddressHTML.exists()).toBeTruthy();
+  });
+
+  it ('is remove button remove the order', async () => {
+    const spyOnRemoveOrder = jest.spyOn(OrderMainUnit.methods, 'removeOrder');
+    authenticateUser(store);
+    addressesSet(store);
+
+    createDoughs(store);
+    createSizes(store);
+    createIngredients(store);
+    createSauces(store);
+    createMiscs(store);
+
+    createComponent({ localVue, store, propsData });
+    const removeBtn = wrapper.find('[data-test="remove-btn"]');
+    await removeBtn.trigger('click');
+
+    expect(spyOnRemoveOrder).toHaveBeenCalled();
+  });
+
+  it ('is repeat button repeat the order', async () => {
+    const spyOnRepeatOrder = jest.spyOn(OrderMainUnit.methods, 'repeat');
+    authenticateUser(store);
+    addressesSet(store);
+
+    createDoughs(store);
+    createSizes(store);
+    createIngredients(store);
+    createSauces(store);
+    createMiscs(store);
+
+    createComponent({ localVue, store, propsData, mocks });
+    const repeatBtn = wrapper.find('[data-test="repeat-btn"]');
+    await repeatBtn.trigger('click');
+
+    expect(spyOnRepeatOrder).toHaveBeenCalled();
+    expect(routerPush).toHaveBeenCalledWith({ name: 'Cart' });
   });
 })
 

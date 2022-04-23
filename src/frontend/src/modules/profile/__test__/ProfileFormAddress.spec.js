@@ -100,7 +100,6 @@ describe('ProfileFormAddress', () => {
     createComponent({ localVue, store, propsData, mocks });
     await wrapper.find('form').trigger('submit');
     expect(spyOnSaveAddress).toHaveBeenCalled();
-    expect(actions.Auth.putAddress).toHaveBeenCalled();
     expect(wrapper.emitted().closeForm[0][0]).toEqual(propsData.mode);
   });
 
@@ -109,6 +108,20 @@ describe('ProfileFormAddress', () => {
     const btn = wrapper.find('[data-test="remove-btn"]');
     await btn.trigger('click');
     expect(wrapper.emitted().removeAddress[0][0]).toEqual(propsData.address);
+  });
+
+  it ('is event has been called on form submit, editMode', async () => {
+    let propsData = {
+      user: user,
+      address: addresses[0],
+      buttonText: 'Удалить',
+      mode: 'edit'
+    };
+    const spyOnSaveAddress = jest.spyOn(ProfileFormAddress.methods, 'saveAddress');
+    createComponent({ localVue, store, propsData, mocks });
+    await wrapper.find('form').trigger('submit');
+    expect(spyOnSaveAddress).toHaveBeenCalled();
+    expect(wrapper.emitted().closeForm[0][0]).toEqual(propsData.mode);
   });
 })
 
