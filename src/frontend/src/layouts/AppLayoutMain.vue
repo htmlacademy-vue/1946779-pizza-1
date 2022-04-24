@@ -4,6 +4,7 @@
       :price="price"
       :isLogin="isLogin"
       :user="user"
+      data-test="header-comp"
     />
 
     <slot class="slot-class"/>

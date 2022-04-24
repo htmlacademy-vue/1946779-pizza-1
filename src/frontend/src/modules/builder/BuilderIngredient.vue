@@ -9,6 +9,7 @@
         class="filling"
         :class="`filling--${ingredient.type}`"
         :style="{'--varIngBcg': `url(${ingredient.image})`}"
+        data-test="filling"
       >
         {{ ingredient.name }}
       </span>
@@ -16,6 +17,7 @@
       <BuilderItemCounter
         :counter="this.ingredient.counter"
         @countIngredient="countIngredient"
+        data-test="item-counter"
       />
     </AppDrag>
   </div>
@@ -40,10 +42,12 @@ export default {
   },
   methods: {
     ...mapActions("Builder", ["addIngredients"]),
+
     async countIngredient(counter) {
       this.ingredient.counter = counter;
       await this.addIngredients(this.ingredient);
     },
+
     isDraggable(ingredient) {
       return (ingredient.counter <= 2);
     },

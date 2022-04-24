@@ -3,12 +3,12 @@
       <div class="product cart-list__product">
         <img src="@/assets/img/product.svg" class="product__img" width="56" height="56" alt="Капричоза">
         <div class="product__text">
-          <h2>{{ pizza.pizzaName }}</h2>
+          <h2 data-test="pizzaName">{{ pizza.pizzaName }}</h2>
           <ul>
-            <li>
+            <li data-test="sizeOfPizza">
               {{ sizeOfPizza }}, <span class="product__ingredient-span">{{ typeOfDough }}</span> тесто.
             </li>
-            <li>
+            <li data-test="typeOfSauce">
               Соус: {{ typeOfSauce }}.
             </li>
             <li>
@@ -17,6 +17,7 @@
                 class="product__ingredient-span product__ingredient-span_pseudo"
                 v-for="ingredient in ingredients"
                 :key="ingredient.index"
+                data-test="ingredient"
               >
                 {{ ingredient }}
               </span>
@@ -30,6 +31,7 @@
         <CartItemCounter
           @sendCount="catchCounter"
           :counter="this.pizza.count"
+          data-test="pizza-count"
         />
       </div>
 
@@ -42,6 +44,7 @@
           type="button"
           class="cart-list__edit"
           @click="changeIngredients"
+          data-test="change-btn"
         >
         Изменить</button>
       </div>
@@ -51,7 +54,7 @@
 import CartItemCounter from '@/modules/cart/CartItemCounter';
 import { dough_types, pizza_sizes, pizza_sauces } from "@/common/constants";
 import { parsePizzaInfo } from "@/common/helpers";
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: "CartPizzaItem",

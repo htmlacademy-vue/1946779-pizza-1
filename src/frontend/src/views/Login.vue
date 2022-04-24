@@ -5,6 +5,7 @@
         href="#"
         class="close close--white"
         @click.prevent="$router.push({ name: 'Home'})"
+        data-test="close-button"
       >
         <span class="visually-hidden">Закрыть форму авторизации</span>
       </a>
@@ -26,6 +27,7 @@
               class="input"
               placeholder="example@mail.ru"
               :error-text="validations.email.error"
+              data-test="email-component"
             />
           </label>
         </div>
@@ -41,6 +43,7 @@
             class="input"
             placeholder="***********"
             :error-text="validations.password.error"
+            data-test="password-component"
           />
           </label>
         </div>

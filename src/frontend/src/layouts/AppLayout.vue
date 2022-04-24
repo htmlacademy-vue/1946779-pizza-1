@@ -7,7 +7,7 @@
       :user="user"
     >
 
-      <slot />
+      <slot/>
     </component>
   </transition>
 </template>

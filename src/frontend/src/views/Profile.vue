@@ -18,6 +18,7 @@
     <div
       class="layout__address"
       v-if="addresses && ( addresses.length > 0 )"
+      data-test="address-layout"
     >
 
       <ProfileAddressView
@@ -25,6 +26,7 @@
         v-for="address in this.addresses"
         :key="address.id"
         :address="address"
+        data-test="address-view"
       />
 
       <ProfileFormAddress
@@ -34,6 +36,7 @@
         :mode='"edit"'
         @removeAddress="removeAddress"
         @closeForm="closeForm"
+        data-test="addressEdit-form"
       />
 
     </div>
@@ -41,6 +44,7 @@
     <div
       class="layout__address"
       v-else
+      data-test="address-empty"
     >
 
       <h2>Нет сохраненных aдресов</h2>
@@ -53,6 +57,7 @@
         class="button button--border"
         @click="showForm"
         :disabled="showNewForm"
+        data-test="add-btn"
       >
         Добавить новый адрес
       </button>
@@ -64,6 +69,7 @@
         :user="user"
         @removeAddress="removeAddress"
         @closeForm="closeForm"
+        data-test="addressNew-form"
       />
   </div>
 
@@ -106,18 +112,18 @@ export default {
     },
 
     removeAddress(address) {
-      if( !address.id ) {
-        this.showNewForm = false;
-      } else if ( address.id ) {
+      if ( address.id ) {
         this.deleteAddress(address.id);
         this.showEditForm = false;
+      } else {
+        this.showNewForm = false;
       }
     },
 
     closeForm(mode) {
       if (mode === 'edit') {
         this.showEditForm = false;
-      } else if( mode === 'new' ) {
+      } else if ( mode === 'new' ) {
         this.showNewForm = false;
       }
     }

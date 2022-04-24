@@ -5,6 +5,7 @@
       type="button"
       class="counter__button counter__button--minus"
       :disabled="counter < 1"
+      data-test="button-minus"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
@@ -22,6 +23,7 @@
       type="button"
       class="counter__button counter__button--plus"
       :disabled="counter >= 3"
+      data-test="button-plus"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -29,11 +31,11 @@
 </template>
 <script>
 export default {
-  name: "ItemCounter",
+  name: "BuilderItemCounter",
   props: {
     counter: {
-      type: Number,
-      required: true,
+      type: [String, Number],
+      required: true
     }
   },
 }

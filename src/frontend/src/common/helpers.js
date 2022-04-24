@@ -11,6 +11,8 @@ import {
   OrdersApiService,
   AddressApiService
 } from '@/services/api.service';
+import { dough_types, pizza_sizes, pizza_sauces, pizza_ingredients, misc_types  } from '@/common/constants';
+
 
 export const createResources = notifier => {
   return {
@@ -48,7 +50,7 @@ export const parsePizzaCost = pizzasInfoArray => {
   let costsList = [];
   var initialValue = 0;
   pizzasInfoArray.forEach( pizzaInfo => {
-    let price = pizzaInfo.pizza_price;
+    let price = pizzaInfo.price;
     costsList.push(price);
   });
   return costsList.reduce(function(a, b) {
@@ -69,19 +71,9 @@ export const createPizzasRequestObj = (pizzas) => {
     })
   });
 
-  function parseIngredients(ings = []) {
-    const parsedIngs = [];
-    ings.forEach( ing => {
-      parsedIngs.push({
-        "ingredientId": ing.id,
-        "quantity": ing.counter
-      })
-    });
-    return parsedIngs;
-  }
-
   return parsePizzas;
 }
+
 export const createMiscRequestObj = (misc) => {
   const parsedMisc= [];
   misc.forEach( m => {
@@ -91,4 +83,60 @@ export const createMiscRequestObj = (misc) => {
     })
   });
   return parsedMisc;
+}
+
+// Нормализация массыва с видом теста.
+export const normalizeDough = dough => {
+  return {
+    ...dough,
+    type: dough_types.find(({ label }) => dough.name === label)?.value,
+    checked: dough_types.find(({ label }) => dough.name === label)?.checked,
+  };
+};
+
+// Нормализация массыва с размером пиццы.
+export const normalizeSize = sizes => {
+  return {
+    ...sizes,
+    type: pizza_sizes.find(({ label }) => sizes.multiplier === label)?.value,
+    checked: pizza_sizes.find(({ label }) => sizes.multiplier === label)?.checked,
+  };
+}
+
+// Нормализация массыва с типом соуса пиццы.
+export const normalizeSauce = sauces => {
+  return {
+    ...sauces,
+    type: pizza_sauces.find(({ label }) => sauces.name === label)?.value,
+    checked: pizza_sauces.find(({ label }) => sauces.name === label)?.checked,
+  };
+}
+
+// Нормализация массыва с ингредиентами пиццы.
+export const normalizeIngredients = ings => {
+  return {
+    ...ings,
+    type: pizza_ingredients.find(({ name }) => ings.name === name)?.value,
+    counter: 0,
+  }
+}
+
+// Нормализация массыва с допами.
+export const normalizeMisc = misc => {
+  return {
+    ...misc,
+    initialCounter: misc_types.find(({ name }) => misc.name === name)?.initialCounter,
+    svgName: misc_types.find(({ name }) => misc.name === name)?.svg,
+  };
+};
+
+export const parseIngredients = ings => {
+  const parsedIngs = [];
+  ings.forEach( ing => {
+    parsedIngs.push({
+      "ingredientId": ing.id,
+      "quantity": ing.counter
+    })
+  });
+  return parsedIngs;
 }

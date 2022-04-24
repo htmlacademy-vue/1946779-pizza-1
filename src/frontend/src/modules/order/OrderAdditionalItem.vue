@@ -1,19 +1,24 @@
 <template>
   <li>
     <img
-      :src="require(`@/assets/img/${miscSvg}.svg`)"
       width="20"
       height="30"
+      :src="miscImage"
       :alt="miscName"
+      data-test="misc-img"
     >
     <p>
-      <span>{{ miscName }}</span>
-      <b>{{ miscPrice }} ₽</b>
+      <span
+      data-test="miscName-text"
+      >
+        {{ miscName }}
+      </span>
+      <b data-test="miscPrice-text">{{ miscPrice }} ₽</b>
     </p>
   </li>
 </template>
 <script>
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: 'OrderAdditionalItem',
@@ -34,8 +39,8 @@ export default {
       return this.miscs.find( el => this.misc.miscId === el.id)?.price;
     },
 
-    miscSvg: function() {
-      return this.miscs.find( el => this.misc.miscId === el.id)?.svgName;
+    miscImage: function() {
+      return this.miscs.find( el => this.misc.miscId === el.id)?.image;
     }
   },
 }

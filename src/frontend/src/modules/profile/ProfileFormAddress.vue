@@ -80,6 +80,7 @@
         type="button"
         class="button button--transparent"
         @click="$emit('removeAddress', address)"
+        data-test="remove-btn"
       >
         {{ buttonText }}
       </button>
@@ -95,7 +96,7 @@
   </form>
 </template>
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: "ProfileFormAddress",
@@ -138,7 +139,7 @@ export default {
         };
 
         this.postAddress(newAddress);
-      } else if ( this.mode === 'edit' ) {
+      } else {
         this.putAddress(this.address);
       }
 

@@ -18,6 +18,7 @@
           class="button"
           type="button"
           @click.prevent="closePopup"
+          data-test="close-btn"
         >
           Отлично, я жду!
         </AppButton>
@@ -27,7 +28,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
+import { mapState, mapMutations, mapGetters } from 'vuex';
 
 export default {
   name: 'Popup',

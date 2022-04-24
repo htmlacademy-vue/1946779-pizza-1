@@ -1,6 +1,7 @@
 <template>
   <label
     class="radio ingredients__input"
+    data-test="sauce-label"
   >
     <input
       :value="sauce.type"
@@ -17,7 +18,7 @@
 import { mapMutations } from 'vuex';
 
 export default {
-  name: "RadioButton",
+  name: "BuilderSauceSelector",
   props:{
     sauce: {
       type: Object,
@@ -30,9 +31,8 @@ export default {
       addSauce: "ADD_SAUCE"
     }),
 
-    sendSauceData(event) {;
+    sendSauceData(event) {
       this.addSauce({ type: this.sauce.type, price: this.sauce.price, id: this.sauce.id});
-
     }
   },
   created() {

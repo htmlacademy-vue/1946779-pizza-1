@@ -16,6 +16,7 @@
           type="button"
           class="button button--border"
           @click="removeOrder"
+          data-test="remove-btn"
         >
           Удалить
         </button>
@@ -27,6 +28,7 @@
           type="button"
           class="button"
           @click="repeat"
+          data-test="repeat-btn"
         >
           Повторить
         </button>
@@ -40,6 +42,7 @@
         v-for="pizza in order.orderPizzas"
         :key="pizza.id"
         :pizza="pizza"
+        data-test="pizzas-item"
       />
 
     </ul>
@@ -51,6 +54,7 @@
         :key="misc.id"
         :misc="misc"
         v-show="misc.quantity > 0"
+        data-test="additionals-item"
       />
 
     </ul>
@@ -58,6 +62,7 @@
     <p
       class="order__address"
       v-if="addresses.find(el => el.id == order.addressId)"
+      data-test="order-address-old"
     >
       Адрес доставки: {{ order.orderAddress.name }}
     </p>
@@ -65,6 +70,7 @@
     <p
       class="order__address"
       v-else-if="order.addressId === null"
+      data-test="order-address-empty"
     >
       Адрес доставки: самовывоз.
     </p>
@@ -72,6 +78,7 @@
     <p
       class="order__address"
       v-else-if="!addresses.find(el => el.id == order.addressId)"
+      data-test="order-address-new"
     >
       Адрес доставки: улица {{  order.orderAddress.street }},
       дом {{  order.orderAddress.building }}, квартира {{  order.orderAddress.flat }}
@@ -82,7 +89,7 @@
 <script>
 import OrderPizzaItem from '@/modules/order/OrderPizzaItem';
 import OrderAdditionalItem from '@/modules/order/OrderAdditionalItem';
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'OrderMainUnit',
@@ -112,7 +119,6 @@ export default {
     ...mapState('Auth', ['user', 'addresses']),
     ...mapState("Builder", ['sizes', 'doughs', 'sauces', 'ingredients']),
     ...mapState("Cart", ['miscs']),
-    ...mapGetters('Auth', ['isAuthenticated']),
 
     price: function() {
       let pizzasPrice = 0;
