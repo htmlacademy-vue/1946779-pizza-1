@@ -82,18 +82,12 @@ describe('BuilderDoughSelector', () => {
   });
 
   it('calls the vuex mutation on input', () => {
+    const spyOnSendDoughData = jest.spyOn(BuilderDoughSelector.methods, 'sendDoughData');
     createComponent({ store, propsData });
     const input = wrapper.find('input[type="radio"]');
     expect(input.exists()).toBeTruthy();
-    const spyOnMutation = jest.spyOn(wrapper.vm, 'addDough');
     input.trigger('input');
-    expect(spyOnMutation).toHaveBeenCalledWith(
-      {
-        type: propsData.dough.type,
-        price: propsData.dough.price,
-        id: propsData.dough.id
-      }
-    );
+    expect(spyOnSendDoughData).toHaveBeenCalled();
   });
 });
 

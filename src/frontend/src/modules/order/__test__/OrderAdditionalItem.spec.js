@@ -107,21 +107,20 @@ describe('OrderAdditionalItem', () => {
     createMiscs(store);
     createComponent({ localVue, store, propsData });
     const miscImg = wrapper.find('[data-test="misc-img"]');
-    expect(miscImg.attributes('alt')).toBe(miscs.find( el => orders[0].orderMisc[0].miscId === el.id)?.name);
+    expect(miscImg.attributes('alt')).toBe(misc[0].name);
   });
 
   it ('is misc name text value from getter', () => {
     createMiscs(store);
     createComponent({ localVue, store, propsData });
     const miscNameSpan = wrapper.find('[data-test="miscName-text"]');
-    expect(miscNameSpan.text()).toBe(miscs.find( el => orders[0].orderMisc[0].miscId === el.id)?.name);
+    expect(miscNameSpan.text()).toBe('Cola-Cola 0,5 литра');
   });
 
   it ('is misc price text value from getter', () => {
     createMiscs(store);
     createComponent({ localVue, store, propsData });
     const miscPriceSpan = wrapper.find('[data-test="miscPrice-text"]');
-    expect(miscPriceSpan.text()).toEqual(`${(miscs.find( el => orders[0].orderMisc[0].miscId === el.id)?.price)} ₽`);
+    expect(miscPriceSpan.text()).toEqual(`${misc[0].price} ₽`);
   });
-
 })

@@ -32,11 +32,6 @@ describe('Popup', () => {
   let commit;
   let dispatch;
   let routerPush;
-  let getters
-
-  let propsData = {
-    showPopup: true
-  };
 
   const createComponent = options => {
     wrapper = mount(Popup, options);
