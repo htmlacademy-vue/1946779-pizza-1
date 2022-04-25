@@ -4,7 +4,7 @@ import Home from '@/views/Index.vue';
 import store from '@/store';
 import { middlewarePipeline } from '@/middlewares';
 
-import { auth, isAdmin, isLoggedIn } from '@/middlewares';
+import { auth, isLoggedIn } from '@/middlewares';
 
 Vue.use(VueRouter)
 
