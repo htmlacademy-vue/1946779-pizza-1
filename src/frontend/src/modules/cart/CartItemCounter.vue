@@ -21,6 +21,7 @@
       type="button"
       class="counter__button counter__button--plus counter__button--orange"
       @click="$emit('sendCount', counter + 1)"
+      data-test="plus-btn"
     >
       <span class="visually-hidden">Больше</span>
     </button>

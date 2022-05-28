@@ -8,6 +8,7 @@
           type="button"
           class="icon"
           @click="$emit('editAddress', address)"
+          data-test="edit-btn"
         >
           <span class="visually-hidden">Изменить адрес</span>
         </button>

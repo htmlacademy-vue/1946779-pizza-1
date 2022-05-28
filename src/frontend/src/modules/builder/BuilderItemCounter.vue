@@ -5,6 +5,7 @@
       class="counter__button counter__button--minus"
       :disabled="counter < 1"
       @click="$emit('countIngredient', counter - 1)"
+
     >
       <span class="visually-hidden">Меньше</span>
     </button>
@@ -29,11 +30,11 @@
 </template>
 <script>
 export default {
-  name: "ItemCounter",
+  name: "BuilderItemCounter",
   props: {
     counter: {
-      type: Number,
-      required: true,
+      type: [String, Number],
+      required: true
     }
   },
 }

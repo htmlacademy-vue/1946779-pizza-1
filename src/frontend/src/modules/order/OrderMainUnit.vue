@@ -16,6 +16,7 @@
           type="button"
           class="button button--border"
           @click="removeOrder"
+          data-test="remove-btn"
         >
           Удалить
         </button>
@@ -27,6 +28,7 @@
           type="button"
           class="button"
           @click="repeat"
+          data-test="repeat-btn"
         >
           Повторить
         </button>
@@ -40,6 +42,7 @@
         v-for="pizza in order.orderPizzas"
         :key="pizza.id"
         :pizza="pizza"
+        data-test="pizzas-item"
       />
 
     </ul>
@@ -82,7 +85,7 @@
 <script>
 import OrderPizzaItem from '@/modules/order/OrderPizzaItem';
 import OrderAdditionalItem from '@/modules/order/OrderAdditionalItem';
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'OrderMainUnit',
@@ -102,7 +105,6 @@ export default {
     ...mapState('Auth', ['user', 'addresses']),
     ...mapState("Builder", ['sizes', 'doughs', 'sauces', 'ingredients']),
     ...mapState("Cart", ['miscs']),
-    ...mapGetters('Auth', ['isAuthenticated']),
 
     addressFinded: function() {
       return this.addresses.find(el => el.id == this.order.addressId);

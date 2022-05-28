@@ -3,6 +3,7 @@
       :class="`dough__input--${dough.type}`"
       :style="{'--varBag': `url(${dough.image})`}"
       class="dough__input"
+      data-test="dough__label"
     >
     <input
       name="dough"
@@ -18,7 +19,7 @@
   </label>
 </template>
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
   name: "BuilderDoughSelector",

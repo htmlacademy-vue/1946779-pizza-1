@@ -7,6 +7,7 @@
         v-for="sauce in sauces"
         :key="sauce.id"
         :sauce="sauce"
+        data-test="add-sauce"
       />
 
     </div>
@@ -20,6 +21,7 @@
           v-for="ingredient in ingredients"
           :key="ingredient.id"
           :ingredient="ingredient"
+          data-test="add-ingr"
         />
 
       </ul>

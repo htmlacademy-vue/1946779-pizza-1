@@ -18,6 +18,7 @@
           <router-link
             v-if="this.pizzas.length > 0"
             to="/cart"
+            data-test="cart-full"
           >
             {{ this.finalPrice }} ₽
           </router-link>
@@ -26,6 +27,7 @@
             v-else
             href="#"
             to="/cart"
+            data-test="cart-empty"
           >
            0 ₽
           </router-link>
@@ -35,21 +37,22 @@
       <div
         v-if="isAuthenticated"
         class="header__user"
+        data-test="user-auth"
+
       >
         <router-link
           to="/profile"
         >
           <picture>
-            <source
-              type="image/webp"
-              :srcset="user.avatar"
+            <source type="image/webp"
+            :srcset="user.avatar"
+            data-test="picture-source"
             >
 
             <img
-              alt="Василий Ложкин"
-              width="32"
-              height="32"
-              :src="user.avatar"
+            :src="user.avatar"
+            data-test="img-source"
+            alt="Василий Ложкин" width="32" height="32"
             >
           </picture>
           <span>{{ user.name }}</span>
@@ -60,6 +63,7 @@
           href="#"
           class="header__logout"
           @click.prevent='$logout'
+          data-test="logout-link"
         >
           <span>Выйти</span>
         </a>
@@ -68,9 +72,9 @@
       <div
         v-else
         class="header__user"
+        data-test="user-not-auth"
       >
         <router-link
-
           class="header__login"
           to="/login"
         >
@@ -81,11 +85,11 @@
     </header>
 </template>
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { logout } from '@/common/mixins';
 
 export default {
-  name: "AppLayout",
+  name: "AppLayoutHeader",
   mixins: [logout],
   props: {
     user: {

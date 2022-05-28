@@ -80,6 +80,7 @@
         type="button"
         class="button button--transparent"
         @click="$emit('removeAddress', address)"
+        data-test="remove-btn"
       >
         {{ buttonText }}
       </button>
@@ -155,11 +156,9 @@ export default {
         };
 
         this.postAddress(newAddress);
-
         this.$store.dispatch('Auth/getAddresses');
 
       } else if ( this.mode === 'edit' ) {
-
         this.putAddress(this.address);
 
       }

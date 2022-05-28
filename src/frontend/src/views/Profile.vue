@@ -43,6 +43,7 @@
         :mode='"edit"'
         @removeAddress="removeAddress"
         @closeForm="closeForm"
+        data-test="addressEdit-form"
       />
 
     </div>
@@ -73,6 +74,7 @@
         :user="user"
         @removeAddress="removeAddress"
         @closeForm="closeForm"
+        data-test="addressNew-form"
       />
   </div>
 
@@ -125,18 +127,18 @@ export default {
     },
 
     removeAddress(address) {
-      if( !address.id ) {
-        this.showNewForm = false;
-      } else if ( address.id ) {
+      if ( address.id ) {
         this.deleteAddress(address.id);
         this.showEditForm = false;
+      } else {
+        this.showNewForm = false;
       }
     },
 
     closeForm(mode) {
       if (mode === 'edit') {
         this.showEditForm = false;
-      } else if( mode === 'new' ) {
+      } else if ( mode === 'new' ) {
         this.showNewForm = false;
       }
     }

@@ -9,12 +9,12 @@
           alt="Капричоза"
         >
         <div class="product__text">
-          <h2>{{ pizza.pizzaName }}</h2>
+          <h2 data-test="pizzaName">{{ pizza.pizzaName }}</h2>
           <ul>
-            <li>
+            <li data-test="sizeOfPizza">
               {{ sizeOfPizza }}, <span class="product__ingredient-span">{{ typeOfDough }}</span> тесто.
             </li>
-            <li>
+            <li data-test="typeOfSauce">
               Соус: {{ typeOfSauce }}.
             </li>
             <li>
@@ -48,6 +48,7 @@
           type="button"
           class="cart-list__edit"
           @click="changeIngredients"
+          data-test="change-btn"
         >
         Изменить</button>
       </div>

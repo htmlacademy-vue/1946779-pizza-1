@@ -18,6 +18,7 @@
           class="button"
           type="button"
           @click.prevent="closePopup"
+          data-test="close-btn"
         >
           Отлично, я жду!
         </AppButton>

@@ -3,6 +3,7 @@
     @drop.stop="onDrop"
     @dragover.prevent
     @dragenter.prevent
+    data-test="drop-div"
   >
     <slot />
   </div>
@@ -16,12 +17,11 @@ export default {
   methods: {
     onDrop({ dataTransfer }) {
       const payload = dataTransfer.getData(DATA_TRANSFER_PAYLOAD);
-      if (payload) {
+      if ( payload ) {
         const transferData =
             JSON.parse(dataTransfer.getData(DATA_TRANSFER_PAYLOAD));
         this.$emit('drop', transferData);
       }
-
     }
   }
 };

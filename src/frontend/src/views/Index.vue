@@ -36,6 +36,7 @@
                 v-for="size in sizes"
                 :key="size.id"
                 :size="size"
+                data-test="add-size"
               />
 
             </div>
@@ -49,7 +50,7 @@
             <div class="sheet__content ingredients">
 
               <BuilderIngredientsSelector
-
+                data-test="ingr-selector"
               />
 
             </div>
@@ -60,6 +61,7 @@
 
           <BuilderPizzaView
             @drop="dropIngr($event)"
+            data-test="drop-elem"
           />
 
           <div
@@ -72,6 +74,7 @@
               class="button"
               :disabled="disabledButton"
               @click="putPizza"
+              data-test="putPizza-button"
             >
               Готовьте!
             </button>
@@ -125,14 +128,6 @@ export default {
 
     dropIngr(ingredient) {
       this.dropIngredients(ingredient);
-    },
-
-    inputNameOfPizza(inputValue) {
-      this.nameOfPizza = inputValue;
-    },
-
-    movePriceToCart() {
-      this.$emit('sendInfo', infoAboutPizza);
     },
 
     putPizza() {

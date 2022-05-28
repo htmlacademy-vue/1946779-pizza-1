@@ -25,6 +25,7 @@
             v-for="pizza in pizzas"
             :key="pizza.id"
             :pizza="pizza"
+            data-test="pizza"
           />
 
         </ul>
@@ -39,6 +40,7 @@
               v-for="misc in miscs"
               :key="misc.id"
               :misc="misc"
+              data-test="additional"
             />
 
           </ul>
@@ -64,6 +66,7 @@
                 class="select"
                 required
                 @change="selectOrderMethod($event.target.value)"
+                data-test="auth-select"
               >
 
                 <option
@@ -74,6 +77,7 @@
 
                 <option
                   value="new"
+                  data-test="option-new"
                 >
                   Новый адрес
                 </option>
@@ -99,6 +103,7 @@
                 name="tel"
                 placeholder="+7 999-999-99-99"
                 required
+                data-test="input-tel"
               >
 
             </label>
@@ -182,6 +187,7 @@
 
                 <option
                   value="new"
+                  data-test="option-new-value"
                 >
                   Новый адрес
                 </option>
@@ -198,6 +204,7 @@
                 name="tel"
                 placeholder="+7 999-999-99-99"
                 required
+                data-test="nonAuth-input-phone"
               >
 
             </label>
@@ -218,6 +225,7 @@
                     type="text"
                     name="street"
                     :disabled="(orderWay !== 'new')"
+                    data-test="nonAuth-input-street"
                   >
 
                 </label>
@@ -233,6 +241,7 @@
                     type="number"
                     name="house"
                     :disabled="(orderWay !== 'new')"
+                    data-test="nonAuth-input-house"
                   >
 
                 </label>
@@ -248,6 +257,7 @@
                     type="number"
                     name="apartment"
                     :disabled="(orderWay !== 'new')"
+                    data-test="nonAuth-input-apartment"
                   >
                 </label>
               </div>
@@ -264,14 +274,20 @@
         <router-link
           to="/"
           class="button button--border button--arrow"
+          data-test="route-link"
         >
           Хочу еще одну
         </router-link>
 
       </div>
       <p class="footer__text">Перейти к конструктору<br>чтоб собрать ещё одну пиццу</p>
-      <div class="footer__price">
+      <div
+        class="footer__price"
+        data-test="final-price"
+      >
+
         <b>Итого: {{ finalPrice }} ₽</b>
+
       </div>
 
       <div class="footer__submit">
@@ -300,8 +316,8 @@ import CartAdditionalItem from '@/modules/cart/CartAdditionalItem';
 
 import Popup from '@/views/Popup';
 
-import { parsePizzaCost, createPizzasRequestObj, createMiscRequestObj } from '@/common/helpers';
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { createPizzasRequestObj, createMiscRequestObj } from '@/common/helpers';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: "Cart",
@@ -449,7 +465,7 @@ export default {
           this.addOrderToState(order);
           this.showPopup = !this.showPopup;
 
-        } else if ( this.orderWay === 'new' ) {
+        } else {
           // новый адрес
           this.addressForm = {
             street: this.street,

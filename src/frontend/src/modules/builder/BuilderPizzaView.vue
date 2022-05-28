@@ -1,6 +1,7 @@
 <template>
   <AppDrop
     @drop="$emit('drop', $event)"
+    data-test="drop-emit"
   >
 
     <label class="input">
@@ -12,6 +13,7 @@
         name="pizza_name"
         placeholder="Введите название пиццы"
         required
+        data-test="pizzaName-input"
       >
 
     </label>
@@ -20,6 +22,7 @@
       <div
         class="pizza"
         :class="`pizza--foundation--${doughType}-${sauceType}`"
+        data-teet="doughAndSouce-image"
       >
         <transition-group
           name="ingredients"
@@ -34,6 +37,7 @@
             :class="[`pizza__filling--${ingredientType.type}`,
               {'pizza__filling--second': ingredientType.number === 2},
               {'pizza__filling--third': ingredientType.number === 3} ]"
+            data-test="ingredientType"
           >
           </div>
         </transition-group>
@@ -44,7 +48,7 @@
 </template>
 <script>
 import AppDrop from '@/common/components/AppDrop';
-import { mapState, mapMutations, mapGetters } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   name: "BuilderPizzaView",

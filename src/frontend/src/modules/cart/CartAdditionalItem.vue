@@ -6,6 +6,7 @@
         height="60"
         :src="require(`@/assets/img/${misc.svgName}.svg`)"
         :alt="misc.name"
+        data-test="img"
       >
       <span>{{misc.name}}</span>
 

@@ -6,13 +6,6 @@
 <script>
 
 export default {
-  name: "AppLayoutDefault",
-  component: {
-
-  },
-
-  props: {
-
-  }
+  name: "AppLayoutDefault"
 }
 </script>
