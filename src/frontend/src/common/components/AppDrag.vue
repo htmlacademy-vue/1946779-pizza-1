@@ -1,10 +1,10 @@
 <template>
   <div
+    :draggable="isDraggable"
+    data-test="drag-div"
     @dragstart.self="onDrag"
     @dragover.prevent
     @dragenter.prevent
-    :draggable="isDraggable"
-    data-test="drag-div"
   >
     <slot />
   </div>
@@ -20,11 +20,13 @@ export default {
       type: Object,
       required: true
     },
+
     isDraggable: {
       type: Boolean,
       default: true,
     }
   },
+
   methods: {
     onDrag({ dataTransfer }) {
       dataTransfer.effectAllowed = MOVE;

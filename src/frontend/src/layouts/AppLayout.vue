@@ -1,9 +1,12 @@
 <template>
-  <transition :name="firstLoad === true ? '' : 'slide'" mode="out-in">
+  <transition
+    :name="firstLoad === true ? '' : 'slide'"
+    mode="out-in"
+  >
     <component
       :is="layout"
       :price="price"
-      :isLogin="isLogin"
+      :is-login="isLogin"
       :user="user"
     >
 
@@ -22,19 +25,23 @@ export default {
       type: Number,
       default: 0
     },
+
     isLogin: {
       type: Boolean,
       default: false
     },
+
     user: {
       type: Object,
       default: () => {}
     },
+
     firstLoad: {
       type: Boolean,
       default: false
     }
   },
+
   computed: {
     layout() {
       const layout = this.$route.meta.layout || defaultLayout;

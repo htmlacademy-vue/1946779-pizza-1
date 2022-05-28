@@ -1,9 +1,9 @@
 <template>
   <div
+    data-test="drop-div"
     @drop.stop="onDrop"
     @dragover.prevent
     @dragenter.prevent
-    data-test="drop-div"
   >
     <slot />
   </div>

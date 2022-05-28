@@ -28,6 +28,7 @@ export default {
       default: () => {}
     }
   },
+
   computed: {
     ...mapState("Cart", ['miscs']),
 

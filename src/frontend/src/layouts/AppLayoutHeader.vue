@@ -6,7 +6,8 @@
           class="logo"
         >
           <img
-            img src="@/assets/img/logo.svg"
+            img
+            src="@/assets/img/logo.svg"
             alt="V!U!E! Pizza logo"
             width="90"
             height="40"
@@ -35,23 +36,26 @@
 
       </div>
       <div
-        class="header__user"
         v-if="isAuthenticated"
+        class="header__user"
         data-test="user-auth"
       >
         <router-link
           to="/profile"
         >
           <picture>
-            <source type="image/webp"
-            :srcset="user.avatar"
-            data-test="picture-source"
+            <source
+              type="image/webp"
+              :srcset="user.avatar"
+              data-test="picture-source"
             >
 
             <img
-            :src="user.avatar"
-            data-test="img-source"
-            alt="Василий Ложкин" width="32" height="32"
+              :src="user.avatar"
+              data-test="img-source"
+              alt="Василий Ложкин"
+              width="32"
+              height="32"
             >
           </picture>
           <span>{{ user.name }}</span>
@@ -61,16 +65,16 @@
         <a
           href="#"
           class="header__logout"
-          @click.prevent='$logout'
           data-test="logout-link"
+          @click.prevent='$logout'
         >
           <span>Выйти</span>
         </a>
       </div>
 
       <div
-        class="header__user"
         v-else
+        class="header__user"
         data-test="user-not-auth"
       >
         <router-link
@@ -96,6 +100,7 @@ export default {
       default: () => {}
     }
   },
+
   computed: {
     ...mapState('Cart', ['pizzas']),
     ...mapGetters('Auth', ['isAuthenticated']),

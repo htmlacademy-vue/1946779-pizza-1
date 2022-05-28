@@ -1,7 +1,6 @@
 import resources from '@/common/enums/resources';
 import {
   AuthApiService,
-  CrudApiService,
   ReadOnlyApiService,
   IngredientApiService,
   SauceApiService,
