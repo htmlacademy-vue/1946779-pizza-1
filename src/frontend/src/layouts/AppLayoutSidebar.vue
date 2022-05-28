@@ -6,7 +6,7 @@
       class="logo layout__logo"
     >
       <img
-        img src="@/assets/img/logo.svg"
+        src="@/assets/img/logo.svg"
         alt="V!U!E! Pizza logo"
         width="90"
         height="40"
@@ -42,3 +42,20 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import "~@/assets/scss/mixins/mixins.scss";
+@import "~@/assets/scss/ds-system/ds.scss";
+@import "~@/assets/scss/layout/layout.scss";
+
+.logo {
+  display: block;
+
+  img {
+    display: block;
+
+    width: 90px;
+    height: 40px;
+  }
+}
+
+</style>

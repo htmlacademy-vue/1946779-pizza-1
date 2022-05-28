@@ -13,7 +13,7 @@
   </li>
 </template>
 <script>
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: 'OrderAdditionalItem',
@@ -23,6 +23,7 @@ export default {
       default: () => {}
     }
   },
+
   computed: {
     ...mapState("Cart", ['miscs']),
 

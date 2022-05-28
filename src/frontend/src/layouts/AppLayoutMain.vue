@@ -14,24 +14,26 @@ import AppLayoutHeader from '@/layouts/AppLayoutHeader';
 
 export default {
   name: "AppLayoutMain",
+  components: {
+    AppLayoutHeader
+  },
+
   props: {
     price: {
       type: Number,
       default: 0
     },
+
     isLogin: {
       type: Boolean,
       default: false
     },
+
     user: {
       type: Object,
       default: () => {}
     }
-  },
-  components: {
-    AppLayoutHeader
-  },
-
+  }
 }
 </script>
 <style lang="scss" scoped>
