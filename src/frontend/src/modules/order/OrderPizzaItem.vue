@@ -5,7 +5,8 @@
       <img
         src="@/assets/img/product.svg"
         class="product__img"
-        width="56" height="56"
+        width="56"
+        height="56"
         :alt="pizza.name"
         data-test="img"
       >
@@ -17,9 +18,9 @@
           <li>
             Начинка:
             <span
-              class="product__ingredient-span product__ingredient-span_pseudo"
               v-for="ing in ings"
               :key="ings.indexOf(ing)"
+              class="product__ingredient-span product__ingredient-span_pseudo"
               data-test="ings"
             >
               {{ ing }}
@@ -42,6 +43,7 @@ export default {
       default: () => {}
     }
   },
+
   computed: {
     ...mapState("Builder", ['sizes', 'doughs', 'sauces', 'ingredients']),
 
@@ -80,16 +82,56 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .product__ingredient-span {
-    text-transform: lowercase;
-  }
-  .product__ingredient-span_pseudo {
-    &::after {
-      content: ", ";
-    }
+@import "~@/assets/scss/mixins/mixins.scss";
+@import "~@/assets/scss/ds-system/ds.scss";
 
-    &:last-child::after {
-      content: ".";
-    }
+.product {
+  display: flex;
+  align-items: center;
+}
+
+.product__text {
+  margin-left: 15px;
+
+  h2 {
+    @include b-s18-h21;
+
+    margin-top: 0;
+    margin-bottom: 10px;
   }
+
+  ul {
+    @include clear-list;
+    @include l-s11-h13;
+  }
+}
+
+.order__item {
+  display: flex;
+
+  width: 310px;
+  margin-right: 33px;
+  margin-bottom: 32px;
+}
+
+.order__price {
+  @include b-s16-h19;
+
+  margin: 0;
+
+  white-space: nowrap;
+}
+
+.product__ingredient-span {
+  text-transform: lowercase;
+}
+.product__ingredient-span_pseudo {
+  &::after {
+    content: ", ";
+  }
+
+  &:last-child::after {
+    content: ".";
+  }
+}
 </style>

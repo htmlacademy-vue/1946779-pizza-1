@@ -6,7 +6,8 @@
       class="logo layout__logo"
     >
       <img
-        img src="@/assets/img/logo.svg"
+        img
+        src="@/assets/img/logo.svg"
         alt="V!U!E! Pizza logo"
         width="90"
         height="40"

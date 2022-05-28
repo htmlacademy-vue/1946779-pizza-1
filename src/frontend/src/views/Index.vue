@@ -1,6 +1,9 @@
 <template>
   <main class="content">
-    <form action="#" method="post">
+    <form
+      action="#"
+      method="post"
+    >
       <div class="content__wrapper">
 
         <h1 class="title title--big">Конструктор пиццы</h1>
@@ -15,7 +18,7 @@
               <BuilderDoughSelector
                 v-for="dough in doughs"
                 :key="dough.id"
-                :dough=dough
+                :dough="dough"
                 data-test="add-dough"
               />
 
@@ -58,8 +61,8 @@
         <div class="content__pizza">
 
           <BuilderPizzaView
-            @drop="dropIngr($event)"
             data-test="drop-elem"
+            @drop="dropIngr($event)"
           />
 
           <div
@@ -70,9 +73,9 @@
             <button
               type="button"
               class="button"
-              :disabled=" (buildedPizza.ingredients.length < 1) || (buildedPizza.pizzaName === '') "
-              @click="putPizza"
+              :disabled="disabledButton"
               data-test="putPizza-button"
+              @click="putPizza"
             >
               Готовьте!
             </button>
@@ -104,7 +107,14 @@ export default {
   computed: {
     ...mapGetters("Builder", ["pricePizza"]),
     ...mapState("Builder", ['buildedPizza', 'sizes', 'doughs']),
+
+    disabledButton: function () {
+      let ingCount = 0;
+      this.buildedPizza.ingredients.forEach( ingredient => ingCount += ingredient.counter);
+      return ( (ingCount < 1) || (this.buildedPizza.pizzaName === '') );
+    }
   },
+
   methods: {
     ...mapActions("Builder", ["addIngredients", 'query', "dropIngredients"]),
 
@@ -131,3 +141,150 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+@import "~@/assets/scss/mixins/mixins.scss";
+@import "~@/assets/scss/ds-system/ds.scss";
+@import "~@/assets/scss/layout/content.scss";
+@import "~@/assets/scss/layout/sheet.scss";
+
+.title {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+
+  color: $black;
+
+  &--big {
+    @include b-s36-h42;
+  }
+
+  &--small {
+    @include b-s18-h21;
+  }
+}
+
+.button {
+  $bl: &;
+
+  @include b-s18-h21;
+  font-family: inherit;
+  display: block;
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+
+  color: $white;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  box-shadow: $shadow-medium;
+
+  background-color: $green-500;
+
+  &:hover:not(:active):not(:disabled) {
+    background-color: $green-400;
+  }
+
+  &:active:not(:disabled) {
+    background-color: $green-600;
+  }
+
+  &:focus:not(:disabled) {
+    opacity: 0.5;
+  }
+
+  &:disabled {
+    background-color: $green-300;
+    color: rgba($white, 0.2);
+    cursor: default;
+  }
+
+  &--border {
+    background-color: transparent;
+    border: 1px solid $green-500;
+    color: $black;
+    box-shadow: none;
+
+    &:hover:not(:active):not(:disabled) {
+      color: $green-500;
+      border-color: $green-500;
+      background-color: transparent;
+    }
+
+    &:active:not(:disabled) {
+      color: $green-600;
+      border-color: $green-600;
+      background-color: transparent;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  &--transparent {
+    @include b-s14-h16;
+    background-color: transparent;
+    box-shadow: none;
+    color: $black;
+
+    &:hover:not(:active):not(:disabled) {
+      color: $red-800;
+      background-color: transparent;
+    }
+
+    &:active:not(:disabled) {
+      color: $red-900;
+      background-color: transparent;
+    }
+
+    &:disabled {
+      opacity: 0.25;
+    }
+  }
+
+  &--arrow {
+    &::before {
+      content: "";
+      background-image: url("~@/assets/img/button-arrow.svg");
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-right: 16px;
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      transform: translateY(-1px);
+    }
+  }
+
+  &--white {
+    background-color: $white;
+    color: $green-500;
+  }
+}
+
+.content__result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 25px;
+
+  p {
+    @include b-s24-h28;
+
+    margin: 0;
+  }
+
+  button {
+    margin-left: 12px;
+    padding: 16px 45px;
+  }
+}
+</style>
