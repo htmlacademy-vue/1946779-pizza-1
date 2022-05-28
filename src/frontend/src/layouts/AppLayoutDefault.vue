@@ -6,6 +6,6 @@
 <script>
 
 export default {
-  name: "AppLayoutDefault",
+  name: "AppLayoutDefault"
 }
 </script>

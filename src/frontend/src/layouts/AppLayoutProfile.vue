@@ -2,7 +2,7 @@
   <div class="app-layout-main">
     <AppLayoutHeader
       :price="price"
-      :isLogin="isLogin"
+      :is-login="isLogin"
       :user="user"
       data-test="header"
     />
@@ -25,20 +25,24 @@ export default {
     AppLayoutHeader,
     AppLayoutSidebar
   },
+
   props: {
     price: {
       type: Number,
       default: 0
     },
+
     isLogin: {
       type: Boolean,
       default: false
     },
+
     user: {
       type: Object,
       default: () => {}
     }
   },
+
   data() {
     return {
       isActiveClass: true

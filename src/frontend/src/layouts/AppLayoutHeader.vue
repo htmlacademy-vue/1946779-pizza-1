@@ -6,7 +6,7 @@
           class="logo"
         >
           <img
-            img src="@/assets/img/logo.svg"
+            src="@/assets/img/logo.svg"
             alt="V!U!E! Pizza logo"
             width="90"
             height="40"
@@ -35,9 +35,10 @@
 
       </div>
       <div
-        class="header__user"
         v-if="isAuthenticated"
+        class="header__user"
         data-test="user-auth"
+
       >
         <router-link
           to="/profile"
@@ -69,8 +70,8 @@
       </div>
 
       <div
-        class="header__user"
         v-else
+        class="header__user"
         data-test="user-not-auth"
       >
         <router-link
@@ -96,6 +97,7 @@ export default {
       default: () => {}
     }
   },
+
   computed: {
     ...mapState('Cart', ['pizzas']),
     ...mapGetters('Auth', ['isAuthenticated']),

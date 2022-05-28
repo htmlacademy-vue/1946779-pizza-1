@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <AppLayout
-      :isLogin="isLogin"
+      :is-login="isLogin"
       :user="user"
-      :firstLoad="firstLoad"
+      :first-load="firstLoad"
     >
 
       <router-view
-        :pizzasInfoArray="routeProps.pizzasInfoArray"
+        :pizzas-info-array="routeProps.pizzasInfoArray"
         :user="routeProps.user"
         @changeInitialCounter="changeInitialCounter"
       />
@@ -29,19 +29,7 @@ export default {
       firstLoad: true
     }
   },
-  methods: {
-    changeInitialCounter(counterAndPizzaId) {
-      if (this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id )) {
-        let findedPizza = this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id);
-        findedPizza.initialCounter = counterAndPizzaId.counter;
-      }
-    }
-  },
-  watch: {
-    $route(to, from) {
-        this.firstLoad = from.name == null ? true : false
-    },
-  },
+
   computed: {
     ...mapState(['Auth']),
     ...mapGetters('Auth', ['getUserAttribute']),
@@ -58,6 +46,13 @@ export default {
       return routes[this.$route.name] || {};
     },
   },
+
+  watch: {
+    $route(to, from) {
+        this.firstLoad = from.name == null ? true : false
+    },
+  },
+
   created() {
     window.onerror = function (msg, url, line, col, error) {
       console.error(error);
@@ -68,6 +63,15 @@ export default {
     }
 
     this.$store.dispatch('init');
+  },
+
+  methods: {
+    changeInitialCounter(counterAndPizzaId) {
+      if (this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id )) {
+        let findedPizza = this.pizzasInfoArray.find(el =>  el.id = counterAndPizzaId.id);
+        findedPizza.initialCounter = counterAndPizzaId.counter;
+      }
+    }
   }
 };
 </script>
